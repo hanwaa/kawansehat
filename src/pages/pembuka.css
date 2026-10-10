@@ -1,0 +1,30 @@
+.pembuka {
+  padding-top: var(--r6);
+  max-width: 1040px;
+}
+
+.pembuka__sapa {
+  max-width: 620px;
+  margin-bottom: var(--r6);
+}
+
+.pembuka h1 {
+  max-width: 22ch;
+}
+
+.pembuka__ket {
+  font-size: var(--fs-sedang);
+  color: var(--teks-redup);
+  margin-bottom: var(--r5);
+}
+
+.pembuka__status {
+  min-height: 1.6em;
+  margin-top: var(--r4);
+  font-weight: 700;
+  color: var(--utama);
+}
+
+.pembuka__aksi {
+  margin-top: var(--r3);
+}

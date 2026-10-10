@@ -1,0 +1,215 @@
+.kepala-situs {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--latar) 94%, transparent);
+  border-bottom: var(--garis) solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+}
+
+[data-profil='anak'] .kepala-situs,
+[data-profil='remaja'] .kepala-situs,
+[data-kontras='ya'] .kepala-situs {
+  border-bottom-color: var(--garis-warna);
+}
+
+.kepala-situs__isi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--r2) var(--r4);
+  min-height: 68px;
+  padding-block: var(--r2);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--r2);
+  font-family: var(--font-judul);
+  font-weight: 800;
+  font-size: var(--fs-besar);
+  color: var(--teks);
+  text-decoration: none;
+  white-space: nowrap;
+  flex: none;
+}
+
+.logo svg {
+  flex: none;
+}
+
+.logo:hover {
+  color: var(--teks);
+}
+
+.kepala-situs__aksi {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--r2);
+  margin-left: auto;
+}
+
+.tombol--kepala {
+  padding-inline: var(--r4);
+}
+
+/* Navigasi utama: di desktop menyatu di header, di HP menempel di bawah layar */
+.navigasi-utama ul {
+  display: flex;
+  gap: var(--r1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigasi-utama li + li {
+  margin-top: 0;
+}
+
+.navigasi-utama a {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  min-height: var(--target);
+  padding: var(--r2) var(--r3);
+  border-radius: var(--radius-pil);
+  color: var(--teks);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navigasi-utama a svg {
+  width: 1.3em;
+  height: 1.3em;
+  flex: none;
+}
+
+.navigasi-utama a:hover {
+  background: var(--permukaan-2);
+  color: var(--teks);
+}
+
+.navigasi-utama a[aria-current='page'] {
+  background: var(--utama-lembut);
+  color: var(--utama);
+  box-shadow: inset 0 0 0 2px var(--utama);
+}
+
+@media (min-width: 900px) {
+  .navigasi-utama {
+    margin-left: var(--r4);
+  }
+  .navigasi-utama a {
+    white-space: nowrap;
+  }
+  /* Teks besar: menu pindah ke baris kedua header supaya tidak berdesakan. */
+  [data-teks='besar'] .navigasi-utama,
+  [data-teks='sangat-besar'] .navigasi-utama {
+    order: 3;
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 899px) {
+  .navigasi-utama {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: var(--permukaan);
+    border-top: var(--garis) solid var(--garis-warna);
+    padding: var(--r1) var(--r2) calc(var(--r1) + env(safe-area-inset-bottom));
+  }
+  [data-profil='dewasa'] .navigasi-utama {
+    border-top-color: color-mix(in srgb, var(--garis-warna) 40%, transparent);
+    box-shadow: 0 -6px 20px rgb(0 0 0 / 0.06);
+  }
+  .navigasi-utama ul {
+    justify-content: space-around;
+  }
+  .navigasi-utama li {
+    flex: 1;
+    min-width: 0;
+  }
+  .navigasi-utama a {
+    flex-direction: column;
+    gap: 2px;
+    border-radius: var(--radius-kecil);
+    /* Label menu bawah dibatasi supaya empat menu tetap muat di layar 360px saat teks diperbesar. */
+    font-size: min(var(--fs-kecil), 18px);
+    padding: var(--r1) 2px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  /* Menu bawah + tombol Panduan mengambang. */
+  main.ada-navigasi {
+    padding-bottom: calc(var(--tinggi-nav, 72px) + 136px);
+  }
+  .kaki-situs {
+    padding-bottom: calc(var(--tinggi-nav, 72px) + 144px) !important;
+  }
+}
+
+/* HP: ukuran header dibatasi (tidak ikut membesar penuh saat teks diperbesar) supaya selalu satu baris.
+   Isi halaman tetap mengikuti ukuran teks pilihan pengguna. */
+@media (max-width: 520px) {
+  .kepala-situs__isi {
+    column-gap: min(var(--r3), 12px);
+  }
+  .kepala-situs__aksi {
+    gap: min(var(--r2), 8px);
+  }
+  .logo span {
+    font-size: min(var(--fs-sedang), 18px);
+  }
+  .logo svg {
+    width: 32px;
+    height: 32px;
+  }
+  .tombol--kepala {
+    gap: min(var(--r1), 4px);
+    padding-inline: min(var(--r3), 12px);
+    font-size: min(var(--fs-dasar), 16px);
+  }
+  .tombol--kepala svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.kepala-situs__isi--dua-baris .kepala-situs__aksi {
+  flex-basis: 100%;
+  margin-left: 0;
+  flex-wrap: nowrap;
+}
+
+.kepala-situs__isi--dua-baris .tombol--kepala {
+  flex: 1;
+}
+
+/* Bila logo + tombol tidak muat satu baris (dihitung di Layout.jsx), nama situs disembunyikan
+   secara visual tetapi tetap dibacakan pembaca layar. Label tombol selalu terlihat. */
+.kepala-situs__isi--rapat .logo span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.kaki-situs {
+  margin-top: var(--r8);
+  padding-block: var(--r6) 128px;
+  border-top: var(--garis) solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+  font-size: var(--fs-kecil);
+  color: var(--teks-redup);
+}
+
+.kaki-situs p {
+  margin-bottom: var(--r2);
+}

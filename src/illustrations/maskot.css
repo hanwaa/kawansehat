@@ -1,0 +1,58 @@
+.maskot {
+  --maskot-garis: transparent;
+  flex: none;
+  overflow: visible;
+}
+
+[data-profil='anak'] .maskot {
+  --maskot-garis: #1e2433;
+}
+
+.maskot__garis {
+  stroke: var(--maskot-garis);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.maskot__tubuh {
+  transform-origin: 100px 200px;
+  animation: maskot-ayun 3.2s ease-in-out infinite;
+}
+
+[data-profil='anak'] .maskot__tubuh {
+  animation-name: maskot-lompat;
+  animation-duration: 2.2s;
+}
+
+[data-profil='lansia'] .maskot__tubuh {
+  animation: none;
+}
+
+.maskot__lambai {
+  animation: maskot-kedip 1.6s ease-in-out infinite;
+}
+
+@keyframes maskot-ayun {
+  50% {
+    transform: translateY(-3px) rotate(-1.5deg);
+  }
+}
+
+@keyframes maskot-lompat {
+  0%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  45% {
+    transform: translateY(-8px) scale(0.98, 1.02);
+  }
+  60% {
+    transform: translateY(0) scale(1.03, 0.97);
+  }
+}
+
+@keyframes maskot-kedip {
+  50% {
+    opacity: 0.2;
+  }
+}

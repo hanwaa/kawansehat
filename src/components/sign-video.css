@@ -1,0 +1,56 @@
+.isyarat {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) 1fr;
+  gap: var(--r4);
+  align-items: start;
+  margin: var(--r4) 0;
+  padding: var(--r4);
+  border: var(--garis) dashed var(--garis-warna);
+  border-radius: var(--radius-kecil);
+  background: var(--permukaan);
+}
+
+.isyarat__video {
+  position: relative;
+}
+
+.isyarat__label {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 0 var(--r2);
+  border-radius: var(--radius-pil);
+  background: var(--aksen);
+  color: #1c2420;
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+}
+
+.isyarat figcaption strong {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+}
+
+.isyarat figcaption strong svg {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.isyarat summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--utama);
+  min-height: var(--target);
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .isyarat {
+    grid-template-columns: 1fr;
+  }
+  .isyarat__video {
+    max-width: 220px;
+  }
+}

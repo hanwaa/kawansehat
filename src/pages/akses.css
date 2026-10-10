@@ -1,0 +1,31 @@
+.akses__isi {
+  display: grid;
+  gap: var(--r6);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .akses__isi {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+  .akses__pratinjau {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+.akses__pratinjau h2 {
+  margin-bottom: var(--r2);
+}
+
+.akses__pratinjau .kartu h3 {
+  margin-bottom: var(--r2);
+}
+
+.akses__aksi {
+  margin-top: var(--r6);
+}
+
+.akses__isi > * {
+  min-width: 0;
+}

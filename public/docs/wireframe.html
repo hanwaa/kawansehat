@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wireframe · Kawal Sehat</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      /* Wireframe low-fidelity: hanya abu-abu, fokus pada struktur, hierarki, dan alur. */
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #f4f4f2; color: #222; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; line-height: 1.55; }
+      .wadah { max-width: 1240px; margin: 0 auto; padding: 32px 16px 64px; }
+      header h1 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); margin: 0 0 6px; }
+      header p { max-width: 72ch; color: #555; margin: 0 0 6px; }
+      a { color: #222; }
+      h2.grup { margin: 48px 0 6px; font-size: 1.5rem; border-bottom: 2px solid #ccc; padding-bottom: 6px; }
+      .grup-ket { color: #555; margin: 0 0 20px; max-width: 80ch; }
+      .rak { display: flex; flex-wrap: wrap; gap: 32px 28px; align-items: flex-start; }
+      figure { margin: 0; width: 300px; }
+      figure.lebar { width: min(100%, 760px); }
+      figcaption { margin-top: 10px; font-size: 0.85rem; color: #444; }
+      figcaption strong { display: block; font-size: 0.95rem; color: #111; }
+      figcaption ol { margin: 6px 0 0; padding-left: 1.3em; }
+
+      .frame { position: relative; border: 2.5px solid #333; border-radius: 26px; background: #fff; padding: 10px 12px 12px; min-height: 600px; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+      .frame--desk { border-radius: 10px; min-height: 440px; padding: 0 0 14px; }
+      .frame--desk .isi { padding: 0 18px; display: flex; flex-direction: column; gap: 10px; }
+      .chrome { height: 22px; background: #e2e2e2; display: flex; gap: 5px; align-items: center; padding: 0 10px; border-bottom: 1.5px solid #bbb; }
+      .chrome i { width: 8px; height: 8px; border-radius: 50%; background: #aaa; display: block; }
+      .bar { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; border-bottom: 1.5px solid #ccc; }
+      .frame--desk .bar { padding: 8px 18px; }
+      .logo { width: 22px; height: 22px; border-radius: 50%; background: #777; flex: none; }
+      .spasi { flex: 1; }
+      .l { height: 7px; border-radius: 4px; background: #d2d2d2; }
+      .l + .l { margin-top: 5px; }
+      .h { height: 13px; border-radius: 4px; background: #8d8d8d; }
+      .h--besar { height: 20px; }
+      .w20 { width: 20%; } .w30 { width: 30%; } .w40 { width: 40%; } .w50 { width: 50%; } .w60 { width: 60%; } .w70 { width: 70%; } .w80 { width: 80%; } .w90 { width: 90%; }
+      .kotak { border: 1.5px solid #8a8a8a; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+      .kotak--tebal { border-width: 3px; border-color: #444; }
+      .kotak--putus { border-style: dashed; }
+      .kotak--gelap { background: #ececec; }
+      .gambar { background-color: #e6e6e6; background-image: linear-gradient(to top right, transparent calc(50% - 1px), #bdbdbd, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #bdbdbd, transparent calc(50% + 1px)); border: 1.5px solid #bdbdbd; border-radius: 8px; min-height: 70px; }
+      .bulat { width: 46px; height: 46px; border-radius: 50%; background: #d9d9d9; border: 1.5px solid #999; flex: none; }
+      .bulat--kecil { width: 26px; height: 26px; }
+      .bulat--maskot { background: #bdbdbd; position: relative; }
+      .bulat--maskot::after { content: 'Si Kawal'; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); font-size: 8px; color: #666; white-space: nowrap; }
+      .tombol { border: 2px solid #555; border-radius: 999px; min-height: 30px; padding: 4px 12px; display: inline-grid; place-items: center; font-size: 11px; font-weight: 700; color: #333; background: #fff; }
+      .tombol--primer { background: #555; color: #fff; }
+      .tombol--gelap { background: #2b2b2b; color: #fff; border-color: #2b2b2b; }
+      .tombol--besar { min-height: 42px; font-size: 13px; }
+      .tombol--penuh { display: grid; width: 100%; }
+      .tombol--teks { border-color: transparent; text-decoration: underline; padding: 4px 6px; }
+      .baris { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+      .kisi2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .kisi3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+      .label { font-size: 10px; font-weight: 700; color: #444; }
+      .teks { font-size: 11px; color: #333; }
+      .gelembung { display: flex; gap: 8px; align-items: flex-end; }
+      .gelembung .kotak { flex: 1; }
+      .saklar { display: flex; align-items: center; gap: 6px; border: 1.5px solid #9a9a9a; border-radius: 8px; padding: 6px 8px; }
+      .saklar .jalur { width: 30px; height: 16px; border-radius: 999px; border: 2px solid #555; position: relative; flex: none; }
+      .saklar .jalur::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #555; top: 1px; left: 2px; }
+      .saklar .jalur.on { background: #555; }
+      .saklar .jalur.on::after { background: #fff; left: 14px; }
+      .nav-bawah { margin-top: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; border-top: 1.5px solid #ccc; padding-top: 8px; }
+      .nav-bawah span { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; color: #444; }
+      .nav-bawah span::before { content: ''; width: 16px; height: 16px; border-radius: 4px; background: #bbb; }
+      .nav-bawah span.aktif { font-weight: 800; }
+      .nav-bawah span.aktif::before { background: #555; }
+      .input { border: 1.5px solid #777; border-radius: 6px; height: 28px; display: flex; align-items: center; justify-content: flex-end; padding: 0 6px; font-size: 10px; color: #555; }
+      .pil { align-self: flex-start; display: inline-block; border: 1.5px solid #666; border-radius: 999px; padding: 1px 8px; font-size: 10px; }
+      .pil--isi { background: #555; color: #fff; }
+      .bar-progres { height: 8px; border-radius: 999px; border: 1.5px solid #777; overflow: hidden; }
+      .bar-progres span { display: block; height: 100%; background: #777; }
+      .tiket-nomor { font-size: 34px; font-weight: 800; text-align: center; letter-spacing: 0.05em; color: #333; }
+      .piring { width: 150px; height: 150px; border-radius: 50%; border: 3px solid #555; margin: 0 auto; background: conic-gradient(#cfcfcf 0 120deg, #e4e4e4 120deg 180deg, #b9b9b9 180deg 300deg, #dadada 300deg 360deg); }
+      .redup { position: absolute; inset: 0; background: rgb(0 0 0 / 0.45); border-radius: inherit; }
+      .sorot { position: absolute; border: 3px solid #fff; outline: 3px dashed #222; border-radius: 10px; box-shadow: 0 0 0 999px rgb(0 0 0 / 0.45); }
+      .balon { position: absolute; left: 10px; right: 10px; background: #fff; border: 2px solid #333; border-radius: 14px; padding: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 2; }
+      .no { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #e0a526; color: #111; font-size: 10px; font-weight: 800; display: grid; place-items: center; z-index: 3; }
+      .fab { position: absolute; right: 10px; bottom: 60px; z-index: 2; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; font-size: 10px; font-weight: 800; }
+      .fab b { position: relative; padding: 3px 8px; border: 2px solid #444; border-radius: 9px; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.2); }
+      .fab b::after { content: ''; position: absolute; right: 10px; bottom: -5px; width: 7px; height: 7px; background: #fff; border-right: 2px solid #444; border-bottom: 2px solid #444; transform: rotate(45deg); }
+      .fab i { width: 28px; height: 28px; border-radius: 50%; background: #bdbdbd; border: 1.5px solid #888; margin-right: 4px; }
+      .kartu-bantuan { background: #f0f0f0; display: grid; place-items: center; text-align: center; font-weight: 800; color: #222; padding: 16px; }
+      .kolom-desk { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 14px; }
+      @media print { body { background: #fff; } .rak { gap: 18px; } figure { break-inside: avoid; } }
+    </style>
+  </head>
+  <body>
+    <main class="wadah">
+      <header>
+        <h1>Wireframe Kawal Sehat</h1>
+        <p>
+          Kerangka low-fidelity setiap layar utama, versi HP (360 px) dan desktop. Lingkaran kuning bernomor menandai anotasi.
+          Warna, ilustrasi, dan font menyusul di prototipe hi-fi. Komponen yang posisinya <strong>selalu sama</strong> di semua
+          mode: logo, tombol <em>Tampilan</em>, tombol <em>119</em>, menu utama, dan Si Kawal <em>Lihat Panduan</em> di kanan bawah.
+        </p>
+        <p><a href="/">Buka prototipe hi-fi</a> · <a href="/docs/user-flow.html">User flow</a></p>
+      </header>
+
+      <!-- ============ 1. PEMBUKA ============ -->
+      <h2 class="grup">1. Pembuka & pengaturan akses</h2>
+      <p class="grup-ket">Pengguna memilih siapa yang memakai. Tampilan langsung berubah, lalu pengguna mengatur kenyamanan dengan pratinjau langsung.</p>
+      <div class="rak">
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="l w30" style="margin:0"></span><span class="spasi"></span><span class="tombol tombol--gelap">119</span></div>
+            <span class="no" style="top:58px;left:8px">1</span>
+            <div class="gelembung"><span class="bulat bulat--maskot"></span><div class="kotak"><div class="l w90"></div><div class="l w70"></div></div></div>
+            <div class="h h--besar w90"></div><div class="h h--besar w60"></div>
+            <div class="l w80"></div>
+            <span class="no" style="top:250px;left:8px">2</span>
+            <div class="kisi2">
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Anak-anak</span><div class="l w60"></div></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Remaja</span><div class="l w60"></div></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Dewasa</span><div class="l w60"></div></div>
+              <div class="kotak kotak--tebal" style="align-items:center"><span class="bulat"></span><span class="teks">Lansia ✓</span><div class="l w60"></div></div>
+            </div>
+            <div class="l w70"></div>
+            <span class="no" style="bottom:66px;left:8px">3</span>
+            <span class="tombol tombol--primer tombol--besar tombol--penuh">Lanjut atur kenyamanan →</span>
+            <span class="tombol tombol--teks">Lewati, langsung ke beranda</span>
+          </div>
+          <figcaption>
+            <strong>1a · Pembuka</strong>
+            <ol>
+              <li>Si Kawal menyapa lewat balon kata.</li>
+              <li>4 kartu bergambar (radio group). Memilih kartu langsung mengubah tampilan, sebagai pratinjau hidup.</li>
+              <li>Aksi utama + jalan pintas "Lewati". Tidak ada pertanyaan wajib.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol tombol--gelap">119</span></div>
+            <div class="label">Langkah 2 dari 2 · Profil Lansia</div>
+            <div class="h h--besar w80"></div>
+            <span class="no" style="top:104px;left:8px">1</span>
+            <div class="kisi3"><span class="kotak" style="align-items:center"><b class="teks">Aa</b></span><span class="kotak kotak--tebal" style="align-items:center"><b>Aa</b></span><span class="kotak" style="align-items:center"><b style="font-size:16px">Aa</b></span></div>
+            <span class="no" style="top:160px;left:8px">2</span>
+            <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w60"></div><div class="l w80"></div></div><span class="jalur"></span></div>
+            <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w50"></div><div class="l w70"></div></div><span class="jalur on"></span></div>
+            <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w70"></div><div class="l w60"></div></div><span class="jalur"></span></div>
+            <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w60"></div><div class="l w70"></div></div><span class="jalur on"></span></div>
+            <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w50"></div><div class="l w60"></div></div><span class="jalur"></span></div>
+            <span class="no" style="top:410px;left:8px">3</span>
+            <div class="kotak"><div class="label">Contoh tampilan</div><div class="baris"><span class="bulat bulat--maskot"></span><div style="flex:1"><div class="h w70"></div><div class="l w90"></div></div></div><span class="tombol">🔊 Dengarkan</span></div>
+            <span class="tombol tombol--primer tombol--besar tombol--penuh">Simpan dan mulai →</span>
+          </div>
+          <figcaption>
+            <strong>1b · Atur kenyamanan</strong>
+            <ol>
+              <li>Ukuran teks: Normal / Besar / Sangat besar.</li>
+              <li>5 saklar: kontras tinggi, bacakan teks, BISINDO, tampilan sederhana, kurangi animasi. Status ditulis "Aktif/Mati", tidak hanya warna.</li>
+              <li>Pratinjau langsung (di desktop menempel di samping).</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure class="lebar">
+          <div class="frame frame--desk">
+            <div class="chrome"><i></i><i></i><i></i></div>
+            <div class="bar"><span class="logo"></span><span class="l w20" style="margin:0"></span><span class="spasi"></span><span class="tombol tombol--gelap">119</span></div>
+            <div class="isi">
+              <div class="label">Langkah 2 dari 2</div>
+              <div class="h h--besar w50"></div>
+              <div class="kolom-desk">
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div class="kisi3"><span class="kotak kotak--tebal" style="align-items:center"><b class="teks">Aa</b></span><span class="kotak" style="align-items:center"><b>Aa</b></span><span class="kotak" style="align-items:center"><b style="font-size:16px">Aa</b></span></div>
+                  <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w40"></div></div><span class="jalur"></span></div>
+                  <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w30"></div></div><span class="jalur"></span></div>
+                  <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w50"></div></div><span class="jalur on"></span></div>
+                  <div class="saklar"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="l w40"></div></div><span class="jalur"></span></div>
+                </div>
+                <div class="kotak">
+                  <div class="label">Contoh tampilan</div>
+                  <div class="baris"><span class="bulat bulat--maskot"></span><div style="flex:1"><div class="h w60"></div><div class="l w90"></div></div></div>
+                  <span class="tombol">🔊 Dengarkan</span>
+                  <div class="kotak kotak--putus"><div class="baris"><div class="gambar" style="width:90px;min-height:56px"></div><div style="flex:1"><div class="label">Video BISINDO (contoh)</div><div class="l w90"></div><div class="l w60"></div></div></div></div>
+                </div>
+              </div>
+              <div class="baris"><span class="tombol tombol--primer tombol--besar">Simpan dan mulai →</span><span class="tombol tombol--teks">← Ganti profil</span></div>
+            </div>
+          </div>
+          <figcaption><strong>1c · Atur kenyamanan (desktop)</strong> Dua kolom: pengaturan di kiri, pratinjau menempel di kanan. Slot BISINDO muncul saat bahasa isyarat aktif.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============ 2. BERANDA ============ -->
+      <h2 class="grup">2. Beranda: satu kerangka, empat cara bicara</h2>
+      <p class="grup-ket">Header dan menu tetap di tempat yang sama. Isi, tata letak, dan jumlah pilihan berbeda per profil.</p>
+      <div class="rak">
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <span class="no" style="top:56px;left:8px">1</span>
+            <div class="gelembung"><span class="bulat bulat--maskot" style="width:60px;height:60px"></span><div class="kotak kotak--tebal"><div class="h w90"></div><div class="l w70"></div><span class="tombol">🔊 Dengarkan</span></div></div>
+            <span class="no" style="top:160px;left:8px">2</span>
+            <div class="kotak kotak--tebal"><div class="gambar"></div><div class="h w70"></div><div class="l w90"></div></div>
+            <div class="kotak kotak--tebal"><div class="baris"><span class="bulat bulat--kecil"></span><span class="bulat bulat--kecil"></span><span class="bulat bulat--kecil"></span><span class="bulat bulat--kecil"></span></div><div class="h w60"></div><div class="l w80"></div></div>
+            <div class="kotak kotak--tebal"><div class="baris"><span class="teks">★ ★ ★</span></div><div class="h w40"></div><div class="l w80"></div></div>
+            <span class="no" style="bottom:110px;left:8px">3</span>
+            <div class="kotak kotak--gelap"><div class="l w80"></div><div class="l w50"></div></div>
+            <div class="nav-bawah"><span class="aktif">Beranda</span><span>Belajar</span><span>Piringku</span><span>Kuis</span></div>
+          </div>
+          <figcaption>
+            <strong>2a · Anak</strong>
+            <ol>
+              <li>Maskot memandu, kalimat sangat pendek.</li>
+              <li>Kartu besar bergambar: Cerita Nyamuk, Susun Isi Piringku, Kuis.</li>
+              <li>"Ajak orang tua" menggantikan layanan antrean. Ada juga koleksi lencana.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="label">Kawal Sehat · Remaja</div>
+            <span class="no" style="top:76px;left:8px">1</span>
+            <div class="h h--besar w70"></div><div class="h h--besar w50"></div>
+            <span class="tombol" style="align-self:flex-start">🔊 Dengarkan</span>
+            <span class="no" style="top:190px;left:8px">2</span>
+            <div class="kotak kotak--tebal" style="box-shadow:4px 4px 0 #444"><span class="pil">Mitos vs Fakta</span><div class="h w80"></div><div class="l w60"></div></div>
+            <div class="kotak kotak--tebal" style="box-shadow:4px 4px 0 #444"><span class="pil">Gizi</span><div class="h w70"></div><div class="l w80"></div></div>
+            <div class="kotak kotak--tebal" style="box-shadow:4px 4px 0 #444"><span class="pil">Tubuh</span><div class="h w60"></div><div class="l w70"></div></div>
+            <span class="no" style="bottom:66px;left:8px">3</span>
+            <div class="kotak kotak--gelap"><div class="l w90"></div></div>
+            <div class="nav-bawah"><span class="aktif">Beranda</span><span>Info</span><span>Cek Gizi</span><span>Layanan</span></div>
+          </div>
+          <figcaption>
+            <strong>2b · Remaja</strong>
+            <ol>
+              <li>Judul besar dan tegas (neo-brutalism lembut).</li>
+              <li>Kartu ala feed dengan label topik dan durasi baca.</li>
+              <li>Catatan privasi: semua cek dihitung di perangkat.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w90"></div><div class="l w80"></div>
+            <span class="tombol" style="align-self:flex-start">🔊 Dengarkan</span>
+            <span class="no" style="top:136px;left:8px">1</span>
+            <div class="gambar" style="min-height:110px"></div>
+            <span class="no" style="top:262px;left:8px">2</span>
+            <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w70"></div><div class="l w90"></div></div></div></div>
+            <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w60"></div><div class="l w80"></div></div></div></div>
+            <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w50"></div><div class="l w90"></div></div></div></div>
+            <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w50"></div><div class="l w70"></div></div></div></div>
+            <span class="fab"><b>Lihat Panduan</b><i></i></span>
+            <span class="no" style="bottom:96px;right:104px">3</span>
+            <div class="nav-bawah"><span class="aktif">Beranda</span><span>Info</span><span>Cek Gizi</span><span>Layanan</span></div>
+          </div>
+          <figcaption>
+            <strong>2c · Dewasa</strong>
+            <ol>
+              <li>Ilustrasi puskesmas ramah difabel.</li>
+              <li>Layanan di depan: antrean, konsultasi online, cek gizi, pengingat obat. Tiket aktif muncul paling atas bila ada.</li>
+              <li>Si Kawal mengambang di kanan bawah dengan balon chat <em>Lihat Panduan</em>, di atas menu bawah. Ada di semua halaman kecuali pembuka dan bisa memutar ulang tur.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w90"></div><div class="h h--besar w50"></div>
+            <div class="l w80"></div>
+            <span class="no" style="top:120px;left:8px">1</span>
+            <span class="tombol tombol--besar tombol--penuh">🔊 Dengarkan halaman ini</span>
+            <span class="no" style="top:186px;left:8px">2</span>
+            <div class="kotak kotak--tebal" style="min-height:76px;justify-content:center"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h h--besar w70"></div><div class="l w60"></div></div></div></div>
+            <div class="kotak kotak--tebal" style="min-height:76px;justify-content:center"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h h--besar w60"></div><div class="l w50"></div></div></div></div>
+            <div class="kotak kotak--tebal" style="min-height:76px;justify-content:center"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h h--besar w80"></div><div class="l w60"></div></div></div></div>
+            <div class="kotak kotak--tebal" style="min-height:76px;justify-content:center"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h h--besar w50"></div><div class="l w70"></div></div></div></div>
+            <span class="fab"><b>Lihat Panduan</b><i></i></span>
+            <div class="nav-bawah"><span class="aktif">Beranda</span><span>Info</span><span>Cek Badan</span><span>Antrean</span></div>
+          </div>
+          <figcaption>
+            <strong>2d · Lansia</strong>
+            <ol>
+              <li>Tombol "Dengarkan halaman ini" di atas konten.</li>
+              <li>Satu kolom, maksimal 4 tombol raksasa (≥ 96 px): Ambil Antrean, Minum Obat, Info Kesehatan, Cek Badan.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="gelembung"><span class="bulat bulat--maskot"></span><div class="kotak"><div class="h w80"></div><span class="tombol">🔊</span></div></div>
+            <div class="kotak"><div class="gambar"></div><div class="h w60"></div></div>
+            <div class="kotak"><div class="gambar"></div><div class="h w60"></div></div>
+            <div class="nav-bawah" style="position:relative"><span class="aktif">Beranda</span><span>Belajar</span><span>Piringku</span><span>Kuis</span></div>
+            <div class="sorot" style="left:6px;right:6px;bottom:4px;height:46px"></div>
+            <div class="balon" style="top:16px">
+              <div class="baris"><span class="bulat bulat--maskot"></span><div style="flex:1"><div class="label">Langkah 1 dari 4</div><div class="h w80"></div><div class="l w90"></div><div class="l w60"></div></div></div>
+              <div class="baris"><span class="tombol tombol--primer">Lanjut →</span><span class="spasi"></span><span class="tombol tombol--teks">✕ Lewati tur</span></div>
+              <div class="baris" style="justify-content:center"><span class="pil pil--isi" style="padding:0 8px"></span><span class="pil" style="padding:0 3px"></span><span class="pil" style="padding:0 3px"></span><span class="pil" style="padding:0 3px"></span></div>
+            </div>
+            <span class="no" style="top:6px;right:6px">1</span>
+            <span class="no" style="bottom:52px;left:8px">2</span>
+          </div>
+          <figcaption>
+            <strong>2e · Tur Si Kawal (HP)</strong>
+            <ol>
+              <li>Balon kata dialog: "Langkah x dari y", Kembali / Lanjut / Lewati. Muncul di atas karena target ada di bawah.</li>
+              <li>Sorotan bergaris tebal di sekitar elemen yang dijelaskan. Latar lain diredupkan, tidak pernah maju otomatis.</li>
+            </ol>
+          </figcaption>
+        </figure>
+
+        <figure class="lebar">
+          <div class="frame frame--desk">
+            <div class="chrome"><i></i><i></i><i></i></div>
+            <div class="bar"><span class="logo"></span><span class="l w20" style="margin:0"></span><span class="pil pil--isi">Beranda</span><span class="pil">Info</span><span class="pil">Cek Gizi</span><span class="pil">Layanan</span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="isi">
+              <div class="kolom-desk" style="grid-template-columns:1fr 1fr;align-items:center">
+                <div><div class="h h--besar w90"></div><div class="h h--besar w60" style="margin-top:6px"></div><div class="l w80" style="margin-top:10px"></div><span class="tombol" style="margin-top:10px">🔊 Dengarkan</span></div>
+                <div class="gambar" style="min-height:150px"></div>
+              </div>
+              <div class="h w20"></div>
+              <div class="kisi2">
+                <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w60"></div><div class="l w90"></div></div></div></div>
+                <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w50"></div><div class="l w80"></div></div></div></div>
+                <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w40"></div><div class="l w90"></div></div></div></div>
+                <div class="kotak"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w50"></div><div class="l w70"></div></div></div></div>
+              </div>
+            </div>
+          </div>
+          <figcaption><strong>2f · Beranda dewasa (desktop)</strong> Menu utama menyatu di header. Saat teks diperbesar, menu turun ke baris kedua supaya tidak berdesakan.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============ 3. INFO ============ -->
+      <h2 class="grup">3. Info kesehatan adaptif</h2>
+      <div class="rak">
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <span class="tombol tombol--teks" style="align-self:flex-start">← Semua topik</span>
+            <div class="h h--besar w90"></div><div class="l w80"></div>
+            <span class="no" style="top:110px;left:8px">1</span>
+            <div class="label">Ditinjau Oktober 2026 · sumber Kemenkes</div>
+            <span class="tombol" style="align-self:flex-start">🔊 Dengarkan</span>
+            <span class="no" style="top:172px;left:8px">2</span>
+            <div class="kotak kotak--putus"><div class="baris"><div class="gambar" style="width:80px;min-height:56px"></div><div style="flex:1"><div class="label">Video BISINDO (contoh)</div><div class="l w90"></div><div class="l w50"></div></div></div></div>
+            <div class="kotak"><div class="h w50"></div><div class="l w90"></div><div class="l w80"></div><div class="l w70"></div></div>
+            <span class="no" style="top:356px;left:8px">3</span>
+            <div class="kotak kotak--tebal kotak--gelap"><div class="h w50"></div><div class="l w90"></div><div class="l w70"></div><div class="h w60"></div></div>
+            <div class="kisi3"><div class="kotak"><div class="gambar" style="min-height:40px"></div><div class="l w70"></div></div><div class="kotak"><div class="gambar" style="min-height:40px"></div><div class="l w70"></div></div><div class="kotak"><div class="gambar" style="min-height:40px"></div><div class="l w70"></div></div></div>
+            <div class="nav-bawah"><span>Beranda</span><span class="aktif">Info</span><span>Cek Gizi</span><span>Layanan</span></div>
+          </div>
+          <figcaption>
+            <strong>3a · Topik DBD (dewasa)</strong>
+            <ol>
+              <li>Sumber & tanggal ditinjau untuk melawan hoaks.</li>
+              <li>Slot BISINDO + transkrip (hanya saat bahasa isyarat aktif).</li>
+              <li>Tanda bahaya dibedakan dengan garis tebal dan ikon, tidak hanya warna. Lalu 3M Plus bergambar.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w80"></div>
+            <div class="kotak kotak--tebal"><div class="gambar"></div><div class="l w80"></div><div class="l w60"></div></div>
+            <div class="kotak kotak--tebal"><span class="bulat"></span><div class="l w90"></div><div class="l w70"></div></div>
+            <div class="kotak kotak--tebal"><span class="bulat"></span><div class="l w80"></div><div class="l w60"></div></div>
+            <div class="h w50"></div>
+            <span class="tombol tombol--primer tombol--besar tombol--penuh">Main kuis nyamuk</span>
+            <div class="nav-bawah"><span>Beranda</span><span class="aktif">Belajar</span><span>Piringku</span><span>Kuis</span></div>
+          </div>
+          <figcaption><strong>3b · Topik DBD (anak)</strong> Panel komik bergambar, satu kalimat per panel, diakhiri ajakan kuis.</figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w90"></div>
+            <span class="tombol tombol--besar tombol--penuh">🔊 Dengarkan halaman ini</span>
+            <div class="kotak kotak--tebal"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w90"></div><div class="h w50"></div></div></div></div>
+            <div class="kotak kotak--tebal"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w80"></div><div class="h w60"></div></div></div></div>
+            <div class="kotak kotak--tebal kotak--gelap"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w90"></div><div class="h w70"></div></div></div></div>
+            <div class="kotak kotak--tebal"><div class="baris"><span class="bulat bulat--kecil"></span><div style="flex:1"><div class="h w70"></div></div></div></div>
+            <div class="nav-bawah"><span>Beranda</span><span class="aktif">Info</span><span>Cek Badan</span><span>Antrean</span></div>
+          </div>
+          <figcaption><strong>3c · Topik DBD (lansia)</strong> Lima poin besar, satu informasi per kalimat. Poin bahaya ditandai garis tebal.</figcaption>
+        </figure>
+      </div>
+
+      <!-- ============ 4. CEK GIZI ============ -->
+      <h2 class="grup">4. Cek gizi & tubuh</h2>
+      <div class="rak">
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w50"></div><div class="l w90"></div>
+            <span class="no" style="top:96px;left:8px">1</span>
+            <div class="label">Jenis kelamin</div>
+            <div class="kisi2"><span class="kotak kotak--tebal teks">◉ Laki-laki</span><span class="kotak teks">○ Perempuan</span></div>
+            <div class="kisi2"><div><div class="label">Umur</div><div class="input">tahun</div></div><div><div class="label">Lebih bulan</div><div class="input">bulan</div></div></div>
+            <div class="kisi2"><div><div class="label">Berat badan</div><div class="input">kg</div></div><div><div class="label">Tinggi badan</div><div class="input">cm</div></div></div>
+            <span class="tombol tombol--primer tombol--besar tombol--penuh">Hitung</span>
+            <span class="no" style="top:322px;left:8px">2</span>
+            <div class="kotak kotak--tebal">
+              <div class="label">Hasil</div><div class="h w80"></div>
+              <div class="baris"><span class="teks">IMT</span><b style="font-size:20px">24,2</b></div>
+              <div class="bar-progres"><span style="width:62%"></span></div>
+              <div class="l w90"></div><div class="l w70"></div>
+              <div class="baris"><span class="tombol">🔊 Dengarkan hasil</span><span class="tombol tombol--primer">Antrean Poli Gizi</span></div>
+              <div class="l w50"></div>
+            </div>
+          </div>
+          <figcaption>
+            <strong>4a · Cek IMT</strong>
+            <ol>
+              <li>Kolom bersatuan, menerima koma desimal. Pesan galat muncul di bawah kolom dan fokus pindah ke kolom yang salah.</li>
+              <li>Hasil diumumkan ke pembaca layar. Metodenya otomatis: &lt; 5 th → Buku KIA, 5–18 th → IMT/U WHO, ≥ 19 th → IMT Indonesia. Bila perlu perhatian, muncul pintasan ke Poli Gizi.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w60"></div>
+            <span class="no" style="top:80px;left:8px">1</span>
+            <div class="piring"></div>
+            <div class="gelembung"><span class="bulat bulat--maskot"></span><div class="kotak kotak--gelap"><div class="l w90"></div><div class="l w60"></div></div></div>
+            <span class="no" style="top:330px;left:8px">2</span>
+            <div class="kisi3">
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Nasi</span></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Tempe</span></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Bayam</span></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Pisang</span></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Ikan</span></div>
+              <div class="kotak" style="align-items:center"><span class="bulat"></span><span class="teks">Jeruk</span></div>
+            </div>
+            <div class="nav-bawah"><span>Beranda</span><span>Belajar</span><span class="aktif">Piringku</span><span>Kuis</span></div>
+          </div>
+          <figcaption>
+            <strong>4b · Game Susun Isi Piringku (anak)</strong>
+            <ol>
+              <li>Piring 4 bagian sesuai Isi Piringku. Si Kawal menjelaskan setiap makanan yang masuk.</li>
+              <li>Cukup <em>ketuk</em> (tanpa drag), tanpa angka kalori. Piring lengkap → lencana.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure class="lebar">
+          <div class="frame frame--desk">
+            <div class="chrome"><i></i><i></i><i></i></div>
+            <div class="bar"><span class="logo"></span><span class="l w20" style="margin:0"></span><span class="pil">Beranda</span><span class="pil">Info</span><span class="pil pil--isi">Cek Gizi</span><span class="pil">Layanan</span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="isi">
+              <div class="h h--besar w30"></div>
+              <div class="kolom-desk">
+                <div class="kotak">
+                  <span class="no" style="top:-8px;left:-8px">1</span>
+                  <div class="h w40"></div><div class="input" style="justify-content:flex-start">🔍 tempe</div>
+                  <div class="baris"><span class="pil pil--isi">Semua</span><span class="pil">Makanan pokok</span><span class="pil">Lauk pauk</span><span class="pil">Sayur</span><span class="pil">Buah</span></div>
+                  <div class="label">3 makanan ditemukan</div>
+                  <div class="kotak"><div class="baris"><div class="h w30"></div><span class="spasi"></span><div class="l w30"></div></div></div>
+                  <div class="kotak kotak--tebal"><div class="baris"><div class="h w40"></div><span class="spasi"></span><div class="l w40"></div></div></div>
+                  <div class="kotak"><div class="baris"><div class="h w30"></div><span class="spasi"></span><div class="l w30"></div></div></div>
+                </div>
+                <div class="kotak">
+                  <span class="no" style="top:-8px;left:-8px">2</span>
+                  <div class="h w60"></div>
+                  <div class="l w50"></div><div class="l w40"></div>
+                  <div class="label">Isi Piringku ✓ ✓ – –</div>
+                  <div class="l w30"></div><div class="bar-progres"><span style="width:20%"></span></div>
+                  <div class="l w30"></div><div class="bar-progres"><span style="width:100%"></span></div>
+                  <div class="l w30"></div><div class="bar-progres"><span style="width:18%"></span></div>
+                  <span class="tombol" style="align-self:flex-start">🔊 Dengarkan rekap</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            <strong>4c · Cek makanan (desktop)</strong>
+            <ol>
+              <li>Cari + filter kelompok. Hasil berupa daftar tombol berisi ukuran rumah tangga.</li>
+              <li>Piringku Hari Ini menempel di kanan: ceklis Isi Piringku, bar gula/garam/lemak (dengan angka & teks "melebihi batas"), dan perbandingan dengan AKG.</li>
+            </ol>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- ============ 5. LAYANAN ============ -->
+      <h2 class="grup">5. Antrean, tiket, pengingat obat, darurat</h2>
+      <div class="rak">
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w80"></div>
+            <span class="no" style="top:84px;left:8px">1</span>
+            <div class="bar-progres"><span style="width:66%"></span></div>
+            <div class="kotak">
+              <div class="label">Langkah 4 dari 6</div>
+              <div class="h w60"></div>
+              <span class="no" style="top:46px;left:-8px">2</span>
+              <div class="gelembung"><span class="bulat bulat--maskot bulat--kecil"></span><div class="kotak kotak--gelap"><div class="l w90"></div></div></div>
+              <span class="no" style="top:110px;left:-8px">3</span>
+              <div class="saklar"><span class="teks">☑</span><div style="flex:1"><div class="l w70"></div><div class="l w50"></div></div></div>
+              <div class="saklar"><span class="teks">☐</span><div style="flex:1"><div class="l w40"></div><div class="l w60"></div></div></div>
+              <div class="saklar"><span class="teks">☐</span><div style="flex:1"><div class="l w60"></div><div class="l w70"></div></div></div>
+              <div class="saklar"><span class="teks">☑</span><div style="flex:1"><div class="l w50"></div><div class="l w60"></div></div></div>
+              <div class="label">Kebutuhan lain</div><div class="input" style="height:44px"></div>
+              <div class="baris"><span class="tombol">← Kembali</span><span class="spasi"></span><span class="tombol tombol--primer tombol--besar">Lanjut →</span></div>
+            </div>
+            <div class="nav-bawah"><span>Beranda</span><span>Info</span><span>Cek Gizi</span><span class="aktif">Layanan</span></div>
+          </div>
+          <figcaption>
+            <strong>5a · Antrean (langkah kebutuhan khusus)</strong>
+            <ol>
+              <li>Bilah progres + "Langkah x dari 6". Di desktop berupa daftar langkah bernomor.</li>
+              <li>Tips Si Kawal tampil di dalam halaman (bukan popup).</li>
+              <li>Juru bahasa isyarat, kursi roda, pendamping, prioritas, subtitle, dokumen dibacakan.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w70"></div>
+            <span class="no" style="top:84px;left:8px">1</span>
+            <div class="kotak kotak--tebal" style="align-items:center;padding:16px">
+              <div class="label">Nomor antrean</div>
+              <div class="tiket-nomor">L-024</div>
+              <div class="h w50"></div>
+              <div class="l w80"></div><div class="l w70"></div>
+              <div class="kotak kotak--gelap" style="width:100%"><div class="l w90"></div><div class="l w80"></div></div>
+              <div class="l w80"></div>
+            </div>
+            <div class="gelembung"><span class="bulat bulat--maskot bulat--kecil"></span><div class="kotak kotak--gelap"><div class="l w70"></div></div></div>
+            <span class="no" style="bottom:82px;left:8px">2</span>
+            <div class="baris"><span class="tombol">🔊 Dengarkan tiket</span><span class="tombol">Cetak / PDF</span><span class="tombol tombol--teks">Batalkan antrean</span></div>
+          </div>
+          <figcaption>
+            <strong>5b · Tiket</strong>
+            <ol>
+              <li>Nomor sangat besar, diumumkan pembaca layar dan dibacakan bila suara aktif. Kebutuhan khusus dikonfirmasi satu per satu.</li>
+              <li>Membatalkan butuh konfirmasi. Fokus awal ada di tombol aman, "Tidak jadi".</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w60"></div>
+            <span class="tombol" style="align-self:flex-start">🔊 Dengarkan jadwal</span>
+            <div class="h w30"></div>
+            <span class="no" style="top:150px;left:8px">1</span>
+            <div class="kotak"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h w80"></div><div class="l w50"></div></div></div><div class="baris"><span class="pil">☑ Sudah diminum</span><span class="tombol tombol--teks">Coba pengingat</span></div></div>
+            <div class="kotak"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h w60"></div><div class="l w40"></div></div></div><div class="baris"><span class="pil">☐ Sudah diminum</span><span class="tombol tombol--teks">Coba pengingat</span></div></div>
+            <div class="h w30"></div>
+            <div class="kotak"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="h w60"></div><div class="l w40"></div></div></div></div>
+            <span class="tombol tombol--primer tombol--besar tombol--penuh">+ Tambah obat</span>
+            <div class="redup"></div>
+            <span class="no" style="top:384px;left:8px;z-index:4">2</span>
+            <div class="balon" style="bottom:70px"><div class="baris"><span class="bulat"></span><div style="flex:1"><div class="label">Pengingat pagi · 07.00</div><div class="h w90"></div><div class="h w60"></div></div></div><div class="baris"><span class="tombol tombol--primer tombol--besar">✓ Sudah diminum</span><span class="tombol">Ingatkan 10 menit lagi</span></div></div>
+          </div>
+          <figcaption>
+            <strong>5c · Pengingat obat</strong>
+            <ol>
+              <li>Obat ditampilkan dengan gambar bentuk & warna supaya mudah dikenali tanpa membaca.</li>
+              <li>Notifikasi berupa dialog besar yang dibacakan otomatis bila suara aktif.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame">
+            <div class="bar"><span class="logo"></span><span class="spasi"></span><span class="tombol">Tampilan</span><span class="tombol tombol--gelap">119</span></div>
+            <div class="h h--besar w60"></div><div class="l w90"></div>
+            <span class="no" style="top:92px;left:8px">1</span>
+            <span class="tombol tombol--gelap tombol--penuh" style="min-height:70px;font-size:18px;border-radius:14px">📞 Telepon 119</span>
+            <div class="l w80"></div>
+            <div class="kotak"><div class="h w70"></div><div class="l w90"></div><div class="l w80"></div><div class="l w90"></div><div class="l w60"></div></div>
+            <span class="no" style="top:322px;left:8px">2</span>
+            <div class="kotak kotak--gelap"><div class="h w70"></div><div class="l w90"></div><span class="tombol tombol--primer" style="align-self:flex-start">Tampilkan kartu bantuan</span></div>
+            <div class="kotak"><div class="h w50"></div><div class="l w80"></div></div>
+          </div>
+          <figcaption>
+            <strong>5d · Darurat</strong>
+            <ol>
+              <li>Tombol telepon 119 selebar layar, plus hal yang perlu disampaikan ke petugas.</li>
+              <li>Kartu bantuan untuk teman Tuli atau yang sulit bicara.</li>
+            </ol>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="frame kartu-bantuan">
+            <div>
+              <div style="font-size:30px;line-height:1.15">Saya butuh bantuan medis.</div>
+              <div style="font-size:24px;margin-top:16px">Tolong teleponkan 119.</div>
+              <div style="font-size:16px;margin-top:16px;font-weight:700">Saya Tuli atau sulit bicara. Mohon tulis pesan untuk saya.</div>
+              <span class="tombol tombol--gelap tombol--besar" style="margin-top:20px">✕ Tutup kartu</span>
+            </div>
+          </div>
+          <figcaption><strong>5e · Kartu bantuan (layar penuh)</strong> Teks sangat besar dengan kontras maksimal untuk ditunjukkan ke orang di sekitar.</figcaption>
+        </figure>
+      </div>
+    </main>
+  </body>
+</html>

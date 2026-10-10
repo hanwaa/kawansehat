@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Flow · Kawal Sehat</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --latar: #fbf7ef;
+        --permukaan: #ffffff;
+        --teks: #1c2420;
+        --redup: #4d5a53;
+        --utama: #1f6f4a;
+        --utama-lembut: #e3f1e8;
+        --aksen: #e0a526;
+        --aksen-lembut: #fcefc7;
+        --garis: #d9d3c7;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--latar);
+        color: var(--teks);
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        line-height: 1.6;
+      }
+      .wadah { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+      header h1 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); margin: 0 0 8px; }
+      header p { color: var(--redup); max-width: 70ch; margin: 0 0 8px; }
+      .legenda { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 20px 0 8px; padding: 0; list-style: none; font-size: 0.9rem; }
+      .legenda li { display: flex; align-items: center; gap: 8px; }
+      .k { display: inline-block; width: 28px; height: 18px; border: 2px solid var(--utama); background: var(--permukaan); }
+      .k--mulai { border-radius: 999px; background: var(--utama); }
+      .k--keputusan { width: 18px; transform: rotate(45deg); background: var(--aksen-lembut); border-color: #b07a00; }
+      .k--putus { border-style: dashed; }
+      .alur { background: var(--permukaan); border: 1.5px solid var(--garis); border-radius: 16px; padding: 24px; margin-top: 28px; break-inside: avoid; }
+      .alur h2 { margin: 0 0 4px; font-size: 1.4rem; }
+      .alur > p { margin: 0 0 16px; color: var(--redup); }
+      .diagram { overflow-x: auto; }
+      .diagram pre.mermaid { margin: 0; display: flex; justify-content: center; }
+      .catatan { margin-top: 16px; padding: 12px 16px; border-radius: 10px; background: var(--aksen-lembut); font-size: 0.95rem; }
+      .catatan ul { margin: 4px 0 0; padding-left: 1.2em; }
+      a { color: var(--utama); }
+      .label { font-size: 0.85rem; font-weight: 700; color: var(--redup); text-transform: none; }
+      @media print {
+        body { background: #fff; }
+        .alur { border-color: #999; page-break-before: always; }
+        .alur:first-of-type { page-break-before: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wadah">
+      <header>
+        <p class="label">Kawal Sehat · UI/UX Competition IT CAS 2026</p>
+        <h1>User Flow</h1>
+        <p>
+          Empat alur utama Kawal Sehat beserta jalur alternatifnya: melewati langkah, mengganti tampilan, dan menangani
+          galat. Semua alur bisa dijalankan dengan keyboard, pembaca layar, maupun sentuhan.
+        </p>
+        <ul class="legenda" aria-label="Keterangan simbol">
+          <li><span class="k k--mulai" aria-hidden="true"></span> Mulai / selesai</li>
+          <li><span class="k" aria-hidden="true"></span> Layar / tindakan</li>
+          <li><span class="k k--keputusan" aria-hidden="true"></span> Keputusan</li>
+          <li><span class="k k--putus" aria-hidden="true"></span> Garis putus: bisa dilakukan kapan saja</li>
+        </ul>
+        <p><a href="/">Buka prototipe</a> · <a href="/docs/wireframe.html">Wireframe</a></p>
+      </header>
+
+      <section class="alur" aria-labelledby="alur-a">
+        <h2 id="alur-a">A. Pembuka, pengaturan akses, dan tur Si Kawal</h2>
+        <p>Pengguna memilih siapa yang memakai, mengatur kenyamanan, lalu ditawari tur, tanpa dipaksa.</p>
+        <div class="diagram">
+          <pre class="mermaid">
+flowchart TD
+  A(["Buka Kawal Sehat"]) --> B{"Sudah pernah<br/>memilih profil?"}
+  B -- Belum --> C["Layar Pembuka<br/>'Siapa yang memakai?'<br/>4 kartu bergambar"]
+  B -- Sudah --> H
+  C --> D{"Pilih profil"}
+  D -- "Anak / Remaja / Dewasa / Lansia" --> E["Tampilan langsung berubah<br/>+ pengaturan bawaan profil"]
+  D -- "Lewati" --> E2["Tampilan umum (dewasa)"]
+  D -- "Lanjut tanpa memilih" --> D1["Pesan: 'Pilih salah satu dulu'"] --> D
+  E --> F["Atur Kenyamanan<br/>teks · kontras · suara · BISINDO<br/>sederhana · animasi<br/>+ pratinjau langsung"]
+  F --> G["Simpan dan mulai"]
+  G --> H["Beranda sesuai profil"]
+  E2 --> H
+  H --> I{"Tur sudah<br/>pernah ditawarkan?"}
+  I -- Belum --> J["Si Kawal menawarkan tur"]
+  J -- "Ya, tunjukkan" --> K["Tur 3–4 langkah<br/>sorotan + balon kata<br/>Kembali · Lanjut · Lewati"]
+  J -- "Nanti saja" --> L
+  K -- "Selesai / Lewati / Esc" --> L(["Memakai Kawal Sehat"])
+  K -. "profil anak selesai" .-> K1["Lencana Penjelajah"]
+  I -- Sudah --> L
+  L -. "kapan saja" .-> M["Si Kawal + balon Lihat Panduan<br/>mengambang, kanan bawah"]
+  M -. "dari halaman mana pun" .-> K
+          </pre>
+        </div>
+        <div class="catatan">
+          <strong>Catatan aksesibilitas</strong>
+          <ul>
+            <li>Setiap langkah tur adalah dialog. Fokus masuk ke balon kata, Esc menutup tur, dan fokus kembali ke tempat semula.</li>
+            <li>Di HP, balon kata muncul dari bawah (atau atas) layar supaya tidak terpotong saat teks diperbesar.</li>
+            <li>Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.</li>
+            <li>Tur bisa diulang dari halaman mana pun lewat Si Kawal dengan balon <em>Lihat Panduan</em> di kanan bawah. Bila dibuka dari beranda, fokus kembali ke tombol itu setelah tur selesai.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="alur" aria-labelledby="alur-b">
+        <h2 id="alur-b">B. Info kesehatan adaptif (contoh: DBD)</h2>
+        <p>Satu topik, empat cara bicara. Alat akses tersedia di setiap profil.</p>
+        <div class="diagram">
+          <pre class="mermaid">
+flowchart TD
+  A(["Beranda"]) --> B["Info Kesehatan"] --> C["Topik: Demam Berdarah"]
+  C --> D{"Profil aktif"}
+  D -- Anak --> D1["Komik 'Nyamuk Nakal'<br/>+ 3M bergambar"] --> Q["Kuis 3 soal"] --> Q1(["Lencana Pemburu Jentik"])
+  D -- Remaja --> D2["Kartu Mitos vs Fakta<br/>+ gejala & tanda bahaya"]
+  D -- Dewasa --> D3["Gejala · tanda bahaya<br/>pertolongan pertama · 3M Plus"]
+  D -- Lansia --> D4["5 poin besar<br/>satu informasi per kalimat"]
+  C --> E{"Butuh bantuan akses?"}
+  E -- "Tombol Dengarkan" --> E1["Dibacakan per paragraf<br/>paragraf aktif disorot"]
+  E -- "BISINDO aktif" --> E2["Video isyarat + transkrip"]
+  D2 & D3 & D4 --> F{"Ada tanda bahaya?"}
+  F -- Ya --> F1["Ambil antrean puskesmas"]
+  F -- Darurat --> F2(["Telepon 119"])
+          </pre>
+        </div>
+        <div class="catatan">Setiap topik mencantumkan sumber resmi (Kemenkes) dan tanggal ditinjau untuk melawan hoaks kesehatan.</div>
+      </section>
+
+      <section class="alur" aria-labelledby="alur-c">
+        <h2 id="alur-c">C. Ambil antrean & konsultasi inklusif</h2>
+        <p>Enam langkah singkat. Kebutuhan khusus dipesan sejak awal supaya puskesmas bisa bersiap.</p>
+        <div class="diagram">
+          <pre class="mermaid">
+flowchart TD
+  A(["Ambil antrean"]) --> P{"Profil anak?"}
+  P -- Ya --> P1["Si Kawal: 'Halaman ini untuk<br/>orang tua atau wali'"]
+  P1 -- "Saya orang tua/wali" --> B
+  P1 -- "Kembali" --> P2(["Beranda"])
+  P -- Tidak --> B["1 · Jenis layanan"]
+  B -- "Datang ke puskesmas" --> C1["2 · Puskesmas + poli<br/>fasilitas aksesibel tertulis"]
+  B -- "Konsultasi online" --> C2["2 · Dokter umum / ahli gizi / psikolog"]
+  C1 --> D["3 · Hari & sesi"]
+  C2 --> D
+  D --> E["4 · Kebutuhan khusus<br/>juru bahasa isyarat · kursi roda · pendamping<br/>antrean prioritas · subtitle · dokumen dibacakan"]
+  E --> F["5 · Nama & nomor HP"]
+  F --> V{"Isian valid?"}
+  V -- Tidak --> V1["Pesan galat di bawah kolom<br/>fokus pindah ke kolom yang salah"] --> F
+  V -- Ya --> G["6 · Periksa ulang<br/>tombol Ubah di tiap bagian"]
+  G -. "Ubah" .-> B
+  G --> H["Tiket: nomor besar<br/>diumumkan pembaca layar<br/>& bisa dibacakan"]
+  H --> H1["Cetak / simpan PDF"]
+  H --> H2{"Batalkan?"}
+  H2 -- "Ya (konfirmasi)" --> H3(["Beranda"])
+  H2 -- "Tidak jadi" --> H
+          </pre>
+        </div>
+        <div class="catatan">
+          Profil lansia: puskesmas terdekat, Poli Lansia, dan antrean prioritas sudah terisi otomatis, dan tetap bisa diubah. Si Kawal memberi
+          tips singkat di setiap langkah, bukan popup.
+        </div>
+      </section>
+
+      <section class="alur" aria-labelledby="alur-d">
+        <h2 id="alur-d">D. Cek gizi & tubuh</h2>
+        <p>Perhitungan berbasis standar resmi: Permenkes 41/2014, Permenkes 2/2020 + WHO 2007, Permenkes 28/2019.</p>
+        <div class="diagram">
+          <pre class="mermaid">
+flowchart TD
+  A(["Cek Gizi & Tubuh"]) --> B{"Pilih alat"}
+  B -- "Cek IMT" --> I1["Jenis kelamin · umur · berat · tinggi<br/>lingkar perut untuk ≥ 19 tahun"]
+  I1 --> IV{"Isian valid?"}
+  IV -- Tidak --> IV1["Pesan galat + fokus ke kolom"] --> I1
+  IV -- Ya --> I2{"Umur"}
+  I2 -- "di bawah 5 tahun" --> I3["Arahkan ke Buku KIA / posyandu"]
+  I2 -- "5–18 tahun" --> I4["IMT menurut umur<br/>z-score WHO 2007"]
+  I2 -- "19 tahun ke atas" --> I5["Kategori IMT Indonesia<br/>+ lingkar perut"]
+  I4 --> I6["Hasil + saran yang tidak menghakimi<br/>bisa dibacakan · sumber dicantumkan"]
+  I5 --> I6
+  I6 -- "Perlu perhatian" --> I7(["Ambil antrean Poli Gizi"])
+  B -- "Kebutuhan gizi" --> K1["AKG sesuai umur, jenis kelamin<br/>hamil / menyusui + batas gula, garam, lemak"]
+  B -- "Cek makanan" --> M0{"Profil anak?"}
+  M0 -- Ya --> M1["Game Susun Isi Piringku<br/>ketuk makanan, tanpa angka kalori"] --> M4(["Lencana Jagoan Piring Sehat"])
+  M0 -- Tidak --> M2["Cari makanan lokal → pilih porsi"] --> M3["Piringku Hari Ini<br/>ceklis Isi Piringku · gula/garam/lemak · vs AKG"]
+  M3 -. "tambah lagi" .-> M2
+          </pre>
+        </div>
+        <div class="catatan">Mode anak dan remaja tidak menampilkan target kalori. Fokusnya pada pola makan lengkap sesuai Isi Piringku.</div>
+      </section>
+    </main>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs'
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        flowchart: { curve: 'basis', htmlLabels: true, padding: 12 },
+        themeVariables: {
+          fontFamily: 'Plus Jakarta Sans, system-ui, sans-serif',
+          fontSize: '15px',
+          primaryColor: '#ffffff',
+          primaryBorderColor: '#1f6f4a',
+          primaryTextColor: '#1c2420',
+          lineColor: '#4d5a53',
+          secondaryColor: '#fcefc7',
+          tertiaryColor: '#e3f1e8',
+          edgeLabelBackground: '#fbf7ef',
+        },
+      })
+    </script>
+  </body>
+</html>

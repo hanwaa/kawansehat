@@ -1,0 +1,114 @@
+/* Si Kawal berdiri di kanan bawah, balon chat "Lihat Panduan" di atasnya. */
+.fab-panduan {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 4px;
+  border: 0;
+  border-radius: 24px;
+  background: none;
+  color: var(--teks);
+  font: inherit;
+  /* Dibatasi supaya tidak menutupi terlalu banyak konten saat teks diperbesar. */
+  font-size: min(var(--fs-dasar), 18px);
+  font-weight: 800;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fab-panduan__balon {
+  position: relative;
+  padding: 8px 14px;
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: 16px;
+  background: var(--permukaan);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.16);
+  white-space: nowrap;
+  line-height: 1.2;
+  transition: background-color var(--durasi) var(--kurva), transform var(--durasi) var(--kurva);
+}
+
+/* Ekor balon menunjuk ke bawah, ke kepala Si Kawal. */
+.fab-panduan__balon::after {
+  content: '';
+  position: absolute;
+  right: 28px;
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  border-right: inherit;
+  border-bottom: inherit;
+  transform: rotate(45deg);
+}
+
+[data-profil='dewasa'] .fab-panduan__balon {
+  border-color: color-mix(in srgb, var(--garis-warna) 55%, transparent);
+}
+
+[data-profil='anak'] .fab-panduan__balon,
+[data-profil='remaja'] .fab-panduan__balon {
+  box-shadow: var(--bayangan-tombol);
+}
+
+.fab-panduan__maskot {
+  display: block;
+  transition: transform var(--durasi) var(--kurva);
+}
+
+.fab-panduan .maskot {
+  width: 64px;
+  height: 64px;
+}
+
+/* Animasi maskot yang terus bergerak dimatikan di sini (WCAG 2.2.2); gerak hanya saat disentuh. */
+.fab-panduan .maskot__tubuh,
+.fab-panduan .maskot__lambai {
+  animation: none;
+}
+
+.fab-panduan[data-hovered] .fab-panduan__balon {
+  background: var(--permukaan-2);
+}
+
+.fab-panduan[data-hovered] .fab-panduan__maskot {
+  transform: translateY(-3px) rotate(-4deg);
+}
+
+.fab-panduan[data-pressed] {
+  transform: scale(0.96);
+}
+
+.fab-panduan[data-focus-visible] {
+  outline: 3px solid var(--fokus);
+  outline-offset: 2px;
+}
+
+/* HP: di atas menu bawah, maskot sedikit lebih kecil. */
+@media (max-width: 899px) {
+  .fab-panduan {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: calc(var(--tinggi-nav, 72px) + 10px);
+  }
+  .fab-panduan .maskot {
+    width: 56px;
+    height: 56px;
+  }
+  .fab-panduan__balon {
+    padding: 6px 12px;
+  }
+  .fab-panduan__balon::after {
+    right: 24px;
+  }
+}
+
+@media print {
+  .fab-panduan {
+    display: none;
+  }
+}

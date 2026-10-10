@@ -1,0 +1,330 @@
+.beranda {
+  padding-top: var(--r6);
+}
+
+/* ---------- Anak ---------- */
+.beranda-anak__sapa {
+  max-width: 720px;
+  margin-bottom: var(--r6);
+}
+
+.beranda-anak__sapa h1 {
+  font-size: var(--fs-xl);
+}
+
+.petualangan {
+  display: grid;
+  gap: var(--r5);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  margin-bottom: var(--r6) !important;
+}
+
+.petualangan__kartu {
+  height: 100%;
+  align-items: flex-start;
+}
+
+.petualangan__kartu--biru {
+  background: #ddeeff;
+}
+.petualangan__kartu--hijau {
+  background: #dcf5e3;
+}
+.petualangan__kartu--kuning {
+  background: #fff1c9;
+}
+
+[data-kontras='ya'] .petualangan__kartu {
+  background: var(--permukaan);
+}
+
+.petualangan__gambar {
+  width: 100%;
+  max-width: 220px;
+  height: 130px;
+}
+
+.petualangan__makanan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2);
+  min-height: 130px;
+  align-items: center;
+}
+
+.petualangan__bintang {
+  display: flex;
+  gap: var(--r2);
+  min-height: 130px;
+  align-items: center;
+  color: #e0a526;
+}
+
+.petualangan__bintang svg {
+  width: 52px;
+  height: 52px;
+  fill: #ffc93c;
+  stroke: #1e2433;
+}
+
+.petualangan__bintang svg:nth-child(2) {
+  width: 72px;
+  height: 72px;
+  transform: translateY(-10px);
+}
+
+.lencana-anak {
+  margin-bottom: var(--r5);
+}
+
+.lencana-anak h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  font-size: var(--fs-besar);
+}
+
+.lencana-anak__daftar {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--r3);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}
+
+.lencana-anak__daftar li {
+  display: flex;
+  gap: var(--r3);
+  align-items: center;
+  margin: 0;
+}
+
+.lencana-anak__daftar small {
+  display: block;
+  color: var(--teks-redup);
+}
+
+.lencana-anak__ikon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #ffc93c;
+  border: 3px solid #1e2433;
+  color: #1e2433;
+  flex: none;
+}
+
+/* ---------- Remaja ---------- */
+.beranda-remaja__kepala {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--r4);
+  margin-bottom: var(--r6);
+}
+
+.beranda-remaja__kepala h1 {
+  font-size: clamp(2rem, 1.4rem + 3vw, 3.25rem);
+  letter-spacing: -0.02em;
+  max-width: 14ch;
+}
+
+.beranda-remaja__stiker {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--r2);
+}
+
+.beranda-remaja__stiker svg:first-child {
+  width: 96px;
+  transform: rotate(12deg);
+}
+
+.beranda-remaja__stiker svg:last-child {
+  width: 56px;
+  transform: rotate(-10deg) translateY(40px);
+}
+
+@media (max-width: 600px) {
+  .beranda-remaja__stiker {
+    display: none;
+  }
+}
+
+.umpan {
+  display: grid;
+  gap: var(--r5);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+  margin-bottom: var(--r6) !important;
+}
+
+.umpan__kartu {
+  height: 100%;
+}
+
+.umpan__kartu h2 {
+  font-size: var(--fs-besar);
+}
+
+.umpan__label {
+  align-self: flex-start;
+  padding: 2px var(--r3);
+  border: 2px solid var(--garis-warna);
+  border-radius: var(--radius-pil);
+  font-size: var(--fs-kecil);
+  font-weight: 800;
+  background: var(--permukaan);
+}
+
+.umpan__kartu--ungu {
+  background: #e9e1ff;
+}
+.umpan__kartu--tosca {
+  background: #d6f7f3;
+}
+.umpan__kartu--kuning {
+  background: #fff1c9;
+}
+.umpan__kartu--koral {
+  background: #ffe1dd;
+}
+
+[data-kontras='ya'] .umpan__kartu {
+  background: var(--permukaan);
+}
+
+/* ---------- Dewasa ---------- */
+.pahlawan {
+  display: grid;
+  gap: var(--r5);
+  align-items: center;
+  margin-bottom: var(--r5);
+}
+
+@media (min-width: 860px) {
+  .pahlawan {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pahlawan__gambar {
+  width: 100%;
+  height: auto;
+}
+
+.layanan-daftar {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+}
+
+.layanan-kartu {
+  flex-direction: row !important;
+  align-items: flex-start;
+  gap: var(--r4) !important;
+  height: 100%;
+}
+
+.layanan-kartu h3 {
+  font-size: var(--fs-sedang);
+  margin-bottom: var(--r1) !important;
+}
+
+.tiket-aktif {
+  margin-bottom: var(--r5);
+}
+
+.tiket-aktif svg {
+  color: var(--aksen-teks);
+}
+
+.info-sorot {
+  flex-direction: row !important;
+  align-items: center;
+  gap: var(--r5) !important;
+}
+
+.info-sorot__gambar {
+  width: 160px;
+  flex: none;
+}
+
+.info-sorot h3 {
+  margin: var(--r1) 0 var(--r2) !important;
+}
+
+@media (max-width: 560px) {
+  .info-sorot {
+    flex-direction: column !important;
+    align-items: flex-start;
+  }
+}
+
+/* ---------- Lansia ---------- */
+.beranda--lansia h1 {
+  font-size: var(--fs-2xl);
+}
+
+.beranda-lansia__ket {
+  font-size: var(--fs-besar);
+}
+
+.beranda-lansia__dengar {
+  margin-bottom: var(--r5);
+}
+
+.tombol-raksasa {
+  display: grid;
+  gap: var(--r4);
+}
+
+.tombol-raksasa__item {
+  display: flex;
+  align-items: center;
+  gap: var(--r4);
+  min-height: 96px;
+  padding: var(--r4) var(--r5);
+  border: 3px solid var(--utama);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+  color: var(--teks);
+  text-decoration: none;
+}
+
+.tombol-raksasa__item:hover {
+  background: var(--utama-lembut);
+  color: var(--teks);
+}
+
+.tombol-raksasa__item svg {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  color: var(--utama);
+}
+
+.tombol-raksasa__item strong {
+  display: block;
+  font-size: var(--fs-xl);
+  line-height: 1.2;
+}
+
+.tombol-raksasa__item span span {
+  display: block;
+  font-size: var(--fs-sedang);
+  color: var(--teks-redup);
+}
+
+.tombol-raksasa__item > span {
+  min-width: 0;
+}
+
+/* Layar sempit + teks sangat besar: judul tombol menyesuaikan lebar layar agar tidak terpotong. */
+@media (max-width: 520px) {
+  .tombol-raksasa__item {
+    padding: var(--r4);
+    gap: var(--r3);
+  }
+  .tombol-raksasa__item strong {
+    font-size: min(var(--fs-xl), 9vw);
+  }
+}

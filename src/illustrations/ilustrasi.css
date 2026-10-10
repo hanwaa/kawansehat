@@ -1,0 +1,41 @@
+/* Isian warna ilustrasi mengikuti token profil aktif. */
+.il {
+  overflow: visible;
+}
+.il-utama {
+  fill: var(--utama);
+}
+.il-utama-lembut {
+  fill: var(--utama-lembut);
+}
+.il-aksen {
+  fill: var(--aksen);
+}
+.il-aksen-lembut {
+  fill: var(--aksen-lembut);
+}
+.il-permukaan {
+  fill: var(--permukaan);
+}
+.il-latar2 {
+  fill: var(--permukaan-2);
+}
+.il-hias1 {
+  fill: var(--hias-1);
+}
+.il-hias2 {
+  fill: var(--hias-2);
+}
+.il-hias3 {
+  fill: var(--hias-3);
+}
+.il-hias4 {
+  fill: var(--hias-4);
+}
+.il-garis {
+  stroke: var(--garis-warna);
+}
+[data-profil='dewasa'] .il-garis,
+[data-profil='lansia'] .il-garis {
+  stroke: color-mix(in srgb, var(--garis-warna) 60%, transparent);
+}

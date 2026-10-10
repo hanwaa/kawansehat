@@ -1,0 +1,34 @@
+.akses-kontrol {
+  display: grid;
+  gap: var(--r5);
+}
+
+.akses-kontrol__ukuran {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr));
+  gap: var(--r2);
+  margin-top: var(--r2);
+}
+
+.ukuran-teks {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: var(--fs-kecil);
+}
+
+.ukuran-teks__contoh {
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.akses-kontrol__saklar {
+  display: grid;
+  gap: var(--r2);
+}
+
+.akses-kontrol > * {
+  min-width: 0;
+}

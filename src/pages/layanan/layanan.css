@@ -1,0 +1,258 @@
+/* Indikator langkah */
+.langkah-langkah ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2) var(--r3);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--r5);
+}
+
+.langkah-langkah li {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  flex: 0 1 auto;
+  margin: 0;
+  color: var(--teks-redup);
+  font-size: var(--fs-kecil);
+  font-weight: 600;
+}
+
+.langkah-langkah__nomor {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--garis-warna);
+  background: var(--permukaan);
+  font-weight: 800;
+}
+
+.langkah-langkah__nomor svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.langkah-langkah li.selesai .langkah-langkah__nomor {
+  background: var(--utama);
+  border-color: var(--utama);
+  color: var(--pada-utama);
+}
+
+.langkah-langkah li.aktif {
+  color: var(--teks);
+  font-weight: 800;
+}
+
+.langkah-langkah li.aktif .langkah-langkah__nomor {
+  border-color: var(--utama);
+  box-shadow: 0 0 0 3px var(--utama-lembut);
+  color: var(--utama);
+}
+
+.langkah-langkah__bar {
+  display: none;
+  height: 10px;
+  margin-bottom: var(--r4);
+  border-radius: var(--radius-pil);
+  background: var(--permukaan-2);
+  border: 1.5px solid var(--garis-warna);
+  overflow: hidden;
+}
+
+.langkah-langkah__bar span {
+  display: block;
+  height: 100%;
+  background: var(--utama);
+  transition: width var(--durasi) var(--kurva);
+}
+
+/* Di layar sempit, daftar langkah diganti bilah progres; teks "Langkah x dari 6" tetap ada di kartu. */
+@media (max-width: 760px) {
+  .langkah-langkah__bar {
+    display: block;
+  }
+  .langkah-langkah ol {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+.antrean__langkah h2:focus {
+  outline: none;
+}
+
+.antrean__tip {
+  margin: var(--r3) 0 var(--r5);
+}
+
+.antrean__aksi {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--r3);
+  margin-top: var(--r6);
+}
+
+.antrean__aksi .tombol--utama {
+  margin-left: auto;
+}
+
+/* HP: "Kembali" dan tombol utama satu baris. Tombol utama mengisi sisa ruang; bila teks besar tidak muat,
+   labelnya (maksimal dua kata) turun baris di dalam tombol. Hanya bila satu kata pun tidak muat (teks sangat
+   besar di layar 360px), kedua tombol bertumpuk selebar layar, bukan meluber ke samping. */
+@media (max-width: 520px) {
+  .antrean__langkah {
+    padding-inline: var(--r3);
+  }
+  .antrean__aksi {
+    gap: var(--r2);
+  }
+  .antrean__aksi .tombol {
+    flex: 1 0 auto;
+    gap: var(--r1);
+    padding-inline: var(--r3);
+  }
+  .antrean__aksi .tombol--utama {
+    flex: 999 1 0;
+    min-width: min-content;
+    margin-left: 0;
+    font-size: var(--fs-dasar);
+    text-wrap: balance;
+  }
+}
+
+.ringkasan {
+  margin: 0;
+}
+
+.ringkasan__baris {
+  padding: var(--r3) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+}
+
+.ringkasan dt {
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+  color: var(--teks-redup);
+}
+
+.ringkasan dd {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--r3);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Tiket */
+.tiket {
+  position: relative;
+  padding: var(--r6) var(--r5);
+  border: 3px solid var(--utama);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+  text-align: center;
+  box-shadow: var(--bayangan);
+}
+
+.tiket::before,
+.tiket::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--latar);
+  border: 3px solid var(--utama);
+  transform: translateY(-50%);
+}
+
+.tiket::before {
+  left: -16px;
+  clip-path: inset(0 0 0 50%);
+}
+
+.tiket::after {
+  right: -16px;
+  clip-path: inset(0 50% 0 0);
+}
+
+.tiket__label {
+  margin: 0;
+  font-weight: 700;
+  color: var(--teks-redup);
+  max-width: none;
+}
+
+.tiket__nomor {
+  margin: 0;
+  max-width: none;
+  font-family: var(--font-judul);
+  font-size: clamp(3.5rem, 2rem + 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: var(--utama);
+}
+
+.tiket__nama {
+  font-size: var(--fs-besar);
+  font-weight: 700;
+  max-width: none;
+}
+
+.tiket__detail,
+.tiket__kebutuhan {
+  display: grid;
+  gap: var(--r2);
+  text-align: left;
+  max-width: 460px;
+  margin: 0 auto var(--r4) !important;
+}
+
+.tiket__detail li,
+.tiket__kebutuhan li {
+  display: flex;
+  gap: var(--r2);
+  align-items: flex-start;
+}
+
+.tiket__detail svg,
+.tiket__kebutuhan svg {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  margin-top: 0.15em;
+  color: var(--utama);
+}
+
+.tiket__kebutuhan {
+  padding: var(--r3) var(--r4) !important;
+  border-radius: var(--radius-kecil);
+  background: var(--utama-lembut);
+}
+
+.tiket__catatan {
+  margin: var(--r4) auto 0;
+  color: var(--teks-redup);
+}
+
+.tiket__kawal {
+  margin: var(--r5) 0;
+}
+
+@media print {
+  .tiket__kawal {
+    display: none;
+  }
+}

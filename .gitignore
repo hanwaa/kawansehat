@@ -1,0 +1,41 @@
+# Dependensi
+node_modules/
+
+# Hasil build & laporan
+dist/
+dist-ssr/
+coverage/
+screenshots/
+
+# Variabel lingkungan & konfigurasi lokal
+.env
+.env.*
+!.env.example
+*.local
+
+# Log
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache alat
+.eslintcache
+.vite/
+.cache/
+
+# Deploy
+.vercel/
+.netlify/
+
+# Editor & sistem operasi
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini

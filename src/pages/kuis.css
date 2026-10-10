@@ -1,0 +1,31 @@
+.kuis__tanya {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--r4);
+}
+
+.kuis__tanya:focus,
+.kuis h1:focus {
+  outline: none;
+}
+
+.kuis__umpan {
+  margin-top: var(--r4);
+}
+
+.kuis__skor {
+  font-size: var(--fs-besar);
+}
+
+.kuis__lencana {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  font-size: var(--fs-sedang);
+}
+
+.kuis__lencana svg {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  color: #b07a00;
+}

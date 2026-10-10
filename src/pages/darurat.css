@@ -1,0 +1,76 @@
+.darurat .kartu {
+  margin-top: var(--r5);
+}
+
+.darurat .kartu h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  font-size: var(--fs-besar);
+}
+
+.tombol-telepon {
+  width: 100%;
+  min-height: 96px;
+  border-radius: var(--radius);
+  font-size: var(--fs-xl);
+  gap: var(--r3);
+}
+
+.tombol-telepon svg {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+}
+
+.tombol-telepon strong {
+  font-size: 1.4em;
+}
+
+.darurat__ket {
+  margin-top: var(--r2);
+}
+
+.kartu-bantuan-lapisan {
+  padding: 0;
+  background: rgb(0 0 0 / 0.75);
+}
+
+.kartu-bantuan {
+  width: 100vw;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: #fff8c5;
+  color: #000;
+  text-align: center;
+  overflow: auto;
+}
+
+.kartu-bantuan .dialog {
+  max-width: 900px;
+}
+
+.kartu-bantuan__judul {
+  font-size: clamp(2.5rem, 1.5rem + 6vw, 5rem);
+  line-height: 1.1;
+  margin-bottom: var(--r5);
+}
+
+.kartu-bantuan__teks {
+  font-size: clamp(2rem, 1.2rem + 4vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 auto var(--r5);
+  max-width: none;
+}
+
+.kartu-bantuan__teks--kecil {
+  font-size: clamp(1.4rem, 1rem + 2vw, 2.25rem);
+  font-weight: 700;
+}
+
+.kartu-bantuan .tombol {
+  --tombol-latar: #000;
+  --tombol-teks: #fff;
+  --tombol-garis: #000;
+}

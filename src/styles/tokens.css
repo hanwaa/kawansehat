@@ -1,0 +1,181 @@
+/*
+  Design tokens Kawal Sehat.
+  Alur: preferensi pengguna → atribut data-* di <html> → token di file ini → semua komponen.
+  - data-profil: anak | remaja | dewasa | lansia (karakter visual)
+  - data-teks: normal | besar | sangat-besar
+  - data-kontras="ya", data-sederhana="ya", data-gerak="kurang", data-isyarat="ya"
+  Rasio kontras setiap pasangan teks/latar sudah dicek: ≥ 4.5:1 (AA), ≥ 7:1 di lansia & kontras tinggi.
+*/
+
+:root {
+  /* Tipografi */
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-judul: var(--font-body);
+  --berat-judul: 700;
+  --fs-kecil: 0.875rem;
+  --fs-dasar: 1rem;
+  --fs-sedang: 1.125rem;
+  --fs-besar: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: clamp(1.875rem, 1.4rem + 2vw, 2.5rem);
+  --lh: 1.6;
+  --lebar-baca: 68ch;
+
+  /* Ruang (kelipatan 4px) */
+  --r1: 0.25rem;
+  --r2: 0.5rem;
+  --r3: 0.75rem;
+  --r4: 1rem;
+  --r5: 1.5rem;
+  --r6: 2rem;
+  --r7: 3rem;
+  --r8: 4rem;
+
+  /* Bentuk */
+  --radius: 16px;
+  --radius-kecil: 10px;
+  --radius-pil: 999px;
+  --garis: 1.5px;
+  --bayangan: 0 1px 2px rgb(28 36 32 / 0.06), 0 6px 20px rgb(28 36 32 / 0.08);
+  --bayangan-tombol: none;
+  --target: 44px;
+  --durasi: 220ms;
+  --kurva: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Warna: Hangat & Ramah (dewasa) */
+  --latar: #fbf7ef;
+  --permukaan: #ffffff;
+  --permukaan-2: #f3ede1;
+  --teks: #1c2420;
+  --teks-redup: #4d5a53;
+  --garis-warna: #7d8781;
+  --utama: #1f6f4a;
+  --utama-kuat: #155537;
+  --utama-lembut: #e3f1e8;
+  --pada-utama: #ffffff;
+  --aksen: #e0a526;
+  --aksen-lembut: #fcefc7;
+  --aksen-teks: #6b4a00;
+  --bahaya: #b42318;
+  --bahaya-kuat: #8f1b12;
+  --bahaya-lembut: #fdecea;
+  --pada-bahaya: #ffffff;
+  --fokus: #0b3d91;
+  --sorot-baca: #ffe59a;
+
+  /* Warna dekorasi ilustrasi (tidak pernah dipakai untuk teks) */
+  --hias-1: #3fa36b;
+  --hias-2: #e0a526;
+  --hias-3: #f2c7a5;
+  --hias-4: #9cc9b0;
+  --kulit-1: #c98b5f;
+  --kulit-2: #8d5a3b;
+  --rambut: #2b2422;
+}
+
+/* ---------- Profil: Anak (flat ceria, garis tebal ala stiker) ---------- */
+[data-profil='anak'] {
+  --font-judul: 'Fredoka', var(--font-body);
+  --berat-judul: 600;
+  --radius: 24px;
+  --radius-kecil: 16px;
+  --garis: 3px;
+  --bayangan: 0 4px 0 #1e2433;
+  --bayangan-tombol: 0 4px 0 #1e2433;
+  --latar: #fff8e1;
+  --permukaan: #ffffff;
+  --permukaan-2: #ffefc2;
+  --teks: #1e2433;
+  --teks-redup: #4a5165;
+  --garis-warna: #1e2433;
+  --utama: #0a64b4;
+  --utama-kuat: #084e8c;
+  --utama-lembut: #ddeeff;
+  --aksen: #ffc93c;
+  --aksen-lembut: #fff1c9;
+  --aksen-teks: #6b4a00;
+  --hias-1: #3dba6f;
+  --hias-2: #ffc93c;
+  --hias-3: #ff8a3d;
+  --hias-4: #4fb3ff;
+}
+
+/* ---------- Profil: Remaja (neo-brutalism lembut) ---------- */
+[data-profil='remaja'] {
+  --berat-judul: 800;
+  --radius: 14px;
+  --radius-kecil: 10px;
+  --garis: 2.5px;
+  --bayangan: 4px 4px 0 #17132b;
+  --bayangan-tombol: 3px 3px 0 #17132b;
+  --latar: #f5f2ff;
+  --permukaan: #ffffff;
+  --permukaan-2: #ece6ff;
+  --teks: #17132b;
+  --teks-redup: #4b4566;
+  --garis-warna: #17132b;
+  --utama: #5b2bc4;
+  --utama-kuat: #46209a;
+  --utama-lembut: #e9e1ff;
+  --aksen: #16c2b0;
+  --aksen-lembut: #d6f7f3;
+  --aksen-teks: #0b5e55;
+  --hias-1: #16c2b0;
+  --hias-2: #ff6b5b;
+  --hias-3: #ffc93c;
+  --hias-4: #a98bff;
+}
+
+/* ---------- Profil: Lansia (flat jelas, tanpa dekorasi) ---------- */
+[data-profil='lansia'] {
+  --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-judul: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --berat-judul: 700;
+  --lh: 1.65;
+  --radius: 12px;
+  --radius-kecil: 10px;
+  --garis: 2px;
+  --bayangan: none;
+  --target: 56px;
+  --latar: #fffdf6;
+  --permukaan: #ffffff;
+  --permukaan-2: #f1eee4;
+  --teks: #111111;
+  --teks-redup: #333333;
+  --garis-warna: #2b2b2b;
+  --utama: #0e5233;
+  --utama-kuat: #093a24;
+  --utama-lembut: #dcefe3;
+  --aksen-teks: #5a3e00;
+  --bahaya: #9b1c12;
+  --bahaya-kuat: #7a150d;
+}
+
+/* ---------- Preferensi akses (bisa dipadukan dengan profil apa pun) ---------- */
+[data-teks='besar'] {
+  font-size: 125%;
+}
+[data-teks='sangat-besar'] {
+  font-size: 150%;
+}
+
+[data-kontras='ya'] {
+  --latar: #ffffff;
+  --permukaan: #ffffff;
+  --permukaan-2: #ffffff;
+  --teks: #000000;
+  --teks-redup: #000000;
+  --garis-warna: #000000;
+  --garis: 2.5px;
+  --utama: #00391d;
+  --utama-kuat: #000000;
+  --utama-lembut: #ffffff;
+  --aksen-lembut: #ffffff;
+  --aksen-teks: #000000;
+  --bahaya: #8f0000;
+  --bahaya-lembut: #ffffff;
+  --bayangan: none;
+  --bayangan-tombol: none;
+  --fokus: #000000;
+  --sorot-baca: #ffff00;
+}

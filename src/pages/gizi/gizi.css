@@ -1,0 +1,499 @@
+.topik__kembali {
+  margin-top: var(--r4);
+  margin-left: calc(var(--r3) * -1);
+}
+
+.gizi-utama {
+  margin-bottom: var(--r4);
+}
+
+.gizi-ortu {
+  margin-bottom: var(--r4);
+}
+
+.gizi-ortu svg {
+  color: var(--utama);
+}
+
+.gizi-alat h2 {
+  font-size: var(--fs-besar);
+}
+
+/* Isi Piringku */
+.isi-piringku {
+  display: grid;
+  gap: var(--r5);
+  align-items: center;
+}
+
+@media (min-width: 720px) {
+  .isi-piringku {
+    grid-template-columns: 260px 1fr;
+  }
+}
+
+.isi-piringku__gambar {
+  width: 100%;
+  max-width: 260px;
+  justify-self: center;
+}
+
+.isi-piringku__daftar {
+  display: grid;
+  gap: var(--r2);
+  margin-bottom: var(--r4) !important;
+}
+
+.isi-piringku__daftar li {
+  display: flex;
+  gap: var(--r3);
+  align-items: flex-start;
+}
+
+.isi-piringku__daftar small {
+  display: block;
+  color: var(--teks-redup);
+}
+
+.isi-piringku__warna {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2em;
+  border-radius: 4px;
+  border: 1.5px solid #1c2420;
+}
+
+/* Formulir */
+.form-gizi {
+  display: grid;
+  gap: var(--r5);
+}
+
+.form-gizi__baris {
+  display: grid;
+  gap: var(--r4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+
+.form-gizi__privasi {
+  margin-top: var(--r4);
+}
+
+/* Hasil */
+.hasil-gizi {
+  margin-top: var(--r5);
+  border-width: 3px;
+}
+
+.hasil-gizi--baik {
+  border-color: var(--utama);
+}
+
+.hasil-gizi--perhatian {
+  border-color: var(--aksen-teks);
+  background: color-mix(in srgb, var(--aksen-lembut) 55%, var(--permukaan));
+}
+
+.hasil-gizi h2:focus {
+  outline: none;
+}
+
+.hasil-gizi__angka {
+  font-size: var(--fs-besar);
+}
+
+.hasil-gizi__angka strong {
+  font-size: var(--fs-2xl);
+}
+
+.hasil-gizi__kawal {
+  margin-top: var(--r4);
+}
+
+.skala-imt {
+  position: relative;
+  margin: var(--r6) 0 var(--r5);
+}
+
+.skala-imt__jalur {
+  display: flex;
+  height: 14px;
+  border-radius: var(--radius-pil);
+  overflow: hidden;
+  border: 1.5px solid var(--garis-warna);
+}
+
+.skala-imt__jalur .s1 {
+  background: #f2b8a0;
+}
+.skala-imt__jalur .s2 {
+  background: #f5d58a;
+}
+.skala-imt__jalur .s3 {
+  background: #7cc68d;
+}
+
+.skala-imt__penanda {
+  position: absolute;
+  top: -34px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skala-imt__penanda span {
+  padding: 0 var(--r2);
+  border-radius: var(--radius-kecil);
+  background: var(--teks);
+  color: var(--latar);
+  font-weight: 800;
+  font-size: var(--fs-kecil);
+}
+
+.skala-imt__penanda::after {
+  content: '';
+  width: 3px;
+  height: 30px;
+  background: var(--teks);
+}
+
+.skala-imt__label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--r1);
+  font-size: var(--fs-kecil);
+  color: var(--teks-redup);
+}
+
+/* Daftar AKG */
+.akg-daftar {
+  display: grid;
+  gap: var(--r3);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr));
+  margin: var(--r4) 0;
+}
+
+.akg-daftar__item {
+  padding: var(--r3) var(--r4);
+  border-radius: var(--radius-kecil);
+  background: var(--utama-lembut);
+}
+
+.akg-daftar dt {
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+  color: var(--teks-redup);
+}
+
+.akg-daftar dd {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.akg-daftar dd span {
+  font-size: var(--fs-dasar);
+  font-weight: 600;
+}
+
+.akg-daftar--ringkas dd {
+  font-size: var(--fs-besar);
+}
+
+.ggl-daftar {
+  display: grid;
+  gap: var(--r1);
+  margin-bottom: var(--r4) !important;
+}
+
+/* Cek makanan */
+.cek-makanan {
+  display: grid;
+  gap: var(--r5);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .cek-makanan {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+  .cek-makanan__kanan {
+    position: sticky;
+    top: 92px;
+  }
+}
+
+.cari-makanan__input {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  padding-inline: var(--r3);
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: var(--radius-kecil);
+  background: var(--permukaan);
+}
+
+.cari-makanan__input:focus-within {
+  outline: 3px solid var(--fokus);
+  outline-offset: 3px;
+}
+
+.cari-makanan__input svg {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--teks-redup);
+}
+
+.cari-makanan__input input {
+  border: 0 !important;
+  outline: none;
+  padding-inline: 0 !important;
+  min-height: var(--target);
+  width: 100%;
+  background: transparent;
+  font: inherit;
+  color: var(--teks);
+}
+
+.cari-makanan__filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2);
+  margin: var(--r4) 0 var(--r2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: var(--r1) var(--r4);
+  border: 1.5px solid var(--garis-warna);
+  border-radius: var(--radius-pil);
+  background: var(--permukaan);
+  font-weight: 600;
+  font-size: var(--fs-kecil);
+  cursor: pointer;
+}
+
+.chip[data-selected] {
+  background: var(--utama);
+  border-color: var(--utama);
+  color: var(--pada-utama);
+}
+
+.chip[data-focus-visible] {
+  outline: 3px solid var(--fokus);
+  outline-offset: 2px;
+}
+
+.cari-makanan__hasil {
+  display: grid;
+  gap: var(--r2);
+  max-height: 460px;
+  overflow: auto;
+  padding: 4px !important;
+}
+
+.hasil-makanan {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--r1) var(--r3);
+  width: 100%;
+  min-height: var(--target);
+  padding: var(--r2) var(--r3);
+  border: 1.5px solid color-mix(in srgb, var(--garis-warna) 50%, transparent);
+  border-radius: var(--radius-kecil);
+  background: var(--permukaan);
+  color: var(--teks);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hasil-makanan[data-hovered] {
+  background: var(--permukaan-2);
+}
+
+.hasil-makanan__nama {
+  font-weight: 700;
+}
+
+.hasil-makanan__urt {
+  color: var(--teks-redup);
+  font-size: var(--fs-kecil);
+}
+
+.detail-makanan h2:focus {
+  outline: none;
+}
+
+.porsi {
+  margin: var(--r4) 0;
+}
+
+.porsi__kontrol {
+  display: flex;
+  align-items: center;
+  gap: var(--r3);
+  margin-top: var(--r2);
+}
+
+.porsi__nilai {
+  min-width: 3ch;
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  text-align: center;
+}
+
+.rekap h3 {
+  font-size: var(--fs-sedang);
+  margin-top: var(--r5);
+}
+
+.rekap__daftar {
+  display: grid;
+  gap: var(--r1);
+}
+
+.rekap__daftar li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid color-mix(in srgb, var(--garis-warna) 25%, transparent);
+}
+
+.ceklis {
+  display: grid;
+  gap: var(--r1);
+}
+
+.ceklis li {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  color: var(--teks-redup);
+}
+
+.ceklis li.ada {
+  color: var(--teks);
+  font-weight: 700;
+}
+
+.ceklis li svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.ceklis li.ada svg {
+  color: var(--utama);
+}
+
+.bar-gizi {
+  margin-bottom: var(--r3);
+}
+
+.bar-gizi__teks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--r2);
+  font-size: var(--fs-kecil);
+  font-weight: 600;
+}
+
+.bar-gizi__jalur {
+  height: 10px;
+  margin-top: 4px;
+  border-radius: var(--radius-pil);
+  background: var(--permukaan-2);
+  border: 1px solid color-mix(in srgb, var(--garis-warna) 40%, transparent);
+  overflow: hidden;
+}
+
+.bar-gizi__jalur span {
+  display: block;
+  height: 100%;
+  background: var(--utama);
+}
+
+.bar-gizi--lewat .bar-gizi__jalur span {
+  background: var(--bahaya);
+}
+
+.bar-gizi--lewat .bar-gizi__teks strong {
+  color: var(--bahaya);
+}
+
+/* Game Susun Isi Piringku */
+.susun-piring__atas {
+  display: grid;
+  gap: var(--r5);
+  align-items: start;
+  margin-bottom: var(--r5);
+}
+
+@media (min-width: 760px) {
+  .susun-piring__atas {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+.susun-piring__piring {
+  width: 100%;
+  max-width: 320px;
+  justify-self: center;
+}
+
+.susun-piring__judul-daftar {
+  font-size: var(--fs-besar);
+  margin-top: var(--r4);
+}
+
+.susun-piring__bagian {
+  display: grid;
+  gap: var(--r1);
+  margin-bottom: var(--r4) !important;
+}
+
+.susun-piring__bagian li.terisi {
+  font-weight: 700;
+}
+
+.susun-piring__makanan {
+  display: grid;
+  gap: var(--r3);
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+}
+
+.makanan-tombol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--r1);
+  width: 100%;
+  padding: var(--r3);
+  border: 3px solid var(--garis-warna);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+  box-shadow: var(--bayangan-tombol);
+  color: var(--teks);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--durasi) var(--kurva);
+}
+
+.makanan-tombol[data-pressed] {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.makanan-tombol[aria-pressed='true'] {
+  background: var(--utama-lembut);
+  border-color: var(--utama);
+}

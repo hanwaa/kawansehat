@@ -1,0 +1,64 @@
+.jadwal-waktu {
+  margin-bottom: var(--r5);
+}
+
+.jadwal-waktu h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+}
+
+.jadwal-waktu h3 svg {
+  color: var(--aksen-teks);
+}
+
+.jadwal-daftar {
+  display: grid;
+  gap: var(--r3);
+}
+
+.jadwal-obat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--r3) var(--r4);
+  align-items: center;
+  padding: var(--r4);
+}
+
+.jadwal-obat__teks {
+  display: flex;
+  flex-direction: column;
+}
+
+.jadwal-obat__teks strong {
+  font-size: var(--fs-sedang);
+}
+
+.jadwal-obat__aksi {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2);
+  align-items: center;
+}
+
+.jadwal-obat--sudah {
+  background: var(--utama-lembut);
+}
+
+.jadwal-obat--sudah .jadwal-obat__teks strong {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.form-obat {
+  margin-top: var(--r5);
+}
+
+.notifikasi-obat h2 {
+  font-size: var(--fs-xl);
+}
+
+.notifikasi-obat .label-kecil {
+  margin: 0 0 var(--r1);
+}

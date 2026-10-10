@@ -1,0 +1,126 @@
+.profil-grup__daftar {
+  display: grid;
+  gap: var(--r4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 900px) {
+  .profil-grup:not(.profil-grup--ringkas) .profil-grup__daftar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.profil-kartu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--r3);
+  padding: var(--r4) var(--r3) var(--r5);
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+  box-shadow: var(--bayangan);
+  cursor: pointer;
+  text-align: center;
+  transition: transform var(--durasi) var(--kurva), background-color var(--durasi) var(--kurva);
+}
+
+[data-profil='dewasa'] .profil-kartu {
+  border-color: color-mix(in srgb, var(--garis-warna) 50%, transparent);
+}
+
+.profil-kartu[data-hovered] {
+  transform: translateY(-3px);
+}
+
+.profil-kartu[data-selected] {
+  background: var(--utama-lembut);
+  border-color: var(--utama);
+  box-shadow: inset 0 0 0 2px var(--utama), var(--bayangan);
+}
+
+.profil-kartu[data-focus-visible] {
+  outline: 3px solid var(--fokus);
+  outline-offset: 4px;
+}
+
+.profil-kartu__gambar {
+  width: min(140px, 80%);
+}
+
+.profil-kartu__teks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profil-kartu__nama {
+  font-family: var(--font-judul);
+  font-weight: var(--berat-judul);
+  font-size: var(--fs-besar);
+  line-height: 1.2;
+}
+
+.profil-kartu__rentang {
+  color: var(--teks-redup);
+  font-size: var(--fs-kecil);
+  font-weight: 600;
+}
+
+.profil-kartu__centang {
+  position: absolute;
+  top: var(--r3);
+  right: var(--r3);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid var(--garis-warna);
+  background: var(--permukaan);
+  color: transparent;
+}
+
+.profil-kartu[data-selected] .profil-kartu__centang {
+  background: var(--utama);
+  border-color: var(--utama);
+  color: var(--pada-utama);
+}
+
+.profil-kartu__centang svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.profil-grup--ringkas .profil-kartu {
+  flex-direction: row;
+  text-align: left;
+  padding: var(--r3);
+  box-shadow: none;
+}
+
+.profil-grup--ringkas .profil-kartu__gambar {
+  width: 56px;
+  flex: none;
+}
+
+.profil-grup--ringkas .profil-kartu__nama {
+  font-size: var(--fs-sedang);
+}
+
+.profil-grup--ringkas .profil-kartu__centang {
+  position: static;
+  margin-left: auto;
+  flex: none;
+}
+
+.profil-grup--ringkas .profil-grup__daftar {
+  margin-top: var(--r2);
+}
+
+@media (max-width: 420px) {
+  .profil-grup--ringkas .profil-grup__daftar {
+    grid-template-columns: 1fr;
+  }
+}

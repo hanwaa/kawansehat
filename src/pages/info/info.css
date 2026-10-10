@@ -1,0 +1,244 @@
+.topik__kembali {
+  margin-top: var(--r4);
+  margin-left: calc(var(--r3) * -1);
+}
+
+.topik__isi {
+  display: grid;
+  gap: var(--r6);
+}
+
+.topik__isi > * {
+  min-width: 0;
+}
+
+.topik__isi > .tombol {
+  justify-self: start;
+}
+
+.topik__dengar {
+  margin-top: var(--r3);
+}
+
+.topik__isi h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+}
+
+.topik__isi h2 svg {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  color: var(--utama);
+}
+
+.topik__kaki {
+  margin-top: var(--r7);
+  padding-top: var(--r4);
+  border-top: var(--garis) solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+}
+
+.kartu--bahaya {
+  background: var(--bahaya-lembut);
+  border-color: var(--bahaya);
+}
+
+.kartu--bahaya h2 svg {
+  color: var(--bahaya) !important;
+}
+
+/* 3M */
+.tiga-m {
+  display: grid;
+  gap: var(--r4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+
+.tiga-m__item {
+  padding: var(--r4);
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+}
+
+[data-profil='dewasa'] .tiga-m__item {
+  border-color: color-mix(in srgb, var(--garis-warna) 40%, transparent);
+}
+
+.tiga-m__gambar {
+  width: 100%;
+  max-width: 160px;
+  margin-bottom: var(--r3);
+}
+
+.tiga-m__item h3 {
+  margin-bottom: var(--r1);
+}
+
+.tiga-m__item p {
+  margin: 0;
+}
+
+/* Komik anak */
+.komik {
+  display: grid;
+  gap: var(--r4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.komik__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r3);
+  padding: var(--r5);
+  border: 3px solid var(--garis-warna);
+  border-radius: var(--radius);
+  box-shadow: var(--bayangan);
+  font-size: var(--fs-sedang);
+}
+
+.komik__panel p {
+  margin: 0;
+}
+
+.komik__panel--biru {
+  background: #ddeeff;
+}
+.komik__panel--kuning {
+  background: #fff1c9;
+}
+.komik__panel--merah {
+  background: #ffe1dd;
+}
+
+[data-kontras='ya'] .komik__panel {
+  background: var(--permukaan);
+}
+
+.komik__gambar {
+  height: 120px;
+}
+
+.komik__ikon {
+  width: 72px;
+  height: 72px;
+  color: var(--utama);
+}
+
+/* Mitos vs fakta remaja */
+.mitos-daftar {
+  display: grid;
+  gap: var(--r4);
+}
+
+.mitos__baris {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2) var(--r3);
+  align-items: flex-start;
+  max-width: none;
+}
+
+.mitos__baris:last-child {
+  margin-bottom: 0;
+}
+
+.mitos__label {
+  flex: none;
+  min-width: 4.5rem;
+  padding: 2px var(--r2);
+  border: 2px solid var(--garis-warna);
+  border-radius: var(--radius-kecil);
+  font-weight: 800;
+  text-align: center;
+}
+
+.mitos__label--mitos {
+  background: #ffe1dd;
+  color: #7a150d;
+}
+
+.mitos__label--fakta {
+  background: #d6f7f3;
+  color: #0b5e55;
+}
+
+[data-kontras='ya'] .mitos__label {
+  background: #fff;
+  color: #000;
+}
+
+/* Poin besar lansia */
+.poin-besar {
+  display: grid;
+  gap: var(--r4);
+}
+
+.poin-besar__item {
+  display: flex;
+  gap: var(--r4);
+  align-items: flex-start;
+  padding: var(--r5);
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: var(--radius);
+  background: var(--permukaan);
+}
+
+.poin-besar__item svg {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  color: var(--utama);
+}
+
+.poin-besar__item p {
+  margin: 0;
+  font-size: var(--fs-besar);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.poin-besar__item--bahaya {
+  background: var(--bahaya-lembut);
+  border-color: var(--bahaya);
+  border-width: 3px;
+}
+
+.poin-besar__item--bahaya svg {
+  color: var(--bahaya);
+}
+
+/* Daftar topik */
+.topik-kartu {
+  height: 100%;
+}
+
+.topik-kartu__gambar {
+  height: 110px;
+  max-width: 180px;
+}
+
+.topik-kartu__ikon {
+  width: 110px;
+  height: 110px;
+}
+
+.topik-kartu__ikon svg {
+  width: 56px;
+  height: 56px;
+}
+
+.segera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2);
+}
+
+.segera li {
+  padding: var(--r1) var(--r3);
+  border: 1.5px dashed var(--garis-warna);
+  border-radius: var(--radius-pil);
+  color: var(--teks-redup);
+  margin: 0;
+}
