@@ -52,7 +52,7 @@ function Pencarian({ onPilih, dipilih }) {
   }, [kata, kelompok])
 
   return (
-    <section className="kartu cari-makanan" aria-labelledby="judul-cari">
+    <section className="kartu cari-makanan" aria-labelledby="judul-cari" data-tour="cari-makanan">
       <h2 id="judul-cari" tabIndex={-1}>
         Cari makanan
       </h2>
@@ -109,7 +109,7 @@ function DetailMakanan({ makanan, onTambah, onTutup, profil }) {
   const g = makanan.gizi
   const ubahPorsi = (d) => setPorsi((p) => Math.min(10, Math.max(0.5, p + d)))
   return (
-    <section className="kartu detail-makanan" aria-labelledby="judul-detail">
+    <section className="kartu detail-makanan" aria-labelledby="judul-detail" data-tour="detail-makanan">
       <div className="dialog__kepala">
         <div>
           <p className="label-kecil">{KELOMPOK[makanan.kelompok]}</p>
@@ -175,7 +175,7 @@ function Rekap({ isi, onHapus, onKosongkan, profil, kabar, onUrungkan, refUrungk
   const kelompokAda = new Set(daftar.map((d) => d.makanan.kelompok))
 
   return (
-    <section className="kartu rekap" aria-labelledby="judul-rekap" ref={rekap}>
+    <section className="kartu rekap" aria-labelledby="judul-rekap" ref={rekap} data-tour="rekap">
       <h2 id="judul-rekap" tabIndex={-1}>
         Piringku Hari Ini
       </h2>
@@ -312,7 +312,7 @@ export default function CekMakanan() {
 
   return (
     <div className="wadah">
-      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali">
+      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali" data-tour="kembali">
         <ArrowLeft aria-hidden="true" /> {pilih({ anak: 'Piringku', semua: 'Cek Gizi' })}
       </Link>
       <header className="judul-halaman">

@@ -77,7 +77,7 @@ Profil lansia hanya berupa **pengaturan bawaan** (teks besar, suara, tampilan se
 |---|---|---|---|
 | 1 | **Mode Sesuai Usia** | Ilustrasi, warna, bahasa, tata letak, dan fitur menyesuaikan profil | Inovasi, relevansi tema |
 | 2 | **Atur Akses** | Enam preferensi akses dengan pratinjau langsung | Aksesibilitas |
-| 3 | **Tur & Tips Si Kawal** | Tur 3–4 langkah per profil, plus tips di setiap langkah antrean | UX, pengguna awam teknologi |
+| 3 | **Tur & Tips Si Kawal** | Panduan untuk setiap halaman, sesuai profil, plus tips di setiap langkah antrean | UX, pengguna awam teknologi |
 | 4 | **Info Sehat Adaptif** | Satu topik (DBD) dalam 4 cara bicara, dengan sumber Kemenkes, tombol Dengarkan, dan BISINDO | Inovasi, melawan hoaks |
 | 5 | **Antrean & Konsultasi Inklusif** | Juru bahasa isyarat, kursi roda, pendamping, antrean prioritas, subtitle, dokumen dibacakan | Manfaat nyata, implementasi |
 | 6 | **Cek Gizi & Tubuh** | IMT dewasa, IMT menurut umur (5–18 th), AKG, nilai gizi makanan lokal, batas gula/garam/lemak | Manfaat jangka panjang, isu gizi nasional |
@@ -100,7 +100,7 @@ Isi medis mengikuti Leaflet DBD 3M Plus Kementerian Kesehatan [9].
 
 1. **Komunikasi kesehatan adaptif.** Bukan sekadar "mode gelap" atau "ukuran huruf". Konten, bahasa, dan tata letak ikut berubah, dan semuanya digerakkan oleh **satu design system** (token warna, tipografi, bentuk), sehingga produk tetap konsisten dan mudah dirawat.
 2. **Aksesibilitas yang berdiri sendiri, bukan diikat ke usia.** Lapisan akses terpisah dari profil, sehingga kombinasi seperti "remaja + bahasa isyarat" atau "anak + teks besar" tetap terlayani.
-3. **Maskot sebagai pemandu yang aksesibel.** Tur Si Kawal menawarkan, bukan memaksa. Setiap langkahnya bisa dijalankan dengan keyboard dan pembaca layar, tidak maju otomatis, dan bisa diulang kapan saja lewat tombol mengambang di pojok kanan bawah: Si Kawal dengan balon chat **"Lihat Panduan"**.
+3. **Maskot sebagai pemandu yang aksesibel.** Tur Si Kawal menawarkan, bukan memaksa. Setiap langkahnya bisa dijalankan dengan keyboard dan pembaca layar, dan tidak maju otomatis. Tombol mengambang di pojok kanan bawah (Si Kawal dengan balon chat **"Lihat Panduan"**) membuka panduan untuk halaman yang sedang dibuka, tanpa memindahkan pengguna ke halaman lain.
 4. **Kebutuhan khusus diminta sejak awal.** Juru bahasa isyarat, kursi roda, dan pendamping dipesan saat mengambil antrean, sehingga puskesmas bisa bersiap sebelum pasien datang.
 5. **Kartu bantuan darurat.** Layar penuh bertuliskan besar "Saya butuh bantuan medis. Tolong teleponkan 119." untuk ditunjukkan ke orang terdekat.
 6. **Cek gizi yang jujur secara ilmiah dan etis.** Usia 5–18 tahun memakai IMT menurut umur (WHO 2007, Permenkes 2/2020), bukan rumus dewasa. Mode anak dan remaja tidak menampilkan target kalori, dan bahasanya tidak menghakimi.

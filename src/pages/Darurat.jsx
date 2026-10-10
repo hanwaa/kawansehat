@@ -22,7 +22,7 @@ export default function Darurat() {
         </p>
       </header>
 
-      <a href="tel:119" className="tombol tombol--bahaya tombol-telepon">
+      <a href="tel:119" className="tombol tombol--bahaya tombol-telepon" data-tour="telepon-119">
         <PhoneCall aria-hidden="true" />
         <span>
           Telepon <strong>119</strong>
@@ -30,7 +30,7 @@ export default function Darurat() {
       </a>
       <p className="bantuan darurat__ket">Layanan gawat darurat medis Kementerian Kesehatan. Bisa dari HP atau telepon rumah, bebas biaya.</p>
 
-      <section className="kartu" aria-labelledby="judul-sampaikan">
+      <section className="kartu" aria-labelledby="judul-sampaikan" data-tour="yang-disampaikan">
         <h2 id="judul-sampaikan">Yang perlu disampaikan ke petugas</h2>
         <ol>
           <li>Nama Anda dan alamat lengkap, beserta patokan yang mudah dicari.</li>
@@ -41,7 +41,7 @@ export default function Darurat() {
         <p>Petugas 119 akan memandu tindakan awal sambil menunggu bantuan datang. Tetap tenang dan jangan tutup telepon sebelum diminta.</p>
       </section>
 
-      <section className="kartu kartu--lembut" aria-labelledby="judul-kartu-bantuan">
+      <section className="kartu kartu--lembut" aria-labelledby="judul-kartu-bantuan" data-tour="kartu-bantuan">
         <h2 id="judul-kartu-bantuan">
           <HandHelping aria-hidden="true" /> Sulit bicara atau Tuli?
         </h2>
@@ -71,7 +71,7 @@ export default function Darurat() {
         </DialogTrigger>
       </section>
 
-      <section className="kartu" aria-labelledby="judul-bukan-darurat">
+      <section className="kartu" aria-labelledby="judul-bukan-darurat" data-tour="bukan-darurat">
         <h2 id="judul-bukan-darurat">
           <Phone aria-hidden="true" /> Bukan darurat?
         </h2>

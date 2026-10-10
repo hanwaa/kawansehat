@@ -61,11 +61,12 @@ Only a few things must stay identical across profiles: the logo, the "Tampilan" 
 
 **CSS loading order matters.** `main.jsx` imports `tokens.css` and `base.css` first. Page CSS ships inside lazily loaded route chunks, so a page's CSS only exists after that page has been visited. Styles shared across pages belong in `base.css` or in a component's own CSS file (e.g. `listen-button.css`), never in a page's CSS.
 
-**Mascot tour.** `src/tour/TourProvider.jsx` and `MascotTour.jsx` run the tour.
-- Steps live in `src/tour/steps.js`, one set per profile. Each step points at `[data-tour="..."]` targets: `menu`, `ganti-tampilan`, `darurat`, `dengarkan` and `aksi-utama`.
-- Every Beranda variant must render the targets its profile's steps use.
-- Each step is a React Aria modal dialog with a spotlight cut-out, placed by `hitungPosisi()`: as a bottom sheet on mobile, otherwise beside or above/below the target.
-- The tour is offered once, after onboarding (`navigate('/beranda', { state: { tawarTur: true } })`), and can be replayed from any page except onboarding via the floating Si Kawal button with a "Lihat Panduan" chat bubble (`components/TombolPanduan.jsx`, bottom-right). On mobile it sits above the bottom nav, using `--tinggi-nav`, which Layout measures. `mulai()` navigates to `/beranda` and waits for `[data-tour="aksi-utama"]` before opening, because routes are lazy-loaded.
+**Mascot tour.** `src/tour/TourProvider.jsx` and `MascotTour.jsx` run the tour. It is a **per-page guide**: it explains the page that is currently open and never navigates away.
+- Steps live in `src/tour/steps.js` in `PANDUAN`, keyed by page (`halamanPanduan(pathname)` maps routes to keys; Beranda has one list per profile). Every page ends with the shared steps `menu`, `ganti-tampilan` and `darurat`.
+- Each step points at a `[data-tour="..."]` element on that page. When the tour opens, steps whose target is missing or hidden are skipped, so one list can cover profile variants and states (no result yet, no ticket). A new page feature that deserves a step needs both a `data-tour` attribute and an entry in its page list.
+- `judul`/`teks` are plain strings or per-profile variants resolved with `pilih()`; `profil: [...]` limits a step to some profiles.
+- Each step is a React Aria modal dialog with a spotlight cut-out and a tail pointing at the target, placed by `hitungPosisi()`: as a bottom sheet on mobile, otherwise beside or above/below the target.
+- The Beranda tour is offered once, after onboarding (`navigate('/beranda', { state: { tawarTur: true } })`). Any page except onboarding can open its own guide via the floating Si Kawal button with a "Lihat Panduan" chat bubble (`components/TombolPanduan.jsx`, bottom-right). On mobile it sits above the bottom nav, using `--tinggi-nav`, which Layout measures.
 
 **Nutrition (`/cek-gizi/*`).** The rule here: **never invent health numbers.**
 - `src/lib/gizi.js` holds pure functions, covered by `gizi.test.js`.

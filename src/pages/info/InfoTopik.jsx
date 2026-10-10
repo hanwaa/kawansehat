@@ -25,7 +25,7 @@ export default function InfoTopik() {
 
   return (
     <article className={`wadah ${profil === 'lansia' ? 'wadah--sempit' : ''} topik topik--${profil}`} ref={artikel}>
-      <Link to="/info" className="tombol tombol--teks topik__kembali" data-tidak-dibaca>
+      <Link to="/info" className="tombol tombol--teks topik__kembali" data-tidak-dibaca data-tour="kembali">
         <ArrowLeft aria-hidden="true" /> Semua topik
       </Link>
       <header className="judul-halaman">
@@ -34,7 +34,7 @@ export default function InfoTopik() {
         <p className="label-kecil" data-tidak-dibaca>
           <CalendarCheck aria-hidden="true" width="16" height="16" /> Ditinjau {data.ditinjau} · sumber Kemenkes
         </p>
-        <div className="topik__dengar">
+        <div className="topik__dengar" data-tour="dengarkan">
           <ListenButton target={artikel} label={profil === 'lansia' ? 'Dengarkan halaman ini' : 'Dengarkan'} />
         </div>
       </header>
@@ -42,7 +42,7 @@ export default function InfoTopik() {
       <div className="topik__isi">
         <Isi />
       </div>
-      <footer className="topik__kaki" data-tidak-dibaca>
+      <footer className="topik__kaki" data-tidak-dibaca data-tour="sumber">
         <Sumber ids={data.sumber} />
         <p className="bantuan">Informasi ini untuk edukasi dan tidak menggantikan pemeriksaan tenaga kesehatan.</p>
       </footer>

@@ -11,7 +11,7 @@ export default function NotFound() {
         <p>Hmm, Si Kawal tidak menemukan halaman ini. Mungkin alamatnya salah ketik.</p>
       </Gelembung>
       <p style={{ marginTop: 'var(--r5)' }}>
-        <Link to="/beranda" className="tombol tombol--utama">
+        <Link to="/beranda" className="tombol tombol--utama" data-tour="kembali-beranda">
           Kembali ke beranda
         </Link>
       </p>

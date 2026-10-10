@@ -128,7 +128,7 @@ export default function CekIMT() {
 
   return (
     <div className="wadah wadah--sempit">
-      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali">
+      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali" data-tour="kembali">
         <ArrowLeft aria-hidden="true" /> {pilih({ anak: 'Piringku', semua: 'Cek Gizi' })}
       </Link>
       <header className="judul-halaman">
@@ -143,7 +143,7 @@ export default function CekIMT() {
         </p>
       </header>
 
-      <form className="kartu form-gizi" onSubmit={hitung} noValidate>
+      <form className="kartu form-gizi" onSubmit={hitung} noValidate data-tour="form-gizi">
         <PilihanRadio label="Jenis kelamin" nilai={form.jk} onChange={ubah('jk')} pilihan={PILIHAN_JK} galat={galat.jk} kisi orientasi="horizontal" />
         <div className="form-gizi__baris">
           <KolomAngka label="Umur" satuan="tahun" nilai={form.umurTahun} onChange={ubah('umurTahun')} galat={galat.umurTahun} inputMode="numeric" />
@@ -180,7 +180,12 @@ export default function CekIMT() {
       </form>
 
       {hasil && (
-        <section className={`kartu hasil-gizi hasil-gizi--${hasil.nada}`} aria-labelledby="judul-hasil" ref={kotakHasil}>
+        <section
+          className={`kartu hasil-gizi hasil-gizi--${hasil.nada}`}
+          aria-labelledby="judul-hasil"
+          ref={kotakHasil}
+          data-tour="hasil"
+        >
           <p className="label-kecil">Hasil</p>
           <h2 id="judul-hasil" tabIndex={-1} ref={judulHasil}>
             {hasil.judul}
@@ -227,7 +232,7 @@ export default function CekIMT() {
           </div>
         </section>
       )}
-      <p className="bantuan form-gizi__privasi">Data hanya dihitung dan disimpan di perangkat ini.</p>
+      <p className="bantuan form-gizi__privasi" data-tour="privasi">Data hanya dihitung dan disimpan di perangkat ini.</p>
     </div>
   )
 }

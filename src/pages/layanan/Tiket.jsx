@@ -45,7 +45,7 @@ export default function Tiket() {
           <h1>Belum ada tiket antrean</h1>
           <p>Ambil antrean puskesmas atau pesan konsultasi online terlebih dahulu.</p>
         </header>
-        <Link to="/layanan/antrean" className="tombol tombol--utama">
+        <Link to="/layanan/antrean" className="tombol tombol--utama" data-tour="ambil-antrean">
           Ambil antrean
         </Link>
       </div>
@@ -72,7 +72,7 @@ export default function Tiket() {
         {pengumuman}
       </div>
 
-      <section className="tiket" ref={kotak} aria-label="Tiket antrean">
+      <section className="tiket" ref={kotak} aria-label="Tiket antrean" data-tour="tiket">
         <p className="tiket__label">Nomor antrean</p>
         <p className="tiket__nomor">{tiket.nomor}</p>
         <p className="tiket__nama">{tiket.nama}</p>
@@ -116,12 +116,16 @@ export default function Tiket() {
       </Gelembung>
 
       <div className="baris tidak-dicetak">
-        <ListenButton target={kotak} label="Dengarkan tiket" />
-        <Button className="tombol" onPress={() => window.print()}>
+        <div data-tour="dengarkan">
+          <ListenButton target={kotak} label="Dengarkan tiket" />
+        </div>
+        <Button className="tombol" onPress={() => window.print()} data-tour="cetak">
           <Printer aria-hidden="true" /> Cetak / simpan PDF
         </Button>
         <DialogTrigger>
-          <Button className="tombol tombol--teks">Batalkan antrean</Button>
+          <Button className="tombol tombol--teks" data-tour="batalkan">
+            Batalkan antrean
+          </Button>
           <ModalOverlay className="lapisan-dialog" isDismissable>
             <Modal className="modal">
               <Dialog className="dialog" role="alertdialog">

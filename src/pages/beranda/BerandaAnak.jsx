@@ -56,7 +56,7 @@ export default function BerandaAnak() {
         </li>
       </ul>
 
-      <section className="kartu lencana-anak" aria-labelledby="judul-lencana">
+      <section className="kartu lencana-anak" aria-labelledby="judul-lencana" data-tour="lencana">
         <h2 id="judul-lencana">
           <Award aria-hidden="true" /> Lencanaku
         </h2>

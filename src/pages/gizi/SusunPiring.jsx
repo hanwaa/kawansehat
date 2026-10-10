@@ -62,7 +62,7 @@ export default function SusunPiring() {
   return (
     <div className="susun-piring">
       <div className="susun-piring__atas">
-        <div className="susun-piring__piring">
+        <div className="susun-piring__piring" data-tour="piring">
           <PiringDiagram terisi={piring}>
             {Object.entries(piring).map(([k, m]) => {
               if (!m) return null
@@ -109,7 +109,7 @@ export default function SusunPiring() {
             </li>
           ))}
         </ol>
-        <ul className="susun-piring__makanan" role="list">
+        <ul className="susun-piring__makanan" role="list" data-tour="pilih-makanan">
           {MAKANAN_GAME.map((m) => (
             <li key={m.id}>
               <Button

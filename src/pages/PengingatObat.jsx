@@ -145,6 +145,9 @@ export default function PengingatObat() {
     ])
   }
 
+  // Panduan Si Kawal menunjuk tombol-tombol pada obat pertama di jadwal.
+  const kunciPertama = WAKTU.flatMap((w) => obat.filter((o) => o.waktu.includes(w.id)).map((o) => `${o.id}-${w.id}`))[0]
+
   return (
     <div className="wadah wadah--sempit pengingat">
       <header className="judul-halaman">
@@ -155,10 +158,12 @@ export default function PengingatObat() {
             semua: 'Atur jadwal minum obat untuk diri sendiri atau anggota keluarga.',
           })}
         </p>
-        <ListenButton target={jadwal} label="Dengarkan jadwal" />
+        <div data-tour="dengarkan">
+          <ListenButton target={jadwal} label="Dengarkan jadwal" />
+        </div>
       </header>
 
-      <section ref={jadwal} aria-labelledby="judul-jadwal">
+      <section ref={jadwal} aria-labelledby="judul-jadwal" data-tour="jadwal">
         <h2 id="judul-jadwal" tabIndex={-1}>
           Hari ini
         </h2>
@@ -189,7 +194,11 @@ export default function PengingatObat() {
                             {o.dosis}, {o.makan} makan
                           </span>
                         </div>
-                        <div className="jadwal-obat__aksi" data-tidak-dibaca>
+                        <div
+                          className="jadwal-obat__aksi"
+                          data-tidak-dibaca
+                          data-tour={kunci === kunciPertama ? 'aksi-obat' : undefined}
+                        >
                           <Checkbox className="pilihan pilihan--kotak" isSelected={sudah} onChange={(v) => tandai(kunci, v)}>
                             <span className="pilihan__tanda" aria-hidden="true">
                               <Check />
@@ -218,7 +227,7 @@ export default function PengingatObat() {
       </section>
 
       {!form && (
-        <div className="baris" style={{ marginTop: 'var(--r5)' }}>
+        <div className="baris" style={{ marginTop: 'var(--r5)' }} data-tour="tambah-obat">
           <Button className="tombol tombol--utama tombol--besar" onPress={() => setForm({ ...kosong })}>
             <Plus aria-hidden="true" /> Tambah obat
           </Button>
@@ -231,7 +240,7 @@ export default function PengingatObat() {
       )}
 
       {form && (
-        <form className="kartu form-obat tumpuk" onSubmit={simpanForm} noValidate aria-labelledby="judul-form-obat">
+        <form className="kartu form-obat tumpuk" onSubmit={simpanForm} noValidate aria-labelledby="judul-form-obat" data-tour="form-obat">
           <h2 id="judul-form-obat">Tambah obat</h2>
           <div className="kolom">
             <label className="label" htmlFor="nama-obat">

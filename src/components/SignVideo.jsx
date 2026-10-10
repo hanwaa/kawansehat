@@ -8,7 +8,7 @@ export default function SignVideo({ transkrip, judul = 'Penjelasan dalam BISINDO
   const { prefs } = usePrefs()
   if (!prefs.isyarat) return null
   return (
-    <figure className="isyarat" data-tidak-dibaca>
+    <figure className="isyarat" data-tidak-dibaca data-tour="isyarat">
       <div className="isyarat__video">
         <IsyaratContoh />
         <span className="isyarat__label">Contoh</span>

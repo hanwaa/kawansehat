@@ -101,7 +101,7 @@ export default function Kuis() {
             Kuis selesai!
           </h1>
         </header>
-        <Gelembung pose="jempol" ukuran={130}>
+        <Gelembung pose="jempol" ukuran={130} data-tour="skor">
           <p className="kuis__skor">
             Kamu menjawab benar <strong>{skor}</strong> dari {SOAL.length} soal.
           </p>
@@ -113,7 +113,7 @@ export default function Kuis() {
             <p>Yuk, baca lagi cerita nyamuknya, lalu coba lagi!</p>
           )}
         </Gelembung>
-        <div className="baris" style={{ marginTop: 'var(--r5)' }}>
+        <div className="baris" style={{ marginTop: 'var(--r5)' }} data-tour="setelah-kuis">
           <Button className="tombol" onPress={ulang}>
             <RotateCcw aria-hidden="true" /> Main lagi
           </Button>
@@ -133,11 +133,11 @@ export default function Kuis() {
     <div className="wadah wadah--sempit kuis">
       <header className="judul-halaman">
         <h1>{pilih({ anak: 'Kuis Nyamuk Nakal', semua: 'Kuis demam berdarah' })}</h1>
-        <p className="label-kecil">
+        <p className="label-kecil" data-tour="nomor-soal">
           Soal {nomor + 1} dari {SOAL.length}
         </p>
       </header>
-      <section className="kartu" aria-labelledby="judul-soal">
+      <section className="kartu" aria-labelledby="judul-soal" data-tour="soal">
         <h2 id="judul-soal" ref={judulSoal} tabIndex={-1} className="kuis__tanya">
           {soal.tanya}
         </h2>

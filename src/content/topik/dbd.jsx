@@ -61,7 +61,7 @@ function TigaM({ judulLevel = 'h3' }) {
 export function DBDAnak() {
   return (
     <>
-      <ol className="komik" role="list">
+      <ol className="komik" role="list" data-tour="komik">
         <li className="komik__panel komik__panel--biru">
           <NyamukNakal className="komik__gambar" />
           <p>
@@ -79,13 +79,13 @@ export function DBDAnak() {
       </ol>
       <h2>Ayo usir dengan 3M!</h2>
       <TigaM />
-      <div className="catatan">
+      <div className="catatan" data-tour="tanda-bahaya">
         <AlertTriangle aria-hidden="true" />
         <p>
           <strong>Kalau badanmu panas tinggi, segera bilang ke orang tua atau guru, ya!</strong>
         </p>
       </div>
-      <Link to="/kuis" className="tombol tombol--utama tombol--besar">
+      <Link to="/kuis" className="tombol tombol--utama tombol--besar" data-tour="kuis">
         Main kuis nyamuk
       </Link>
     </>
@@ -107,7 +107,7 @@ const MITOS = [
 export function DBDRemaja() {
   return (
     <>
-      <ul className="mitos-daftar" role="list">
+      <ul className="mitos-daftar" role="list" data-tour="mitos">
         {MITOS.map((m) => (
           <li key={m.mitos} className="kartu mitos">
             <p className="mitos__baris">
@@ -133,7 +133,7 @@ export function DBDRemaja() {
             <li>Nyeri di ulu hati</li>
           </ul>
         </section>
-        <section className="kartu kartu--bahaya">
+        <section className="kartu kartu--bahaya" data-tour="tanda-bahaya">
           <h2>
             <AlertTriangle aria-hidden="true" /> Tanda bahaya
           </h2>
@@ -177,7 +177,7 @@ export function DBDDewasa() {
             <li>Sering terasa nyeri di ulu hati</li>
           </ul>
         </section>
-        <section className="kartu kartu--bahaya">
+        <section className="kartu kartu--bahaya" data-tour="tanda-bahaya">
           <h2>
             <AlertTriangle aria-hidden="true" /> Tanda bahaya
           </h2>
@@ -243,7 +243,11 @@ export function DBDLansia() {
   return (
     <ul className="poin-besar" role="list">
       {POIN_LANSIA.map(({ Ikon, teks, bahaya }) => (
-        <li key={teks} className={`poin-besar__item ${bahaya ? 'poin-besar__item--bahaya' : ''}`}>
+        <li
+          key={teks}
+          className={`poin-besar__item ${bahaya ? 'poin-besar__item--bahaya' : ''}`}
+          data-tour={bahaya ? 'tanda-bahaya' : undefined}
+        >
           <Ikon aria-hidden="true" />
           <p>{teks}</p>
         </li>

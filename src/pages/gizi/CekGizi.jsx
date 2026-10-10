@@ -12,7 +12,7 @@ import './gizi.css'
 function IsiPiringku() {
   const warna = Object.fromEntries(SEKTOR_PIRING.map((s) => [s.id, s.warna]))
   return (
-    <section className="kartu isi-piringku" aria-labelledby="judul-piringku">
+    <section className="kartu isi-piringku" aria-labelledby="judul-piringku" data-tour="isi-piringku">
       <PiringDiagram className="isi-piringku__gambar" />
       <div>
         <h2 id="judul-piringku">Isi Piringku</h2>
@@ -54,7 +54,7 @@ export default function CekGizi() {
       </header>
 
       <ForProfile only={['anak']}>
-        <Link to="/cek-gizi/makanan" className="kartu kartu--tautan kartu--aksen gizi-utama">
+        <Link to="/cek-gizi/makanan" className="kartu kartu--tautan kartu--aksen gizi-utama" data-tour="main-piring">
           <Gelembung pose="jempol" kecil>
             <p>
               <strong>Main “Susun Isi Piringku”!</strong> Ketuk makanan dan isi piringmu sampai lengkap.
@@ -62,7 +62,7 @@ export default function CekGizi() {
           </Gelembung>
           <span className="kartu__aksi">Mulai main</span>
         </Link>
-        <Link to="/cek-gizi/imt" className="kartu kartu--tautan gizi-ortu">
+        <Link to="/cek-gizi/imt" className="kartu kartu--tautan gizi-ortu" data-tour="untuk-ortu">
           <span className="baris">
             <Users aria-hidden="true" />
             <strong>Untuk orang tua: cek tumbuh anak</strong>
@@ -72,7 +72,7 @@ export default function CekGizi() {
       </ForProfile>
 
       <ForProfile only={['remaja', 'dewasa', 'lansia']}>
-        <ul className="kisi gizi-alat" role="list">
+        <ul className="kisi gizi-alat" role="list" data-tour="alat-gizi">
           <li>
             <Link to="/cek-gizi/imt" className="kartu kartu--tautan">
               <span className="ikon-bulat">

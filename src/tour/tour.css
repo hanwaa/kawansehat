@@ -128,12 +128,20 @@
 }
 
 .tur-dialog {
-  /* Isi yang bergulir (bukan balonnya) supaya ekor penunjuk di luar bingkai tidak terpotong. */
+  display: flex;
+  flex-direction: column;
   max-height: calc(100dvh - 24px);
-  overflow: auto;
   padding: var(--r5);
   border-radius: inherit;
   outline: none;
+}
+
+/* Isi yang bergulir (bukan balonnya, supaya ekor penunjuk di luar bingkai tidak terpotong), sementara tombol
+   Kembali/Lanjut di bawahnya selalu terlihat. */
+.tur-dialog__gulir {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
 }
 
 .tur-dialog__isi {
@@ -215,13 +223,38 @@
   background: var(--utama);
 }
 
-@media (max-width: 420px) {
-  .tur-dialog__isi .maskot {
-    width: 64px;
-    height: 64px;
+/* HP: lembar panduan paling tinggi sekitar separuh layar, supaya target di atasnya tetap terlihat walau teks
+   sangat besar. Teks yang tidak muat bergulir di dalam lembar; tombol satu baris tanpa ikon panah, dan titik
+   progres diganti tulisan "Langkah x dari y" yang sudah ada. */
+@media (max-width: 639px) {
+  .tur-dialog {
+    max-height: 58dvh;
+    padding: var(--r4);
   }
-  .tur-dialog__lewati {
+  .tur-dialog__isi {
+    gap: var(--r3);
+  }
+  .tur-dialog__isi .maskot {
+    width: 48px;
+    height: 48px;
+  }
+  .tur-dialog__aksi {
+    margin-top: var(--r3);
+  }
+  .tur-dialog__aksi .tombol {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: var(--r2);
+  }
+  .tur-dialog__aksi .tombol svg {
+    display: none;
+  }
+  .tur-dialog__aksi .tur-dialog__lewati {
+    flex-basis: 100%;
     margin-left: 0;
+  }
+  .tur-dialog__titik {
+    display: none;
   }
 }
 

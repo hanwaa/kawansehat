@@ -126,7 +126,7 @@ export default function Antrean() {
         <header className="judul-halaman">
           <h1>Ambil antrean puskesmas</h1>
         </header>
-        <Gelembung pose="pikir" ukuran={120}>
+        <Gelembung pose="pikir" ukuran={120} data-tour="untuk-ortu">
           <p>
             <strong>Halaman ini untuk orang tua atau wali, ya.</strong> Kalau kamu merasa sakit, bilang ke orang tua atau
             gurumu supaya mereka yang mendaftarkan.
@@ -166,7 +166,7 @@ export default function Antrean() {
         <p>{pilih({ lansia: 'Ikuti langkah satu per satu. Bisa kembali kapan saja.', semua: 'Enam langkah singkat. Kamu bisa kembali dan mengubah pilihan kapan saja.', dewasa: 'Enam langkah singkat. Anda bisa kembali dan mengubah pilihan kapan saja.' })}</p>
       </header>
 
-      <nav aria-label="Langkah pendaftaran" className="langkah-langkah">
+      <nav aria-label="Langkah pendaftaran" className="langkah-langkah" data-tour="langkah-antrean">
         <div className="langkah-langkah__bar" aria-hidden="true">
           <span style={{ transform: `scaleX(${(langkah + 1) / LANGKAH.length})` }} />
         </div>
@@ -194,7 +194,7 @@ export default function Antrean() {
           <h2 id="judul-langkah" tabIndex={-1} ref={judulLangkah}>
             {LANGKAH[langkah]}
           </h2>
-          <Gelembung kecil pose={langkah === 5 ? 'jempol' : 'tunjuk'} className="antrean__tip">
+          <Gelembung kecil pose={langkah === 5 ? 'jempol' : 'tunjuk'} className="antrean__tip" data-tour="tips">
             <p>{pilih(TIPS[langkah])}</p>
           </Gelembung>
 
@@ -331,7 +331,7 @@ export default function Antrean() {
           )}
         </div>
 
-        <div className="antrean__aksi">
+        <div className="antrean__aksi" data-tour="tombol-langkah">
           {langkah > 0 && (
             <Button className="tombol" onPress={() => keLangkah(langkah - 1)}>
               <ArrowLeft aria-hidden="true" /> Kembali

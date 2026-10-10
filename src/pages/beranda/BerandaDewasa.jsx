@@ -16,7 +16,7 @@ export function TiketAktif() {
   const tiket = baca('ks-tiket', null)
   if (!tiket) return null
   return (
-    <Link to="/layanan/tiket" className="kartu kartu--tautan kartu--aksen tiket-aktif">
+    <Link to="/layanan/tiket" className="kartu kartu--tautan kartu--aksen tiket-aktif" data-tour="tiket-aktif">
       <span className="baris">
         <Ticket aria-hidden="true" />
         <strong>Antrean aktif: {tiket.nomor}</strong>

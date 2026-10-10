@@ -31,7 +31,7 @@ export default function InfoList() {
           })}
         </p>
       </header>
-      <ul className="kisi kisi--2" role="list">
+      <ul className="kisi kisi--2" role="list" data-tour="daftar-topik">
         <li>
           <Link to="/info/dbd" className="kartu kartu--tautan topik-kartu">
             <NyamukNakal className="topik-kartu__gambar" />
@@ -57,7 +57,7 @@ export default function InfoList() {
           </Link>
         </li>
       </ul>
-      <section className="bagian" aria-labelledby="judul-segera">
+      <section className="bagian" aria-labelledby="judul-segera" data-tour="segera-hadir">
         <h2 id="judul-segera" className="label-kecil">
           <Clock aria-hidden="true" width="16" height="16" /> Segera hadir
         </h2>

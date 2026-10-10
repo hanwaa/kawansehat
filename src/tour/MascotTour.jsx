@@ -7,19 +7,15 @@ import { IsyaratContoh } from '../illustrations/Adegan.jsx'
 import { usePrefs } from '../prefs/PrefsProvider.jsx'
 import { bacakan, hentikan } from '../lib/suara.js'
 import { beriLencana } from '../lib/lencana.js'
-import { LANGKAH_TUR, SAPAAN_TUR } from './steps.js'
+import { cariTarget } from './target.js'
 import './tour.css'
 
 const JARAK = 14
 
 const batasi = (n, min, max) => Math.max(min, Math.min(n, max))
 
-function cariTarget(nama) {
-  const el = document.querySelector(`[data-tour="${nama}"]`)
-  if (!el) return null
-  const r = el.getBoundingClientRect()
-  return r.width > 0 && r.height > 0 ? el : null
-}
+// Di bawah lebar ini balon berupa lembar selebar layar (lihat hitungPosisi).
+const LEBAR_LEMBAR = 640
 
 // `ekor` = sisi balon tempat ekor penunjuk berada dan jaraknya dari sudut, supaya balon jelas menunjuk targetnya.
 function hitungPosisi(rect, tinggiTerukur) {
@@ -27,7 +23,7 @@ function hitungPosisi(rect, tinggiTerukur) {
   const tinggiLayar = window.innerHeight
   if (!rect) return { gaya: {}, kelas: 'tur-balon--tengah' }
   // Di layar kecil, balon menempel di bawah (atau di atas bila target ada di bagian bawah).
-  if (lebarLayar < 640) {
+  if (lebarLayar < LEBAR_LEMBAR) {
     const targetDiBawah = rect.top + rect.height / 2 > tinggiLayar * 0.55
     return { gaya: {}, kelas: targetDiBawah ? 'tur-balon--atas' : 'tur-balon--bawah' }
   }
@@ -69,11 +65,12 @@ export default function MascotTour({ status, setStatus, onTutup }) {
   const idTeks = useId()
   const [target, setTarget] = useState({ sesi: null, rect: null })
 
-  const langkah = LANGKAH_TUR[profil]
+  // Langkah & sapaan sudah disusun TourProvider untuk halaman ini (teks sesuai profil).
+  const langkah = status.langkah
   const diTawar = status.tahap === 'tawar'
   const sekarang = diTawar ? null : langkah[status.indeks]
   const terakhir = !diTawar && status.indeks === langkah.length - 1
-  const isi = diTawar ? SAPAAN_TUR[profil] : sekarang
+  const isi = diTawar ? status.sapaan : sekarang
   const kunci = status.terbuka && sekarang ? `${status.sesi}-${profil}-${status.indeks}` : null
 
   // Cari & ukur target setiap langkah berganti, juga saat layar di-scroll atau diubah ukurannya.
@@ -83,7 +80,8 @@ export default function MascotTour({ status, setStatus, onTutup }) {
     const ukur = () => setTarget({ sesi: status.sesi, rect: el ? el.getBoundingClientRect() : null })
     const bingkai = requestAnimationFrame(ukur)
     if (!el) return () => cancelAnimationFrame(bingkai)
-    el.scrollIntoView({ block: 'center', behavior: 'instant' })
+    // Layar lebar: target di tengah, balon di sampingnya. Di HP posisinya diatur efek berikutnya.
+    if (window.innerWidth >= LEBAR_LEMBAR) el.scrollIntoView({ block: 'center', behavior: 'instant' })
     window.addEventListener('resize', ukur)
     window.addEventListener('scroll', ukur, true)
     return () => {
@@ -107,6 +105,21 @@ export default function MascotTour({ status, setStatus, onTutup }) {
     pengamat.observe(el)
     return () => pengamat.disconnect()
   }, [status.terbuka])
+
+  // HP: lembar panduan menutup bagian bawah layar, jadi target digulir ke ruang kosong antara header dan lembar
+  // (di tengahnya bila muat, kalau tidak bagian atasnya). Diulang saat tinggi lembar berubah, misalnya karena
+  // isi langkah atau ukuran teks. Target di header dan menu bawah tidak ikut bergulir, jadi dilewati.
+  useLayoutEffect(() => {
+    if (!kunci || window.innerWidth >= LEBAR_LEMBAR) return
+    const el = cariTarget(sekarang.target)
+    if (!el || el.closest('.kepala-situs')) return
+    const akar = getComputedStyle(document.documentElement)
+    const atas = (parseFloat(akar.getPropertyValue('--tinggi-kepala')) || 0) + 12
+    const bawah = window.innerHeight - (tinggiBalon || window.innerHeight / 2) - 20
+    const r = el.getBoundingClientRect()
+    const sasaran = r.height <= bawah - atas ? atas + (bawah - atas - r.height) / 2 : atas
+    window.scrollBy({ top: r.top - sasaran, behavior: 'instant' })
+  }, [kunci, sekarang, tinggiBalon])
 
   // Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.
   useEffect(() => {
@@ -154,38 +167,41 @@ export default function MascotTour({ status, setStatus, onTutup }) {
           />
         )}
         <Dialog key={`${status.tahap}-${status.indeks}`} className="tur-dialog" aria-describedby={idTeks}>
-          <div className="tur-dialog__isi">
-            <Maskot pose={diTawar ? 'lambai' : sekarang.pose} ukuran={diTawar ? 112 : 84} />
-            <div>
-              {!diTawar && (
-                <p className="tur-dialog__langkah">
-                  Langkah {status.indeks + 1} dari {langkah.length}
+          {/* Teks yang panjang bergulir di sini; tombol di bawahnya selalu terlihat. */}
+          <div className="tur-dialog__gulir">
+            <div className="tur-dialog__isi">
+              <Maskot pose={diTawar ? 'lambai' : sekarang.pose} ukuran={diTawar ? 112 : 84} />
+              <div>
+                {!diTawar && (
+                  <p className="tur-dialog__langkah">
+                    Langkah {status.indeks + 1} dari {langkah.length}
+                  </p>
+                )}
+                <Heading slot="title" className="tur-dialog__judul">
+                  {isi?.judul}
+                </Heading>
+                <p id={idTeks} className="tur-dialog__teks">
+                  {isi?.teks}
                 </p>
-              )}
-              <Heading slot="title" className="tur-dialog__judul">
-                {isi.judul}
-              </Heading>
-              <p id={idTeks} className="tur-dialog__teks">
-                {isi.teks}
+              </div>
+            </div>
+            {(diTawar || terakhir) && (
+              <p className="tur-dialog__petunjuk">
+                {pilih({
+                  anak: 'Mau jalan-jalan lagi? Ketuk aku di pojok kanan bawah, ya!',
+                  remaja: 'Butuh panduan lagi? Tekan tombol Si Kawal di pojok kanan bawah.',
+                  dewasa: 'Panduan bisa dibuka lagi kapan saja lewat tombol Si Kawal di pojok kanan bawah.',
+                  lansia: 'Bapak/Ibu bisa membuka panduan ini lagi lewat tombol Si Kawal di pojok kanan bawah.',
+                })}
               </p>
-            </div>
+            )}
+            {prefs.isyarat && (
+              <div className="tur-dialog__isyarat">
+                <IsyaratContoh />
+                <span>Video BISINDO (contoh)</span>
+              </div>
+            )}
           </div>
-          {(diTawar || terakhir) && (
-            <p className="tur-dialog__petunjuk">
-              {pilih({
-                anak: 'Mau jalan-jalan lagi? Ketuk aku di pojok kanan bawah, ya!',
-                remaja: 'Butuh panduan lagi? Tekan tombol Si Kawal di pojok kanan bawah.',
-                dewasa: 'Panduan bisa dibuka lagi kapan saja lewat tombol Si Kawal di pojok kanan bawah.',
-                lansia: 'Bapak/Ibu bisa membuka panduan ini lagi lewat tombol Si Kawal di pojok kanan bawah.',
-              })}
-            </p>
-          )}
-          {prefs.isyarat && (
-            <div className="tur-dialog__isyarat">
-              <IsyaratContoh />
-              <span>Video BISINDO (contoh)</span>
-            </div>
-          )}
           {diTawar ? (
             <div className="tur-dialog__aksi">
               <Button className="tombol tombol--utama" onPress={() => ke(0)} autoFocus>

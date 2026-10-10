@@ -58,7 +58,7 @@ export default function Kebutuhan() {
 
   return (
     <div className="wadah wadah--sempit">
-      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali">
+      <Link to="/cek-gizi" className="tombol tombol--teks topik__kembali" data-tour="kembali">
         <ArrowLeft aria-hidden="true" /> {pilih({ anak: 'Piringku', semua: 'Cek Gizi' })}
       </Link>
       <header className="judul-halaman">
@@ -66,7 +66,7 @@ export default function Kebutuhan() {
         <p>Angka Kecukupan Gizi (AKG) rata-rata per orang per hari dari Kementerian Kesehatan.</p>
       </header>
 
-      <form className="kartu form-gizi" onSubmit={hitung} noValidate>
+      <form className="kartu form-gizi" onSubmit={hitung} noValidate data-tour="form-gizi">
         <PilihanRadio label="Jenis kelamin" nilai={form.jk} onChange={ubah('jk')} pilihan={PILIHAN_JK} galat={galat.jk} kisi orientasi="horizontal" />
         <KolomAngka label="Umur" satuan="tahun" nilai={form.umurTahun} onChange={ubah('umurTahun')} galat={galat.umurTahun} inputMode="numeric" />
         {bisaHamil && (
@@ -78,7 +78,7 @@ export default function Kebutuhan() {
       </form>
 
       {akg && (
-        <section className="kartu hasil-gizi" aria-labelledby="judul-akg" ref={kotakHasil}>
+        <section className="kartu hasil-gizi" aria-labelledby="judul-akg" ref={kotakHasil} data-tour="hasil">
           <p className="label-kecil">Untuk {akg.label}</p>
           <h2 id="judul-akg" tabIndex={-1} ref={judulHasil}>
             {pilih({ anak: 'Yang dibutuhkan tubuhmu setiap hari', remaja: 'Kebutuhan harianmu', lansia: 'Kebutuhan harian Bapak/Ibu', semua: 'Kebutuhan harian' })}

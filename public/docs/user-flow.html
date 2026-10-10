@@ -90,13 +90,13 @@ flowchart TD
   E2 --> H
   H --> I{"Tur sudah<br/>pernah ditawarkan?"}
   I -- Belum --> J["Si Kawal menawarkan tur"]
-  J -- "Ya, tunjukkan" --> K["Tur 3–4 langkah<br/>sorotan + balon kata<br/>Kembali · Lanjut · Lewati"]
+  J -- "Ya, tunjukkan" --> K["Tur beranda 4–6 langkah<br/>sorotan + balon kata<br/>Kembali · Lanjut · Lewati"]
   J -- "Nanti saja" --> L
   K -- "Selesai / Lewati / Esc" --> L(["Memakai Kawal Sehat"])
   K -. "profil anak selesai" .-> K1["Lencana Penjelajah"]
   I -- Sudah --> L
   L -. "kapan saja" .-> M["Si Kawal + balon Lihat Panduan<br/>mengambang, kanan bawah"]
-  M -. "dari halaman mana pun" .-> K
+  M -. "di halaman mana pun" .-> N["Panduan halaman itu<br/>fitur halaman + menu · Tampilan · 119<br/>tanpa pindah halaman"]
           </pre>
         </div>
         <div class="catatan">
@@ -105,7 +105,7 @@ flowchart TD
             <li>Setiap langkah tur adalah dialog. Fokus masuk ke balon kata, Esc menutup tur, dan fokus kembali ke tempat semula.</li>
             <li>Di HP, balon kata muncul dari bawah (atau atas) layar supaya tidak terpotong saat teks diperbesar.</li>
             <li>Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.</li>
-            <li>Tur bisa diulang dari halaman mana pun lewat Si Kawal dengan balon <em>Lihat Panduan</em> di kanan bawah. Bila dibuka dari beranda, fokus kembali ke tombol itu setelah tur selesai.</li>
+            <li>Setiap halaman punya panduannya sendiri, dibuka lewat Si Kawal dengan balon <em>Lihat Panduan</em> di kanan bawah. Pengguna tetap di halaman itu, dan fokus kembali ke tombol tersebut setelah panduan selesai.</li>
           </ul>
         </div>
       </section>
