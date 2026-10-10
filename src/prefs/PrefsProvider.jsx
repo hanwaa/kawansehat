@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { DAFTAR_PROFIL, PREFS_AWAL, PRESET, UKURAN_TEKS } from './presets.js'
 
@@ -41,12 +41,26 @@ function terapkan(prefs) {
   pasangAtribut('gerak', prefs.gerak, 'kurang')
 }
 
+// Crossfade ganti profil hanya mengubah opasitas (tidak memicu pusing), jadi tetap dipakai saat sistem meminta
+// "kurangi gerakan" (durasinya dipersingkat di base.css). Hanya pilihan "Kurangi animasi" di aplikasi yang mematikannya.
 function bolehAnimasi(prefs) {
-  return (
-    !prefs.gerak &&
-    typeof document.startViewTransition === 'function' &&
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  )
+  return !prefs.gerak && typeof document.startViewTransition === 'function'
+}
+
+// Mencatat posisi layar elemen jangkar; fungsi yang dikembalikan menggulir wadahnya supaya elemen itu tetap
+// di tempat setelah tampilan berubah (misalnya teks membesar saat memilih Lansia), tidak lari dari bawah jari.
+function tahanPosisi(el) {
+  if (!el) return () => {}
+  const sebelum = el.getBoundingClientRect().top
+  return () => {
+    const selisih = el.getBoundingClientRect().top - sebelum
+    if (Math.abs(selisih) < 1) return
+    let wadah = el.parentElement
+    while (wadah && wadah !== document.body && !/(auto|scroll)/.test(getComputedStyle(wadah).overflowY)) {
+      wadah = wadah.parentElement
+    }
+    ;(wadah && wadah !== document.body ? wadah : window).scrollBy(0, selisih)
+  }
 }
 
 export function PrefsProvider({ children }) {
@@ -63,14 +77,38 @@ export function PrefsProvider({ children }) {
 
   const ubah = useCallback((perubahan) => setPrefs((p) => ({ ...p, ...perubahan })), [])
 
-  // Mengganti profil dengan transisi "berubah wujud" bila animasi diizinkan.
+  // Transisi yang sedang berjalan & perubahan yang menunggu untuk diterapkan di dalamnya.
+  const transisi = useRef({ aktif: false, menunggu: null })
+
+  // Mengganti profil dengan transisi "berubah wujud" bila animasi diizinkan. Pilihan baru di tengah transisi
+  // tidak membatalkannya (itu membuat tampilan melompat): perubahan langsung diterapkan dan ikut tampil di
+  // gambar "baru" transisi yang masih hidup. `jangkar` = elemen yang harus tetap di posisinya, biasanya kartu
+  // profil yang baru diketuk.
   const pilihProfil = useCallback(
-    (profil, { pakaiPreset = true } = {}) => {
-      const perbarui = () => setPrefs((p) => ({ ...p, ...(pakaiPreset ? PRESET[profil] : {}), profil }))
-      if (bolehAnimasi(prefs)) {
-        document.startViewTransition(() => flushSync(perbarui))
-      } else {
+    (profil, { pakaiPreset = true, jangkar } = {}) => {
+      const tahan = tahanPosisi(jangkar)
+      const perbarui = () => {
+        flushSync(() => setPrefs((p) => ({ ...p, ...(pakaiPreset ? PRESET[profil] : {}), profil })))
+        tahan()
+      }
+      const t = transisi.current
+      if (t.menunggu) {
+        // Transisi belum sempat menerapkan perubahan sebelumnya: cukup ganti dengan pilihan terbaru.
+        t.menunggu = perbarui
+      } else if (t.aktif || !bolehAnimasi(prefs)) {
         perbarui()
+      } else {
+        t.aktif = true
+        t.menunggu = perbarui
+        const vt = document.startViewTransition(() => {
+          const terapkan = t.menunggu
+          t.menunggu = null
+          terapkan()
+        })
+        vt.finished.finally(() => {
+          t.aktif = false
+          t.menunggu = null
+        })
       }
     },
     [prefs],

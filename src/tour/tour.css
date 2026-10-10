@@ -10,16 +10,27 @@
   background: rgb(10 14 12 / 0.55);
 }
 
-/* Sorotan: lubang terang di sekitar elemen yang dijelaskan + garis emas tebal */
+/* Tur muncul dan hilang dengan memudar; balon di dalamnya ikut bergeser (lihat .tur-balon). */
+.tur-lapisan[data-entering] {
+  animation: muncul var(--durasi) var(--kurva);
+}
+
+.tur-lapisan[data-exiting] {
+  animation: muncul 160ms var(--kurva) reverse forwards;
+}
+
+/* Sorotan: lubang terang di sekitar elemen yang dijelaskan + garis emas tebal.
+   Posisinya lewat transform supaya perpindahan antar-langkah ditangani compositor. */
 .tur-sorot {
   position: fixed;
+  top: 0;
+  left: 0;
   border-radius: 14px;
   box-shadow: 0 0 0 100vmax rgb(10 14 12 / 0.55);
   outline: 4px solid var(--aksen);
   outline-offset: 0;
   pointer-events: none;
-  transition: top var(--durasi) var(--kurva), left var(--durasi) var(--kurva), width var(--durasi) var(--kurva),
-    height var(--durasi) var(--kurva);
+  transition: transform var(--durasi) var(--kurva), width var(--durasi) var(--kurva), height var(--durasi) var(--kurva);
 }
 
 [data-kontras='ya'] .tur-sorot {
@@ -35,12 +46,64 @@
   border: var(--garis) solid var(--garis-warna);
   border-radius: var(--radius);
   box-shadow: 0 18px 50px rgb(0 0 0 / 0.3);
-  max-height: calc(100dvh - 24px);
-  overflow: auto;
+}
+
+/* Ekor penunjuk: persegi berputar yang menyatu dengan bingkai balon dan mengarah ke target. */
+.tur-balon__ekor {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: var(--permukaan);
+  border: var(--garis) solid var(--garis-warna);
+  transform: rotate(45deg);
+  transition: left var(--durasi) var(--kurva), top var(--durasi) var(--kurva);
+}
+
+.tur-balon__ekor[data-sisi='atas'] {
+  top: -10px;
+  left: calc(var(--ekor) - 9px);
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.tur-balon__ekor[data-sisi='bawah'] {
+  bottom: -10px;
+  left: calc(var(--ekor) - 9px);
+  border-top: 0;
+  border-left: 0;
+}
+
+.tur-balon__ekor[data-sisi='kiri'] {
+  left: -10px;
+  top: calc(var(--ekor) - 9px);
+  border-top: 0;
+  border-right: 0;
+}
+
+.tur-balon__ekor[data-sisi='kanan'] {
+  right: -10px;
+  top: calc(var(--ekor) - 9px);
+  border-bottom: 0;
+  border-left: 0;
 }
 
 .tur-balon[data-entering] {
   animation: tur-masuk var(--durasi) var(--kurva);
+}
+
+.tur-balon[data-exiting] {
+  animation: tur-masuk 160ms var(--kurva) reverse forwards;
+}
+
+/* Balon yang menempel di atas layar (HP) masuk dan keluar dari atas, bukan dari bawah. */
+.tur-balon--atas[data-entering],
+.tur-balon--atas[data-exiting] {
+  animation-name: tur-masuk-atas;
+}
+
+/* Balon melayang ikut meluncur bersama sorotan ke target berikutnya. */
+.tur-balon--melayang {
+  transition: top var(--durasi) var(--kurva), left var(--durasi) var(--kurva), transform var(--durasi) var(--kurva);
 }
 
 .tur-balon--tengah {
@@ -65,7 +128,11 @@
 }
 
 .tur-dialog {
+  /* Isi yang bergulir (bukan balonnya) supaya ekor penunjuk di luar bingkai tidak terpotong. */
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
   padding: var(--r5);
+  border-radius: inherit;
   outline: none;
 }
 
@@ -162,6 +229,13 @@
   from {
     opacity: 0;
     translate: 0 12px;
+  }
+}
+
+@keyframes tur-masuk-atas {
+  from {
+    opacity: 0;
+    translate: 0 -12px;
   }
 }
 

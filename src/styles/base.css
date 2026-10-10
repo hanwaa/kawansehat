@@ -49,6 +49,18 @@ h1 {
 h2 {
   font-size: var(--fs-xl);
 }
+
+/* Judul besar: baris lebih rapat dan huruf sedikit dirapatkan, makin besar makin rapat. Anak & lansia
+   dikecualikan: jarak huruf yang lega membantu pembaca pemula dan merupakan bagian dari desain Atkinson
+   Hyperlegible. */
+:where(:root:not([data-profil='anak'], [data-profil='lansia'])) h1 {
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+:where(:root:not([data-profil='anak'], [data-profil='lansia'])) h2 {
+  letter-spacing: -0.01em;
+}
 h3 {
   font-size: var(--fs-besar);
 }
@@ -254,16 +266,23 @@ h1[tabindex='-1']:focus {
   color: var(--tombol-teks);
 }
 
+/* Saat ditekan, umpan balik masuk cepat (90ms); saat dilepas kembali dengan durasi normal. */
 .tombol:active,
 .tombol[data-pressed] {
   transform: translateY(1px) scale(0.98);
+  transition-duration: 90ms;
+}
+
+/* Gaya stiker: tombol "masuk" tepat ke bayangannya, jadi geserannya sama dengan offset bayangan. */
+[data-profil='anak'] .tombol:active,
+[data-profil='anak'] .tombol[data-pressed] {
+  transform: translateY(4px);
+  box-shadow: none;
 }
 
 [data-profil='remaja'] .tombol:active,
-[data-profil='remaja'] .tombol[data-pressed],
-[data-profil='anak'] .tombol:active,
-[data-profil='anak'] .tombol[data-pressed] {
-  transform: translate(2px, 3px);
+[data-profil='remaja'] .tombol[data-pressed] {
+  transform: translate(3px, 3px);
   box-shadow: none;
 }
 
@@ -345,16 +364,39 @@ h1[tabindex='-1']:focus {
   color: inherit;
   text-decoration: none;
   transition: transform var(--durasi) var(--kurva), box-shadow var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .kartu--tautan:hover {
   color: inherit;
-  transform: translateY(-2px);
 }
 
-[data-profil='remaja'] .kartu--tautan:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--garis-warna);
+/* Kartu terangkat hanya di perangkat yang benar-benar bisa hover. Di layar sentuh, ketukan memicu :hover
+   sehingga kartu malah naik saat ditekan. */
+@media (hover: hover) {
+  .kartu--tautan:hover {
+    transform: translateY(-2px);
+  }
+
+  [data-profil='remaja'] .kartu--tautan:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--garis-warna);
+  }
+}
+
+.kartu--tautan:active {
+  transform: scale(0.985);
+  transition-duration: 90ms;
+}
+
+[data-profil='anak'] .kartu--tautan:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+[data-profil='remaja'] .kartu--tautan:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
 }
 
 .kartu--tautan h2,
@@ -511,7 +553,9 @@ legend {
   border-radius: var(--radius-kecil);
   background: var(--permukaan);
   cursor: pointer;
-  transition: background-color var(--durasi) var(--kurva), border-color var(--durasi) var(--kurva);
+  transition: background-color var(--durasi) var(--kurva), border-color var(--durasi) var(--kurva),
+    transform var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-profil='dewasa'] .pilihan {
@@ -520,6 +564,15 @@ legend {
 
 .pilihan[data-hovered] {
   background: var(--permukaan-2);
+}
+
+.pilihan[data-pressed] {
+  transform: scale(0.98);
+  transition-duration: 90ms;
+}
+
+.pilihan[data-disabled] {
+  cursor: default;
 }
 
 .pilihan[data-selected] {
@@ -633,9 +686,16 @@ legend {
   left: 3px;
   width: 1.3rem;
   height: 1.3rem;
-  border-radius: 50%;
+  border-radius: var(--radius-pil);
   background: var(--teks);
-  transition: transform var(--durasi) var(--kurva);
+  transition: transform var(--durasi) var(--kurva), width var(--durasi) var(--kurva);
+}
+
+/* Saat ditekan, ibu jari saklar melebar ke arah ia akan bergerak (seperti saklar iOS): tanda bahwa tekanan
+   diterima sekaligus petunjuk arah perubahannya. */
+.saklar[data-pressed] .saklar__jalur::before {
+  width: 1.6rem;
+  transition-duration: 90ms;
 }
 
 .saklar[data-selected] .saklar__jalur {
@@ -646,6 +706,11 @@ legend {
 .saklar[data-selected] .saklar__jalur::before {
   transform: translateX(1.3rem);
   background: var(--pada-utama);
+}
+
+/* Saat aktif ia melebar ke kiri: tepi kanannya tetap, jadi geserannya dikurangi selebar tambahan. */
+.saklar[data-selected][data-pressed] .saklar__jalur::before {
+  transform: translateX(1rem);
 }
 
 .saklar__status {
@@ -688,6 +753,16 @@ legend {
 
 .modal[data-entering] {
   animation: naik var(--durasi) var(--kurva);
+}
+
+/* Keluar lewat jalur yang sama dengan saat masuk, sedikit lebih cepat. `reverse` sekaligus mencerminkan
+   kurvanya (melambat saat masuk → dipercepat saat keluar). React Aria menunggu animasi ini selesai. */
+.lapisan-dialog[data-exiting] {
+  animation: muncul 160ms var(--kurva) reverse forwards;
+}
+
+.modal[data-exiting] {
+  animation: naik 160ms var(--kurva) reverse forwards;
 }
 
 .dialog {
@@ -791,6 +866,7 @@ legend {
 }
 
 /* ---------- Kurangi animasi ---------- */
+/* Pilihan "Kurangi animasi" di aplikasi: semua gerak dan efek dimatikan, sesuai labelnya. */
 [data-gerak='kurang'] *,
 [data-gerak='kurang'] *::before,
 [data-gerak='kurang'] *::after {
@@ -800,22 +876,40 @@ legend {
   scroll-behavior: auto !important;
 }
 
+/* Setelan "kurangi gerakan" di sistem: gerak spasial (geser, skala, pantul) dihilangkan, tetapi pudar singkat
+   dipertahankan supaya perubahan tetap terbaca dan tidak ada lonjakan kecerahan. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-property: color, background-color, border-color, opacity !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Dialog dan tur memudar, tidak bergeser. */
+  :root:not([data-gerak='kurang']) :is(.lapisan-dialog, .tur-lapisan)[data-entering] {
+    animation: muncul 160ms ease-out !important;
+  }
+
+  :root:not([data-gerak='kurang']) :is(.lapisan-dialog, .tur-lapisan)[data-exiting] {
+    animation: muncul 120ms ease-in reverse forwards !important;
   }
 }
 
-/* Transisi "berubah wujud" saat profil diganti (View Transitions API) */
+/* Transisi "berubah wujud" saat profil diganti (View Transitions API): crossfade singkat. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 420ms;
+  animation-duration: 280ms;
   animation-timing-function: var(--kurva);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 200ms;
+  }
 }
 
 @media print {

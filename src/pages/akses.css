@@ -10,7 +10,7 @@
   }
   .akses__pratinjau {
     position: sticky;
-    top: 96px;
+    top: calc(var(--tinggi-kepala, 72px) + var(--r5));
   }
 }
 

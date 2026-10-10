@@ -1,3 +1,7 @@
+#judul-jadwal:focus {
+  outline: none;
+}
+
 .jadwal-waktu {
   margin-bottom: var(--r5);
 }

@@ -21,7 +21,7 @@ function ambilElemen(wadah) {
  * Tombol "Dengarkan": membacakan isi `target` paragraf demi paragraf sambil menyorotnya.
  */
 export default function ListenButton({ target, label = 'Dengarkan', className = '', ...rest }) {
-  const { profil } = usePrefs()
+  const { profil, prefs } = usePrefs()
   const [membaca, setMembaca] = useState(false)
   const [pesan, setPesan] = useState('')
   const sorot = useRef(null)
@@ -49,6 +49,8 @@ export default function ListenButton({ target, label = 'Dengarkan', className = 
     const elemen = ambilElemen(wadah)
     setPesan(adaSuaraIndonesia() ? '' : 'Suara bahasa Indonesia tidak ditemukan di perangkat ini, jadi dibacakan dengan suara bawaan.')
     setMembaca(true)
+    // Opsi `behavior` di JS mengalahkan `scroll-behavior` di CSS, jadi preferensi gerak dicek di sini.
+    const gulir = prefs.gerak || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
     bacakan(
       elemen.map((el) => el.innerText),
       {
@@ -57,7 +59,7 @@ export default function ListenButton({ target, label = 'Dengarkan', className = 
           bersihkanSorot()
           sorot.current = elemen[i]
           elemen[i].classList.add('sedang-dibaca')
-          elemen[i].scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+          elemen[i].scrollIntoView({ block: 'nearest', behavior: gulir })
         },
         onSelesai: () => {
           bersihkanSorot()

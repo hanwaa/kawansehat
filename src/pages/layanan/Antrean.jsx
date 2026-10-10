@@ -65,6 +65,8 @@ export default function Antrean() {
   const navigate = useNavigate()
   const [orangTua, setOrangTua] = useState(false)
   const [langkah, setLangkah] = useState(() => (params.get('jenis') ? 1 : 0))
+  // Arah perpindahan langkah: isi langkah masuk dari kanan saat maju dan dari kiri saat mundur.
+  const [arah, setArah] = useState(null)
   const [form, setForm] = useState(() => formAwal(params, profil))
   const [galat, setGalat] = useState({})
   const judulLangkah = useRef(null)
@@ -85,6 +87,11 @@ export default function Antrean() {
     setGalat((g) => ({ ...g, [k]: undefined }))
   }
 
+  const keLangkah = (baru) => {
+    setArah(baru > langkah ? 'maju' : 'mundur')
+    setLangkah(baru)
+  }
+
   const lanjut = () => {
     const g = validasiLangkah(langkah, form)
     setGalat(g)
@@ -92,7 +99,7 @@ export default function Antrean() {
       requestAnimationFrame(() => document.querySelector('.antrean [data-invalid] input, .antrean [aria-invalid="true"]')?.focus())
       return
     }
-    setLangkah((l) => l + 1)
+    keLangkah(langkah + 1)
   }
 
   const ambilNomor = () => {
@@ -161,7 +168,7 @@ export default function Antrean() {
 
       <nav aria-label="Langkah pendaftaran" className="langkah-langkah">
         <div className="langkah-langkah__bar" aria-hidden="true">
-          <span style={{ width: `${((langkah + 1) / LANGKAH.length) * 100}%` }} />
+          <span style={{ transform: `scaleX(${(langkah + 1) / LANGKAH.length})` }} />
         </div>
         <ol>
           {LANGKAH.map((nama, i) => (
@@ -179,151 +186,154 @@ export default function Antrean() {
       </nav>
 
       <section className="kartu antrean__langkah" aria-labelledby="judul-langkah">
-        <p className="label-kecil">
-          Langkah {langkah + 1} dari {LANGKAH.length}
-        </p>
-        <h2 id="judul-langkah" tabIndex={-1} ref={judulLangkah}>
-          {LANGKAH[langkah]}
-        </h2>
-        <Gelembung kecil pose={langkah === 5 ? 'jempol' : 'tunjuk'} className="antrean__tip">
-          <p>{pilih(TIPS[langkah])}</p>
-        </Gelembung>
+        {/* Hanya isi langkah yang bergeser; tombol Kembali/Lanjut tetap di tempat supaya tidak lari dari jari. */}
+        <div key={langkah} className="antrean__isi" data-arah={arah ?? undefined}>
+          <p className="label-kecil">
+            Langkah {langkah + 1} dari {LANGKAH.length}
+          </p>
+          <h2 id="judul-langkah" tabIndex={-1} ref={judulLangkah}>
+            {LANGKAH[langkah]}
+          </h2>
+          <Gelembung kecil pose={langkah === 5 ? 'jempol' : 'tunjuk'} className="antrean__tip">
+            <p>{pilih(TIPS[langkah])}</p>
+          </Gelembung>
 
-        {langkah === 0 && (
-          <PilihanRadio
-            label="Mau dilayani dengan cara apa?"
-            nilai={form.jenis}
-            onChange={ubah('jenis')}
-            galat={galat.jenis}
-            pilihan={[
-              { id: 'datang', label: 'Datang ke puskesmas', ket: 'Ambil nomor antrean, datang sesuai jadwal' },
-              { id: 'online', label: 'Konsultasi online', ket: 'Video call dari rumah' },
-            ]}
-          />
-        )}
-
-        {langkah === 1 && form.jenis === 'datang' && (
-          <div className="tumpuk">
+          {langkah === 0 && (
             <PilihanRadio
-              label="Puskesmas"
-              nilai={form.puskesmas}
-              onChange={ubah('puskesmas')}
-              galat={galat.puskesmas}
-              pilihan={PUSKESMAS.map((p) => ({ id: p.id, label: `${p.nama} · ${p.jarak}`, ket: p.fasilitas.join(' · ') }))}
+              label="Mau dilayani dengan cara apa?"
+              nilai={form.jenis}
+              onChange={ubah('jenis')}
+              galat={galat.jenis}
+              pilihan={[
+                { id: 'datang', label: 'Datang ke puskesmas', ket: 'Ambil nomor antrean, datang sesuai jadwal' },
+                { id: 'online', label: 'Konsultasi online', ket: 'Video call dari rumah' },
+              ]}
             />
-            <PilihanRadio label="Poli" nilai={form.poli} onChange={ubah('poli')} galat={galat.poli} pilihan={POLI} kisi />
-          </div>
-        )}
-        {langkah === 1 && form.jenis === 'online' && (
-          <PilihanRadio
-            label="Konsultasi dengan"
-            nilai={form.layananOnline}
-            onChange={ubah('layananOnline')}
-            galat={galat.layananOnline}
-            pilihan={LAYANAN_ONLINE}
-            kisi
-          />
-        )}
+          )}
 
-        {langkah === 2 && (
-          <div className="tumpuk">
-            <PilihanRadio label="Hari" nilai={form.tanggal} onChange={ubah('tanggal')} galat={galat.tanggal} pilihan={hari} kisi />
-            <PilihanRadio label="Sesi" nilai={form.sesi} onChange={ubah('sesi')} galat={galat.sesi} pilihan={SESI} kisi orientasi="horizontal" />
-          </div>
-        )}
-
-        {langkah === 3 && (
-          <div className="tumpuk">
-            <CheckboxGroup value={form.kebutuhan} onChange={ubah('kebutuhan')} className="kolom">
-              <Label className="label">Pilih semua yang dibutuhkan (boleh dikosongkan)</Label>
-              <div className="pilihan-grup">
-                {kebutuhanTampil.map((k) => (
-                  <Checkbox key={k.id} value={k.id} className="pilihan pilihan--kotak">
-                    <span className="pilihan__tanda" aria-hidden="true">
-                      <Check />
-                    </span>
-                    <span className="pilihan__isi">
-                      {k.label}
-                      <small>{k.ket}</small>
-                    </span>
-                  </Checkbox>
-                ))}
-              </div>
-            </CheckboxGroup>
-            <div className="kolom">
-              <label className="label" htmlFor="kebutuhan-lain">
-                Kebutuhan lain <span className="teks-redup">(boleh dikosongkan)</span>
-              </label>
-              <textarea id="kebutuhan-lain" rows={3} value={form.lainnya} onChange={(e) => ubah('lainnya')(e.target.value)} />
-            </div>
-          </div>
-        )}
-
-        {langkah === 4 && (
-          <div className="tumpuk">
-            <div className="kolom">
-              <label className="label" htmlFor="nama">
-                Nama lengkap pasien
-              </label>
-              <input
-                id="nama"
-                autoComplete="name"
-                value={form.nama}
-                onChange={(e) => ubah('nama')(e.target.value)}
-                aria-invalid={galat.nama ? true : undefined}
-                aria-describedby={galat.nama ? 'galat-nama' : undefined}
+          {langkah === 1 && form.jenis === 'datang' && (
+            <div className="tumpuk">
+              <PilihanRadio
+                label="Puskesmas"
+                nilai={form.puskesmas}
+                onChange={ubah('puskesmas')}
+                galat={galat.puskesmas}
+                pilihan={PUSKESMAS.map((p) => ({ id: p.id, label: `${p.nama} · ${p.jarak}`, ket: p.fasilitas.join(' · ') }))}
               />
-              {galat.nama && (
-                <p className="galat" id="galat-nama">
-                  <AlertCircle aria-hidden="true" width="18" height="18" /> {galat.nama}
-                </p>
-              )}
+              <PilihanRadio label="Poli" nilai={form.poli} onChange={ubah('poli')} galat={galat.poli} pilihan={POLI} kisi />
             </div>
-            <div className="kolom">
-              <label className="label" htmlFor="hp">
-                Nomor HP
-              </label>
-              <p className="bantuan" id="bantuan-hp">
-                Contoh: 0812 3456 7890. Prototipe ini tidak mengirim pesan sungguhan.
-              </p>
-              <input
-                id="hp"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                value={form.hp}
-                onChange={(e) => ubah('hp')(e.target.value)}
-                aria-invalid={galat.hp ? true : undefined}
-                aria-describedby={galat.hp ? 'bantuan-hp galat-hp' : 'bantuan-hp'}
-              />
-              {galat.hp && (
-                <p className="galat" id="galat-hp">
-                  <AlertCircle aria-hidden="true" width="18" height="18" /> {galat.hp}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
+          )}
+          {langkah === 1 && form.jenis === 'online' && (
+            <PilihanRadio
+              label="Konsultasi dengan"
+              nilai={form.layananOnline}
+              onChange={ubah('layananOnline')}
+              galat={galat.layananOnline}
+              pilihan={LAYANAN_ONLINE}
+              kisi
+            />
+          )}
 
-        {langkah === 5 && (
-          <dl className="ringkasan">
-            {ringkasan.map((r) => (
-              <div key={r.label} className="ringkasan__baris">
-                <dt>{r.label}</dt>
-                <dd>
-                  <span>{r.isi}</span>
-                  <Button className="tombol tombol--teks" onPress={() => setLangkah(r.langkah)} aria-label={`Ubah ${r.label.toLowerCase()}`}>
-                    <Pencil aria-hidden="true" /> Ubah
-                  </Button>
-                </dd>
+          {langkah === 2 && (
+            <div className="tumpuk">
+              <PilihanRadio label="Hari" nilai={form.tanggal} onChange={ubah('tanggal')} galat={galat.tanggal} pilihan={hari} kisi />
+              <PilihanRadio label="Sesi" nilai={form.sesi} onChange={ubah('sesi')} galat={galat.sesi} pilihan={SESI} kisi orientasi="horizontal" />
+            </div>
+          )}
+
+          {langkah === 3 && (
+            <div className="tumpuk">
+              <CheckboxGroup value={form.kebutuhan} onChange={ubah('kebutuhan')} className="kolom">
+                <Label className="label">Pilih semua yang dibutuhkan (boleh dikosongkan)</Label>
+                <div className="pilihan-grup">
+                  {kebutuhanTampil.map((k) => (
+                    <Checkbox key={k.id} value={k.id} className="pilihan pilihan--kotak">
+                      <span className="pilihan__tanda" aria-hidden="true">
+                        <Check />
+                      </span>
+                      <span className="pilihan__isi">
+                        {k.label}
+                        <small>{k.ket}</small>
+                      </span>
+                    </Checkbox>
+                  ))}
+                </div>
+              </CheckboxGroup>
+              <div className="kolom">
+                <label className="label" htmlFor="kebutuhan-lain">
+                  Kebutuhan lain <span className="teks-redup">(boleh dikosongkan)</span>
+                </label>
+                <textarea id="kebutuhan-lain" rows={3} value={form.lainnya} onChange={(e) => ubah('lainnya')(e.target.value)} />
               </div>
-            ))}
-          </dl>
-        )}
+            </div>
+          )}
+
+          {langkah === 4 && (
+            <div className="tumpuk">
+              <div className="kolom">
+                <label className="label" htmlFor="nama">
+                  Nama lengkap pasien
+                </label>
+                <input
+                  id="nama"
+                  autoComplete="name"
+                  value={form.nama}
+                  onChange={(e) => ubah('nama')(e.target.value)}
+                  aria-invalid={galat.nama ? true : undefined}
+                  aria-describedby={galat.nama ? 'galat-nama' : undefined}
+                />
+                {galat.nama && (
+                  <p className="galat" id="galat-nama">
+                    <AlertCircle aria-hidden="true" width="18" height="18" /> {galat.nama}
+                  </p>
+                )}
+              </div>
+              <div className="kolom">
+                <label className="label" htmlFor="hp">
+                  Nomor HP
+                </label>
+                <p className="bantuan" id="bantuan-hp">
+                  Contoh: 0812 3456 7890. Prototipe ini tidak mengirim pesan sungguhan.
+                </p>
+                <input
+                  id="hp"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  value={form.hp}
+                  onChange={(e) => ubah('hp')(e.target.value)}
+                  aria-invalid={galat.hp ? true : undefined}
+                  aria-describedby={galat.hp ? 'bantuan-hp galat-hp' : 'bantuan-hp'}
+                />
+                {galat.hp && (
+                  <p className="galat" id="galat-hp">
+                    <AlertCircle aria-hidden="true" width="18" height="18" /> {galat.hp}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {langkah === 5 && (
+            <dl className="ringkasan">
+              {ringkasan.map((r) => (
+                <div key={r.label} className="ringkasan__baris">
+                  <dt>{r.label}</dt>
+                  <dd>
+                    <span>{r.isi}</span>
+                    <Button className="tombol tombol--teks" onPress={() => keLangkah(r.langkah)} aria-label={`Ubah ${r.label.toLowerCase()}`}>
+                      <Pencil aria-hidden="true" /> Ubah
+                    </Button>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
 
         <div className="antrean__aksi">
           {langkah > 0 && (
-            <Button className="tombol" onPress={() => setLangkah((l) => l - 1)}>
+            <Button className="tombol" onPress={() => keLangkah(langkah - 1)}>
               <ArrowLeft aria-hidden="true" /> Kembali
             </Button>
           )}

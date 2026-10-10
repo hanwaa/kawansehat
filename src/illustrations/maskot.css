@@ -14,9 +14,12 @@
   stroke-linejoin: round;
 }
 
+/* Maskot bergerak sebentar saat muncul lalu diam (total < 5 detik, WCAG 2.2.2), bukan bergoyang terus di
+   samping formulir. Gelembung memasang ulang maskot setiap pose berganti, jadi geraknya muncul lagi tepat di
+   momen penting: jawaban benar, piring lengkap, langkah tur berikutnya. */
 .maskot__tubuh {
   transform-origin: 100px 200px;
-  animation: maskot-ayun 3.2s ease-in-out infinite;
+  animation: maskot-ayun 2.4s ease-in-out 2;
 }
 
 [data-profil='anak'] .maskot__tubuh {
@@ -29,7 +32,7 @@
 }
 
 .maskot__lambai {
-  animation: maskot-kedip 1.6s ease-in-out infinite;
+  animation: maskot-kedip 1.6s ease-in-out 3;
 }
 
 @keyframes maskot-ayun {

@@ -2,8 +2,36 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--latar) 94%, transparent);
+  background: var(--latar);
   border-bottom: var(--garis) solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+  transition: border-color var(--durasi) var(--kurva);
+}
+
+/* Material di layar lebar: konten yang tergulir tampak buram di balik header, bukan teks yang membayang.
+   Di HP header solid, karena menu bawah (position: fixed) ada di dalam header dan backdrop-filter akan
+   menjadikan header containing block-nya. Lansia, kontras tinggi, dan tampilan sederhana selalu solid. */
+@media (min-width: 900px) {
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root:not([data-profil='lansia'], [data-kontras], [data-sederhana]) .kepala-situs {
+      background: color-mix(in srgb, var(--latar) 78%, transparent);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      backdrop-filter: blur(20px) saturate(180%);
+    }
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .kepala-situs {
+    background: var(--latar) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* Garis bawah baru muncul saat konten mulai bergulir di bawah header, bukan pembatas permanen.
+   Anak, remaja, dan kontras tinggi mempertahankan garis tegas sebagai bagian dari gayanya. */
+.kepala-situs:not([data-tergulir]) {
+  border-bottom-color: transparent;
 }
 
 [data-profil='anak'] .kepala-situs,
@@ -78,17 +106,30 @@
   color: var(--teks);
   font-weight: 700;
   text-decoration: none;
+  transition: background-color var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .navigasi-utama a svg {
   width: 1.3em;
   height: 1.3em;
   flex: none;
+  transition: transform var(--durasi) var(--kurva);
 }
 
 .navigasi-utama a:hover {
   background: var(--permukaan-2);
   color: var(--teks);
+}
+
+.navigasi-utama a:active {
+  background: var(--permukaan-2);
+  transition-duration: 90ms;
+}
+
+.navigasi-utama a:active svg {
+  transform: scale(0.88);
+  transition-duration: 90ms;
 }
 
 .navigasi-utama a[aria-current='page'] {

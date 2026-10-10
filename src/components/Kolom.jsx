@@ -42,12 +42,13 @@ export function KolomAngka({ label, satuan, nilai, onChange, galat, bantuan, waj
   )
 }
 
-export function PilihanRadio({ label, nilai, onChange, pilihan, galat, kisi = false, orientasi = 'vertical' }) {
+export function PilihanRadio({ label, nilai, onChange, pilihan, galat, kisi = false, orientasi = 'vertical', isDisabled = false }) {
   return (
     <RadioGroup
       value={nilai || null}
       onChange={onChange}
       isInvalid={Boolean(galat)}
+      isDisabled={isDisabled}
       orientation={orientasi}
       className="kolom"
     >

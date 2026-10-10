@@ -24,6 +24,7 @@
   cursor: pointer;
   text-align: center;
   transition: transform var(--durasi) var(--kurva), background-color var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
 }
 
 [data-profil='dewasa'] .profil-kartu {
@@ -32,6 +33,11 @@
 
 .profil-kartu[data-hovered] {
   transform: translateY(-3px);
+}
+
+.profil-kartu[data-pressed] {
+  transform: scale(0.97);
+  transition-duration: 90ms;
 }
 
 .profil-kartu[data-selected] {

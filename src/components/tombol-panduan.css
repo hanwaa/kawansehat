@@ -18,10 +18,12 @@
   font-size: min(var(--fs-dasar), 18px);
   font-weight: 800;
   cursor: pointer;
+  transition: transform var(--durasi) var(--kurva);
   -webkit-tap-highlight-color: transparent;
 }
 
 .fab-panduan__balon {
+  --ekor-kanan: 28px;
   position: relative;
   padding: 8px 14px;
   border: var(--garis) solid var(--garis-warna);
@@ -30,14 +32,17 @@
   box-shadow: 0 6px 18px rgb(0 0 0 / 0.16);
   white-space: nowrap;
   line-height: 1.2;
-  transition: background-color var(--durasi) var(--kurva), transform var(--durasi) var(--kurva);
+  /* Menyusut dan tumbuh dari ekornya, yaitu titik yang menempel ke Si Kawal. */
+  transform-origin: calc(100% - var(--ekor-kanan) - 7px) 100%;
+  transition: background-color var(--durasi) var(--kurva), transform var(--durasi) var(--kurva),
+    opacity var(--durasi) var(--kurva);
 }
 
 /* Ekor balon menunjuk ke bawah, ke kepala Si Kawal. */
 .fab-panduan__balon::after {
   content: '';
   position: absolute;
-  right: 28px;
+  right: var(--ekor-kanan);
   bottom: -8px;
   width: 14px;
   height: 14px;
@@ -82,11 +87,25 @@
 
 .fab-panduan[data-pressed] {
   transform: scale(0.96);
+  transition-duration: 90ms;
 }
 
 .fab-panduan[data-focus-visible] {
   outline: 3px solid var(--fokus);
   outline-offset: 2px;
+}
+
+/* Digulir ke bawah: balon menyusut dan keluar dari alur, sehingga area sentuh tombol tinggal Si Kawal (tidak
+   ada area tak terlihat yang menutupi konten). Posisinya sama persis dengan saat masih di dalam alur, jadi
+   tidak ada lompatan. Muncul lagi saat disorot mouse atau difokus keyboard. Lansia selalu melihat labelnya. */
+:root:not([data-profil='lansia']) .fab-panduan[data-ringkas]:not([data-hovered], [data-focus-visible]) .fab-panduan__balon {
+  position: absolute;
+  right: 4px;
+  bottom: calc(100% + 4px);
+  opacity: 0;
+  transform: scale(0.4);
+  visibility: hidden;
+  transition: transform var(--durasi) var(--kurva), opacity var(--durasi) var(--kurva), visibility 0s linear var(--durasi);
 }
 
 /* HP: di atas menu bawah, maskot sedikit lebih kecil. */
@@ -100,10 +119,8 @@
     height: 56px;
   }
   .fab-panduan__balon {
+    --ekor-kanan: 24px;
     padding: 6px 12px;
-  }
-  .fab-panduan__balon::after {
-    right: 24px;
   }
 }
 

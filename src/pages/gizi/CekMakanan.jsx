@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { Button, Label, Radio, RadioGroup } from 'react-aria-components'
 import { ArrowLeft, Check, Minus, Plus, Search, Trash2, X } from 'lucide-react'
 import ListenButton from '../../components/ListenButton.jsx'
+import PesanUrungkan from '../../components/PesanUrungkan.jsx'
 import Sumber from '../../components/Sumber.jsx'
 import { useJudulHalaman } from '../../components/useJudulHalaman.js'
 import { KELOMPOK, MAKANAN, cariMakanan } from '../../data/makanan.js'
@@ -52,7 +53,9 @@ function Pencarian({ onPilih, dipilih }) {
 
   return (
     <section className="kartu cari-makanan" aria-labelledby="judul-cari">
-      <h2 id="judul-cari">Cari makanan</h2>
+      <h2 id="judul-cari" tabIndex={-1}>
+        Cari makanan
+      </h2>
       <div className="kolom">
         <label className="label" htmlFor="kata-makanan">
           Nama makanan
@@ -83,7 +86,11 @@ function Pencarian({ onPilih, dipilih }) {
       <ul className="cari-makanan__hasil" role="list">
         {hasil.map((m) => (
           <li key={m.id}>
-            <Button className={`hasil-makanan ${dipilih?.id === m.id ? 'hasil-makanan--dipilih' : ''}`} onPress={() => onPilih(m)}>
+            <Button
+              className={`hasil-makanan ${dipilih?.id === m.id ? 'hasil-makanan--dipilih' : ''}`}
+              onPress={() => onPilih(m)}
+              data-makanan={m.id}
+            >
               <span className="hasil-makanan__nama">{m.nama}</span>
               <span className="hasil-makanan__urt">
                 1 porsi = {m.urt}
@@ -158,7 +165,7 @@ function DetailMakanan({ makanan, onTambah, onTutup, profil }) {
   )
 }
 
-function Rekap({ isi, onHapus, onKosongkan, profil }) {
+function Rekap({ isi, onHapus, onKosongkan, profil, kabar, onUrungkan, refUrungkan }) {
   const rekap = useRef(null)
   const dataDiri = baca('ks-data-diri', null)
   const umur = bacaAngka(dataDiri?.umurTahun ?? String(PROFIL[profil].umurContoh))
@@ -169,7 +176,10 @@ function Rekap({ isi, onHapus, onKosongkan, profil }) {
 
   return (
     <section className="kartu rekap" aria-labelledby="judul-rekap" ref={rekap}>
-      <h2 id="judul-rekap">Piringku Hari Ini</h2>
+      <h2 id="judul-rekap" tabIndex={-1}>
+        Piringku Hari Ini
+      </h2>
+      <PesanUrungkan kabar={kabar} onUrungkan={onUrungkan} refTombol={refUrungkan} />
       {isi.length === 0 ? (
         <p>Belum ada makanan. Cari makanan lalu tekan “Tambahkan”.</p>
       ) : (
@@ -238,6 +248,10 @@ export default function CekMakanan() {
   const [dipilih, setDipilih] = useState(null)
   const [isi, setIsi] = useState(muatPiringku)
   const [pesan, setPesan] = useState('')
+  const kabar = useRef(null)
+  // Kabar hapus/kosongkan di rekap, dengan data untuk mengurungkannya.
+  const [kabarRekap, setKabarRekap] = useState(null)
+  const tombolUrungkan = useRef(null)
 
   const simpan = (baru) => {
     setIsi(baru)
@@ -246,13 +260,54 @@ export default function CekMakanan() {
 
   const pilihMakanan = (m) => {
     setDipilih(m)
+    setPesan('')
     requestAnimationFrame(() => document.getElementById('judul-detail')?.focus())
   }
 
-  const tambah = (m, porsi) => {
-    simpan([...isi, { id: m.id, porsi }])
-    setPesan(`${m.nama} ${porsi.toLocaleString('id-ID')} porsi ditambahkan ke Piringku Hari Ini.`)
+  // Menutup detail mengembalikan fokus ke makanan yang tadi dipilih di daftar, tempat asalnya.
+  const tutupDetail = () => {
+    const id = dipilih.id
     setDipilih(null)
+    requestAnimationFrame(() => document.querySelector(`[data-makanan="${id}"]`)?.focus())
+  }
+
+  const tambah = (m, porsi) => {
+    const baru = [...isi, { id: m.id, porsi }]
+    simpan(baru)
+    setKabarRekap(null)
+    setPesan(`${m.nama} ${porsi.toLocaleString('id-ID')} porsi ditambahkan. Sekarang ada ${baru.length} makanan di Piringku Hari Ini.`)
+    setDipilih(null)
+    // Konfirmasi tampil di tempat panel detail tadi berada, lalu digulir ke layar bila perlu (di HP rekap ada jauh di bawah).
+    requestAnimationFrame(() => {
+      document.getElementById('judul-cari')?.focus({ preventScroll: true })
+      kabar.current?.scrollIntoView({ block: 'nearest' })
+    })
+  }
+
+  // Tombol yang ditekan ikut hilang setelah menghapus, jadi fokus pindah ke Urungkan.
+  const hapus = (i) => {
+    simpan(isi.filter((_, j) => j !== i))
+    setKabarRekap({ pesan: `${cariMakanan(isi[i].id).nama} dihapus.`, bisaUrungkan: true, item: isi[i], indeks: i })
+    requestAnimationFrame(() => tombolUrungkan.current?.focus())
+  }
+
+  const kosongkan = () => {
+    simpan([])
+    setKabarRekap({ pesan: 'Piring dikosongkan.', bisaUrungkan: true, semua: isi })
+    requestAnimationFrame(() => tombolUrungkan.current?.focus())
+  }
+
+  const urungkan = () => {
+    const { item, indeks, semua } = kabarRekap
+    simpan(semua ? [...semua, ...isi] : [...isi.slice(0, indeks), item, ...isi.slice(indeks)])
+    setKabarRekap({ pesan: 'Dikembalikan ke Piringku Hari Ini.' })
+    requestAnimationFrame(() => document.getElementById('judul-rekap')?.focus())
+  }
+
+  const lihatRekap = () => {
+    const judul = document.getElementById('judul-rekap')
+    judul?.scrollIntoView({ block: 'start' })
+    judul?.focus({ preventScroll: true })
   }
 
   return (
@@ -277,17 +332,39 @@ export default function CekMakanan() {
       ) : (
         <div className="cek-makanan">
           <div className="cek-makanan__kiri">
-            {dipilih ? (
-              <DetailMakanan key={dipilih.id} makanan={dipilih} onTambah={tambah} onTutup={() => setDipilih(null)} profil={profil} />
-            ) : (
-              <Pencarian onPilih={pilihMakanan} dipilih={dipilih} />
+            {/* Region status selalu ada di halaman supaya pembaca layar mengumumkannya; tampil hanya saat ada pesan. */}
+            <div ref={kabar} className={pesan ? 'kabar-tambah' : 'visual-tersembunyi'}>
+              <p role="status" className="kabar-tambah__teks">
+                {pesan && (
+                  <>
+                    <Check aria-hidden="true" /> {pesan}
+                  </>
+                )}
+              </p>
+              {pesan && (
+                <Button className="tombol tombol--teks kabar-tambah__rekap" onPress={lihatRekap}>
+                  Lihat rekap
+                </Button>
+              )}
+            </div>
+            {dipilih && (
+              <DetailMakanan key={dipilih.id} makanan={dipilih} onTambah={tambah} onTutup={tutupDetail} profil={profil} />
             )}
+            {/* Pencarian hanya disembunyikan (bukan dilepas) supaya kata kunci, filter, dan posisi gulir tetap ada. */}
+            <div hidden={Boolean(dipilih)}>
+              <Pencarian onPilih={pilihMakanan} dipilih={dipilih} />
+            </div>
           </div>
           <div className="cek-makanan__kanan">
-            <p className="visual-tersembunyi" role="status">
-              {pesan}
-            </p>
-            <Rekap isi={isi} profil={profil} onHapus={(i) => simpan(isi.filter((_, j) => j !== i))} onKosongkan={() => simpan([])} />
+            <Rekap
+              isi={isi}
+              profil={profil}
+              onHapus={hapus}
+              onKosongkan={kosongkan}
+              kabar={kabarRekap}
+              onUrungkan={urungkan}
+              refUrungkan={tombolUrungkan}
+            />
           </div>
         </div>
       )}

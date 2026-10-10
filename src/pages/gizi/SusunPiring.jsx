@@ -3,7 +3,7 @@ import { Button } from 'react-aria-components'
 import { RotateCcw } from 'lucide-react'
 import Gelembung from '../../components/Gelembung.jsx'
 import IkonMakanan from '../../illustrations/IkonMakanan.jsx'
-import PiringDiagram, { titikSektor } from '../../illustrations/PiringDiagram.jsx'
+import PiringDiagram, { SEKTOR_PIRING, titikSektor } from '../../illustrations/PiringDiagram.jsx'
 import { beriLencana } from '../../lib/lencana.js'
 import { bacakan } from '../../lib/suara.js'
 import { usePrefs } from '../../prefs/PrefsProvider.jsx'
@@ -33,6 +33,8 @@ const PENJELASAN = {
 }
 
 const NAMA_BAGIAN = { pokok: 'Makanan pokok', lauk: 'Lauk pauk', sayur: 'Sayur', buah: 'Buah' }
+const NAMA_PENDEK = { pokok: 'Pokok', lauk: 'Lauk', sayur: 'Sayur', buah: 'Buah' }
+const WARNA_SEKTOR = Object.fromEntries(SEKTOR_PIRING.map((s) => [s.id, s.warna]))
 
 export default function SusunPiring() {
   const { prefs } = usePrefs()
@@ -66,7 +68,7 @@ export default function SusunPiring() {
               if (!m) return null
               const t = titikSektor(k, k === 'pokok' || k === 'sayur' ? 52 : 60)
               return (
-                <foreignObject key={k} x={t.x - 24} y={t.y - 24} width="48" height="48">
+                <foreignObject key={`${k}-${m.id}`} x={t.x - 24} y={t.y - 24} width="48" height="48">
                   <IkonMakanan nama={m.id} ukuran={48} />
                 </foreignObject>
               )
@@ -93,21 +95,35 @@ export default function SusunPiring() {
         </div>
       </div>
 
-      <h2>Pilih makanan</h2>
-      <ul className="susun-piring__makanan" role="list">
-        {MAKANAN_GAME.map((m) => (
-          <li key={m.id}>
-            <Button
-              className="makanan-tombol"
-              onPress={() => ketuk(m)}
-              aria-pressed={piring[m.kelompok]?.id === m.id}
-            >
-              <IkonMakanan nama={m.id} ukuran={56} />
-              <span>{m.nama}</span>
-            </Button>
-          </li>
-        ))}
-      </ul>
+      <div className="susun-piring__pilih">
+        <h2>Pilih makanan</h2>
+        {/* Piring mini yang menempel saat daftar makanan digulir: di HP piring besar sudah di luar layar, jadi
+            hasil setiap ketukan tetap terlihat di dekat jari. Hanya visual, isinya sama dengan daftar "Isi piringmu". */}
+        <ol className="piring-mini" aria-hidden="true">
+          {Object.entries(piring).map(([k, m]) => (
+            <li key={k} className={m ? 'terisi' : ''}>
+              <span className="piring-mini__wadah" style={m ? { background: WARNA_SEKTOR[k] } : undefined}>
+                {m && <IkonMakanan key={m.id} nama={m.id} ukuran={32} />}
+              </span>
+              <span>{NAMA_PENDEK[k]}</span>
+            </li>
+          ))}
+        </ol>
+        <ul className="susun-piring__makanan" role="list">
+          {MAKANAN_GAME.map((m) => (
+            <li key={m.id}>
+              <Button
+                className="makanan-tombol"
+                onPress={() => ketuk(m)}
+                aria-pressed={piring[m.kelompok]?.id === m.id}
+              >
+                <IkonMakanan nama={m.id} ukuran={56} />
+                <span>{m.nama}</span>
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }

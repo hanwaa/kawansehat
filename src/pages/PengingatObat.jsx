@@ -4,6 +4,7 @@ import { AlertCircle, BellRing, Check, Moon, Plus, Sun, Sunrise, Trash2 } from '
 import Gelembung from '../components/Gelembung.jsx'
 import { PilihanRadio } from '../components/Kolom.jsx'
 import ListenButton from '../components/ListenButton.jsx'
+import PesanUrungkan from '../components/PesanUrungkan.jsx'
 import { useJudulHalaman } from '../components/useJudulHalaman.js'
 import { bacakan, hentikan } from '../lib/suara.js'
 import { baca, tulis } from '../lib/simpan.js'
@@ -76,7 +77,12 @@ export default function PengingatObat() {
   })
   const [form, setForm] = useState(null)
   const [galat, setGalat] = useState({})
+  // Isi notifikasi terakhir disimpan terpisah dari status terbuka, supaya tetap tampil selama animasi keluar.
   const [notifikasi, setNotifikasi] = useState(null)
+  const [notifTerbuka, setNotifTerbuka] = useState(false)
+  // Kabar aksi terakhir (hapus, urungkan, tunda pengingat) untuk PesanUrungkan.
+  const [kabar, setKabar] = useState(null)
+  const tombolUrungkan = useRef(null)
   const jadwal = useRef(null)
 
   const simpanObat = (baru) => {
@@ -99,18 +105,45 @@ export default function PengingatObat() {
     if (Object.keys(g).length) return
     simpanObat([...obat, { ...form, id: Date.now().toString(36), nama: form.nama.trim(), dosis: form.dosis.trim() }])
     setForm(null)
+    setKabar(null)
+  }
+
+  const hapusObat = (o) => {
+    const indeks = obat.findIndex((x) => x.id === o.id)
+    simpanObat(obat.filter((x) => x.id !== o.id))
+    setKabar({ pesan: `${o.nama} dihapus dari jadwal.`, bisaUrungkan: true, obat: o, indeks })
+    // Tombol hapus ikut hilang; fokus pindah ke Urungkan supaya tidak jatuh ke awal halaman.
+    requestAnimationFrame(() => tombolUrungkan.current?.focus())
+  }
+
+  const urungkanHapus = () => {
+    const { obat: o, indeks } = kabar
+    simpanObat([...obat.slice(0, indeks), o, ...obat.slice(indeks)])
+    setKabar({ pesan: `${o.nama} dikembalikan ke jadwal.` })
+    requestAnimationFrame(() => document.getElementById('judul-jadwal')?.focus())
+  }
+
+  // Prototipe tidak bisa menjadwalkan notifikasi sungguhan, jadi katakan apa adanya.
+  const ingatkanNanti = () => {
+    const jam = new Date(Date.now() + 10 * 60 * 1000).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+    setKabar({ pesan: `Oke, ${notifikasi.obat.nama} diingatkan lagi pukul ${jam} (simulasi).` })
+    hentikan()
+    setNotifTerbuka(false)
   }
 
   const cobaPengingat = (o, w) => {
     setNotifikasi({ obat: o, waktu: w })
+    setNotifTerbuka(true)
     if (prefs.suara) bacakan(kalimatPengingat(o), { kecepatan: profil === 'lansia' ? 0.9 : 1 })
   }
 
-  const contoh = () =>
+  const contoh = () => {
+    setKabar(null)
     simpanObat([
       { id: 'contoh1', nama: 'Obat tekanan darah (contoh)', dosis: '1 tablet', bentuk: 'tablet', warna: 'putih', waktu: ['pagi'], makan: 'sesudah' },
       { id: 'contoh2', nama: 'Vitamin (contoh)', dosis: '1 kapsul', bentuk: 'kapsul', warna: 'kuning', waktu: ['pagi', 'malam'], makan: 'sesudah' },
     ])
+  }
 
   return (
     <div className="wadah wadah--sempit pengingat">
@@ -126,7 +159,10 @@ export default function PengingatObat() {
       </header>
 
       <section ref={jadwal} aria-labelledby="judul-jadwal">
-        <h2 id="judul-jadwal">Hari ini</h2>
+        <h2 id="judul-jadwal" tabIndex={-1}>
+          Hari ini
+        </h2>
+        <PesanUrungkan kabar={kabar} onUrungkan={urungkanHapus} refTombol={tombolUrungkan} />
         {obat.length === 0 ? (
           <Gelembung pose="pikir" kecil>
             <p>Belum ada obat. Tambahkan obat dulu, atau lihat contohnya.</p>
@@ -165,7 +201,7 @@ export default function PengingatObat() {
                           </Button>
                           <Button
                             className="tombol tombol--teks"
-                            onPress={() => simpanObat(obat.filter((x) => x.id !== o.id))}
+                            onPress={() => hapusObat(o)}
                             aria-label={`Hapus ${o.nama}`}
                           >
                             <Trash2 aria-hidden="true" />
@@ -287,11 +323,11 @@ export default function PengingatObat() {
 
       <ModalOverlay
         className="lapisan-dialog"
-        isOpen={Boolean(notifikasi)}
+        isOpen={notifTerbuka}
         onOpenChange={(buka) => {
           if (!buka) {
             hentikan()
-            setNotifikasi(null)
+            setNotifTerbuka(false)
           }
         }}
         isDismissable
@@ -316,18 +352,12 @@ export default function PengingatObat() {
                     onPress={() => {
                       tandai(`${notifikasi.obat.id}-${notifikasi.waktu.id}`, true)
                       hentikan()
-                      setNotifikasi(null)
+                      setNotifTerbuka(false)
                     }}
                   >
                     <Check aria-hidden="true" /> Sudah diminum
                   </Button>
-                  <Button
-                    className="tombol"
-                    onPress={() => {
-                      hentikan()
-                      setNotifikasi(null)
-                    }}
-                  >
+                  <Button className="tombol" onPress={ingatkanNanti}>
                     Ingatkan 10 menit lagi
                   </Button>
                 </div>

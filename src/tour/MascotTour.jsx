@@ -1,4 +1,5 @@
-import { useEffect, useId, useLayoutEffect, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { Button, Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react'
 import Maskot from '../illustrations/Maskot.jsx'
@@ -11,6 +12,8 @@ import './tour.css'
 
 const JARAK = 14
 
+const batasi = (n, min, max) => Math.max(min, Math.min(n, max))
+
 function cariTarget(nama) {
   const el = document.querySelector(`[data-tour="${nama}"]`)
   if (!el) return null
@@ -18,7 +21,8 @@ function cariTarget(nama) {
   return r.width > 0 && r.height > 0 ? el : null
 }
 
-function hitungPosisi(rect) {
+// `ekor` = sisi balon tempat ekor penunjuk berada dan jaraknya dari sudut, supaya balon jelas menunjuk targetnya.
+function hitungPosisi(rect, tinggiTerukur) {
   const lebarLayar = window.innerWidth
   const tinggiLayar = window.innerHeight
   if (!rect) return { gaya: {}, kelas: 'tur-balon--tengah' }
@@ -27,23 +31,35 @@ function hitungPosisi(rect) {
     const targetDiBawah = rect.top + rect.height / 2 > tinggiLayar * 0.55
     return { gaya: {}, kelas: targetDiBawah ? 'tur-balon--atas' : 'tur-balon--bawah' }
   }
-  // Perkiraan tinggi balon ikut membesar bersama ukuran teks pengguna.
+  // Tinggi balon diukur setelah tampil; sebelum itu dipakai perkiraan yang ikut membesar bersama ukuran teks.
   const skala = parseFloat(getComputedStyle(document.documentElement).fontSize) / 16
-  const tinggiBalon = 300 * skala
+  const tinggiBalon = tinggiTerukur || 300 * skala
   const lebar = Math.min(400 * Math.min(skala, 1.25), lebarLayar - 32)
-  const left = Math.min(Math.max(rect.left + rect.width / 2 - lebar / 2, 16), lebarLayar - lebar - 16)
+  const left = batasi(rect.left + rect.width / 2 - lebar / 2, 16, lebarLayar - lebar - 16)
+  // Ekor menunjuk ke tengah target, tetapi tidak keluar dari sudut balon yang membulat.
+  const ekorX = batasi(rect.left + rect.width / 2 - left, 28, lebar - 28)
   if (rect.bottom + JARAK + tinggiBalon < tinggiLayar) {
-    return { gaya: { top: rect.bottom + JARAK, left, width: lebar }, kelas: 'tur-balon--melayang' }
+    return {
+      gaya: { top: rect.bottom + JARAK, left, width: lebar },
+      kelas: 'tur-balon--melayang',
+      ekor: { sisi: 'atas', posisi: ekorX },
+    }
   }
   if (rect.top - JARAK - tinggiBalon > 0) {
-    return { gaya: { top: rect.top - JARAK, left, width: lebar, transform: 'translateY(-100%)' }, kelas: 'tur-balon--melayang' }
+    return {
+      gaya: { top: rect.top - JARAK, left, width: lebar, transform: 'translateY(-100%)' },
+      kelas: 'tur-balon--melayang',
+      ekor: { sisi: 'bawah', posisi: ekorX },
+    }
   }
   // Target terlalu besar: letakkan di samping bila muat, kalau tidak di bawah tengah layar.
+  const top = batasi(rect.top, 16, tinggiLayar - tinggiBalon - 16)
+  const ekorY = batasi(rect.top + rect.height / 2 - top, 28, tinggiBalon - 28)
   if (lebarLayar - rect.right - JARAK > lebar + 16) {
-    return { gaya: { top: Math.max(16, Math.min(rect.top, tinggiLayar - tinggiBalon - 16)), left: rect.right + JARAK, width: lebar }, kelas: 'tur-balon--melayang' }
+    return { gaya: { top, left: rect.right + JARAK, width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kiri', posisi: ekorY } }
   }
   if (rect.left - JARAK > lebar + 16) {
-    return { gaya: { top: Math.max(16, Math.min(rect.top, tinggiLayar - tinggiBalon - 16)), left: rect.left - JARAK - lebar, width: lebar }, kelas: 'tur-balon--melayang' }
+    return { gaya: { top, left: rect.left - JARAK - lebar, width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kanan', posisi: ekorY } }
   }
   return { gaya: { bottom: 16, left: (lebarLayar - lebar) / 2, width: lebar }, kelas: 'tur-balon--melayang' }
 }
@@ -51,23 +67,23 @@ function hitungPosisi(rect) {
 export default function MascotTour({ status, setStatus, onTutup }) {
   const { profil, prefs, pilih } = usePrefs()
   const idTeks = useId()
-  const [target, setTarget] = useState({ kunci: null, rect: null })
+  const [target, setTarget] = useState({ sesi: null, rect: null })
 
   const langkah = LANGKAH_TUR[profil]
   const diTawar = status.tahap === 'tawar'
   const sekarang = diTawar ? null : langkah[status.indeks]
   const terakhir = !diTawar && status.indeks === langkah.length - 1
   const isi = diTawar ? SAPAAN_TUR[profil] : sekarang
-  const kunci = status.terbuka && sekarang ? `${profil}-${status.indeks}` : null
+  const kunci = status.terbuka && sekarang ? `${status.sesi}-${profil}-${status.indeks}` : null
 
   // Cari & ukur target setiap langkah berganti, juga saat layar di-scroll atau diubah ukurannya.
   useLayoutEffect(() => {
     if (!kunci) return
     const el = cariTarget(sekarang.target)
-    if (!el) return
-    el.scrollIntoView({ block: 'center', behavior: 'instant' })
-    const ukur = () => setTarget({ kunci, rect: el.getBoundingClientRect() })
+    const ukur = () => setTarget({ sesi: status.sesi, rect: el ? el.getBoundingClientRect() : null })
     const bingkai = requestAnimationFrame(ukur)
+    if (!el) return () => cancelAnimationFrame(bingkai)
+    el.scrollIntoView({ block: 'center', behavior: 'instant' })
     window.addEventListener('resize', ukur)
     window.addEventListener('scroll', ukur, true)
     return () => {
@@ -75,8 +91,22 @@ export default function MascotTour({ status, setStatus, onTutup }) {
       window.removeEventListener('resize', ukur)
       window.removeEventListener('scroll', ukur, true)
     }
-  }, [kunci, sekarang])
-  const rect = target.kunci === kunci ? target.rect : null
+  }, [kunci, sekarang, status.sesi])
+  // Posisi terakhir dipertahankan sampai posisi baru terukur: sorotan & balon meluncur ke target berikutnya
+  // tanpa satu frame pun kosong, dan tetap di tempat selama animasi keluar. Tur baru mulai dari nol.
+  const rect = target.sesi === status.sesi ? target.rect : null
+
+  // Ukur tinggi balon yang sebenarnya (berubah bersama isi langkah dan ukuran teks). flushSync: posisi yang
+  // benar sudah dipakai sebelum frame berikutnya digambar.
+  const balon = useRef(null)
+  const [tinggiBalon, setTinggiBalon] = useState(0)
+  useLayoutEffect(() => {
+    const el = balon.current
+    if (!status.terbuka || !el) return
+    const pengamat = new ResizeObserver(() => flushSync(() => setTinggiBalon(el.offsetHeight)))
+    pengamat.observe(el)
+    return () => pengamat.disconnect()
+  }, [status.terbuka])
 
   // Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.
   useEffect(() => {
@@ -91,7 +121,7 @@ export default function MascotTour({ status, setStatus, onTutup }) {
     onTutup()
   }
 
-  const posisi = hitungPosisi(diTawar ? null : rect)
+  const posisi = hitungPosisi(diTawar ? null : rect, tinggiBalon)
   const pad = 8
 
   return (
@@ -105,12 +135,24 @@ export default function MascotTour({ status, setStatus, onTutup }) {
         <div
           className="tur-sorot"
           aria-hidden="true"
-          style={{ top: rect.top - pad, left: rect.left - pad, width: rect.width + pad * 2, height: rect.height + pad * 2 }}
+          style={{
+            transform: `translate(${rect.left - pad}px, ${rect.top - pad}px)`,
+            width: rect.width + pad * 2,
+            height: rect.height + pad * 2,
+          }}
         />
       ) : (
         <div className="tur-redup" aria-hidden="true" />
       )}
-      <Modal className={`tur-balon ${posisi.kelas}`} style={posisi.gaya}>
+      <Modal ref={balon} className={`tur-balon ${posisi.kelas}`} style={posisi.gaya}>
+        {posisi.ekor && (
+          <span
+            className="tur-balon__ekor"
+            data-sisi={posisi.ekor.sisi}
+            style={{ '--ekor': `${posisi.ekor.posisi}px` }}
+            aria-hidden="true"
+          />
+        )}
         <Dialog key={`${status.tahap}-${status.indeks}`} className="tur-dialog" aria-describedby={idTeks}>
           <div className="tur-dialog__isi">
             <Maskot pose={diTawar ? 'lambai' : sekarang.pose} ukuran={diTawar ? 112 : 84} />

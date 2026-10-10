@@ -124,6 +124,32 @@ function useTinggiNavBawah(ref, aktif) {
   }, [ref, aktif])
 }
 
+// Tinggi header (sticky) disimpan di --tinggi-kepala supaya elemen sticky di halaman menempel tepat di bawahnya,
+// berapa pun ukuran teks dan jumlah baris header.
+function useTinggiKepala(ref) {
+  useLayoutEffect(() => {
+    const kepala = ref.current
+    if (!kepala) return
+    const ukur = () => document.documentElement.style.setProperty('--tinggi-kepala', `${kepala.offsetHeight}px`)
+    ukur()
+    const pengamat = new ResizeObserver(ukur)
+    pengamat.observe(kepala)
+    return () => pengamat.disconnect()
+  }, [ref])
+}
+
+// Header diberi data-tergulir saat konten mulai bergulir di bawahnya, untuk garis tepi yang baru muncul saat itu.
+function useTepiGulir(ref) {
+  useEffect(() => {
+    const kepala = ref.current
+    if (!kepala) return
+    const cek = () => kepala.toggleAttribute('data-tergulir', window.scrollY > 4)
+    cek()
+    window.addEventListener('scroll', cek, { passive: true })
+    return () => window.removeEventListener('scroll', cek)
+  }, [ref])
+}
+
 export default function Layout() {
   const { prefs, profil } = usePrefs()
   const { pathname } = useLocation()
@@ -134,13 +160,16 @@ export default function Layout() {
   useHeaderRapat(isiKepala, profil, prefs.teks, diPembuka)
   const navUtama = useRef(null)
   useTinggiNavBawah(navUtama, !diPembuka)
+  const kepala = useRef(null)
+  useTinggiKepala(kepala)
+  useTepiGulir(kepala)
 
   return (
     <TourProvider>
       <a className="lewati-ke-konten" href="#konten">
         Langsung ke konten utama
       </a>
-      <header className="kepala-situs">
+      <header className="kepala-situs" ref={kepala}>
         <div className="wadah kepala-situs__isi" ref={isiKepala}>
           <Link to={prefs.profil ? '/beranda' : '/'} className="logo">
             <Logo />

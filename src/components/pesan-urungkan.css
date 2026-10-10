@@ -1,0 +1,23 @@
+.pesan-urungkan {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r1) var(--r3);
+  margin: var(--r3) 0;
+  padding: var(--r1) var(--r1) var(--r1) var(--r4);
+  border: var(--garis) solid color-mix(in srgb, var(--garis-warna) 50%, transparent);
+  border-radius: var(--radius-kecil);
+  background: var(--permukaan-2);
+}
+
+[data-kontras='ya'] .pesan-urungkan {
+  border-color: var(--garis-warna);
+}
+
+.pesan-urungkan__teks {
+  min-width: 0;
+  margin: 0;
+  padding-block: var(--r2);
+  font-weight: 600;
+}

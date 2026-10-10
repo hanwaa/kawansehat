@@ -141,11 +141,26 @@ export default function Kuis() {
         <h2 id="judul-soal" ref={judulSoal} tabIndex={-1} className="kuis__tanya">
           {soal.tanya}
         </h2>
-        <PilihanRadio label="Pilih jawaban" nilai={jawab} onChange={(v) => {
-            if (diperiksa) return
+        {/* Setelah diperiksa pilihan dikunci (terlihat & diumumkan sebagai nonaktif, bukan diam-diam mengabaikan
+            ketukan), dan jawaban benar ditandai dengan teks, bukan warna saja. */}
+        <PilihanRadio
+          label="Pilih jawaban"
+          nilai={jawab}
+          onChange={(v) => {
             setJawab(v)
             setGalat('')
-          }} pilihan={soal.pilihan} galat={galat} />
+          }}
+          pilihan={
+            diperiksa
+              ? soal.pilihan.map((p) => ({
+                  ...p,
+                  ket: p.id === soal.benar ? 'Jawaban benar' : p.id === jawab ? 'Jawabanmu' : undefined,
+                }))
+              : soal.pilihan
+          }
+          galat={galat}
+          isDisabled={diperiksa}
+        />
         {diperiksa && (
           <div role="status" className="kuis__umpan">
             <Gelembung pose={benar ? 'jempol' : 'pikir'} kecil>

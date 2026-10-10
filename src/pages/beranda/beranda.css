@@ -288,11 +288,28 @@
   background: var(--permukaan);
   color: var(--teks);
   text-decoration: none;
+  transition: transform var(--durasi) var(--kurva), background-color var(--durasi) var(--kurva),
+    box-shadow var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tombol-raksasa__item:hover {
-  background: var(--utama-lembut);
   color: var(--teks);
+}
+
+@media (hover: hover) {
+  .tombol-raksasa__item:hover {
+    background: var(--utama-lembut);
+  }
+}
+
+/* Tanda tekan yang jelas tanpa bergantung pada gerak (tetap terlihat saat animasi dikurangi):
+   latar berubah dan bingkai menebal, supaya lansia yakin ketukannya diterima dan tidak mengetuk dua kali. */
+.tombol-raksasa__item:active {
+  background: var(--utama-lembut);
+  box-shadow: inset 0 0 0 3px var(--utama);
+  transform: scale(0.98);
+  transition-duration: 90ms;
 }
 
 .tombol-raksasa__item svg {

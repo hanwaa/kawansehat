@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Label, Radio, RadioGroup } from 'react-aria-components'
 import { Check } from 'lucide-react'
 import { POTRET } from '../illustrations/Potret.jsx'
@@ -8,10 +9,14 @@ import './profil-pilihan.css'
 // Empat kartu profil bergambar. Memilih kartu langsung mengubah tampilan (pratinjau hidup).
 export default function ProfilPilihan({ label = 'Siapa yang memakai Kawal Sehat?', ringkas = false }) {
   const { prefs, pilihProfil } = usePrefs()
+  const grup = useRef(null)
+  // Kartu yang diketuk dijadikan jangkar: tetap di bawah jari walau tampilan (dan ukuran teks) berubah.
+  const pilih = (p) => pilihProfil(p, { jangkar: grup.current?.querySelector(`[data-profil-id="${p}"]`) })
   return (
     <RadioGroup
+      ref={grup}
       value={prefs.profil}
-      onChange={(p) => pilihProfil(p)}
+      onChange={pilih}
       className={`profil-grup ${ringkas ? 'profil-grup--ringkas' : ''}`}
     >
       <Label className={ringkas ? 'label' : 'visual-tersembunyi'}>{label}</Label>
@@ -19,7 +24,7 @@ export default function ProfilPilihan({ label = 'Siapa yang memakai Kawal Sehat?
         {DAFTAR_PROFIL.map((id) => {
           const Potret = POTRET[id]
           return (
-            <Radio key={id} value={id} className="profil-kartu">
+            <Radio key={id} value={id} className="profil-kartu" data-profil-id={id}>
               <span className="profil-kartu__gambar" aria-hidden="true">
                 <Potret />
               </span>
