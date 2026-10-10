@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Flow · Kawal Sehat</title>
+    <title>User Flow · Kawan Sehat</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,10 +56,10 @@
   <body>
     <main class="wadah">
       <header>
-        <p class="label">Kawal Sehat · UI/UX Competition IT CAS 2026</p>
+        <p class="label">Kawan Sehat · UI/UX Competition IT CAS 2026</p>
         <h1>User Flow</h1>
         <p>
-          Empat alur utama Kawal Sehat beserta jalur alternatifnya: melewati langkah, mengganti tampilan, dan menangani
+          Empat alur utama Kawan Sehat beserta jalur alternatifnya: melewati langkah, mengganti tampilan, dan menangani
           galat. Semua alur bisa dijalankan dengan keyboard, pembaca layar, maupun sentuhan.
         </p>
         <ul class="legenda" aria-label="Keterangan simbol">
@@ -72,12 +72,12 @@
       </header>
 
       <section class="alur" aria-labelledby="alur-a">
-        <h2 id="alur-a">A. Pembuka, pengaturan akses, dan tur Si Kawal</h2>
+        <h2 id="alur-a">A. Pembuka, pengaturan akses, dan tur Piko</h2>
         <p>Pengguna memilih siapa yang memakai, mengatur kenyamanan, lalu ditawari tur, tanpa dipaksa.</p>
         <div class="diagram">
           <pre class="mermaid">
 flowchart TD
-  A(["Buka Kawal Sehat"]) --> B{"Sudah pernah<br/>memilih profil?"}
+  A(["Buka Kawan Sehat"]) --> B{"Sudah pernah<br/>memilih profil?"}
   B -- Belum --> C["Layar Pembuka<br/>'Siapa yang memakai?'<br/>4 kartu bergambar"]
   B -- Sudah --> H
   C --> D{"Pilih profil"}
@@ -89,14 +89,17 @@ flowchart TD
   G --> H["Beranda sesuai profil"]
   E2 --> H
   H --> I{"Tur sudah<br/>pernah ditawarkan?"}
-  I -- Belum --> J["Si Kawal menawarkan tur"]
+  I -- Belum --> J["Piko menawarkan tur"]
   J -- "Ya, tunjukkan" --> K["Tur beranda 4–6 langkah<br/>sorotan + balon kata<br/>Kembali · Lanjut · Lewati"]
   J -- "Nanti saja" --> L
-  K -- "Selesai / Lewati / Esc" --> L(["Memakai Kawal Sehat"])
+  K -- "Selesai / Lewati / Esc" --> L(["Memakai Kawan Sehat"])
   K -. "profil anak selesai" .-> K1["Lencana Penjelajah"]
   I -- Sudah --> L
-  L -. "kapan saja" .-> M["Si Kawal + balon Lihat Panduan<br/>mengambang, kanan bawah"]
-  M -. "di halaman mana pun" .-> N["Panduan halaman itu<br/>fitur halaman + menu · Tampilan · 119<br/>tanpa pindah halaman"]
+  L -. "kapan saja" .-> M["Ketuk Piko di tengah menu bawah<br/>(desktop: kanan bawah)<br/>muncul dua balon"]
+  M -- "Lihat Panduan" --> N["Panduan halaman itu<br/>fitur halaman + menu · Piko · Tampilan · 119<br/>tanpa pindah halaman"]
+  M -- "Tanya Piko" --> O["Obrolan Tanya Piko<br/>saran pertanyaan · ketik bebas<br/>(anak: hanya memilih pertanyaan)"]
+  O -- "tanda gawat darurat" --> O1["Tombol Telepon 119<br/>+ langkah darurat"]
+  O -- "tautan di jawaban" --> O2["Halaman terkait<br/>obrolan tertutup"]
           </pre>
         </div>
         <div class="catatan">
@@ -104,8 +107,9 @@ flowchart TD
           <ul>
             <li>Setiap langkah tur adalah dialog. Fokus masuk ke balon kata, Esc menutup tur, dan fokus kembali ke tempat semula.</li>
             <li>Di HP, balon kata muncul dari bawah (atau atas) layar supaya tidak terpotong saat teks diperbesar.</li>
-            <li>Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.</li>
-            <li>Setiap halaman punya panduannya sendiri, dibuka lewat Si Kawal dengan balon <em>Lihat Panduan</em> di kanan bawah. Pengguna tetap di halaman itu, dan fokus kembali ke tombol tersebut setelah panduan selesai.</li>
+            <li>Bila "Bacakan teks" aktif, Piko membacakan setiap langkah.</li>
+            <li>Setiap halaman punya panduannya sendiri, dibuka lewat balon <em>Lihat Panduan</em> milik Piko. Pengguna tetap di halaman itu, dan fokus kembali ke Piko setelah panduan selesai.</li>
+            <li>Kedua balon Piko adalah menu: tombol panah berpindah pilihan, Esc menutupnya. Di <em>Tanya Piko</em>, jawaban baru diumumkan pembaca layar, saran pertanyaan berupa tombol, dan riwayat obrolan tidak disimpan di perangkat.</li>
           </ul>
         </div>
       </section>
@@ -140,7 +144,7 @@ flowchart TD
           <pre class="mermaid">
 flowchart TD
   A(["Ambil antrean"]) --> P{"Profil anak?"}
-  P -- Ya --> P1["Si Kawal: 'Halaman ini untuk<br/>orang tua atau wali'"]
+  P -- Ya --> P1["Piko: 'Halaman ini untuk<br/>orang tua atau wali'"]
   P1 -- "Saya orang tua/wali" --> B
   P1 -- "Kembali" --> P2(["Beranda"])
   P -- Tidak --> B["1 · Jenis layanan"]
@@ -162,7 +166,7 @@ flowchart TD
           </pre>
         </div>
         <div class="catatan">
-          Profil lansia: puskesmas terdekat, Poli Lansia, dan antrean prioritas sudah terisi otomatis, dan tetap bisa diubah. Si Kawal memberi
+          Profil lansia: puskesmas terdekat, Poli Lansia, dan antrean prioritas sudah terisi otomatis, dan tetap bisa diubah. Piko memberi
           tips singkat di setiap langkah, bukan popup.
         </div>
       </section>

@@ -1,4 +1,4 @@
-# Kawal Sehat
+# Kawan Sehat
 ### Ruang digital kesehatan yang menyesuaikan diri dengan penggunanya
 
 **UI/UX Competition IT CAS 2026** · Tema: *Inovasi Cerdas untuk Indonesia Emas*, "Membangun Ruang Digital yang Bermanfaat bagi Masyarakat"
@@ -9,11 +9,11 @@
 
 ## 1. Ringkasan
 
-Kawal Sehat adalah website kesehatan responsif. Saat pertama dibuka, pengguna ditanya **siapa yang memakai**: anak-anak, remaja, dewasa, atau lansia. Setelah itu, seluruh tampilan berubah: gaya ilustrasi, warna, bahasa, tata letak, dan fitur yang ditonjolkan. Informasi kesehatannya sama, tetapi **cara menyampaikannya berbeda**, sesuai siapa yang membaca.
+Kawan Sehat adalah website kesehatan responsif. Saat pertama dibuka, pengguna ditanya **siapa yang memakai**: anak-anak, remaja, dewasa, atau lansia. Setelah itu, seluruh tampilan berubah: gaya ilustrasi, warna, bahasa, tata letak, dan fitur yang ditonjolkan. Informasi kesehatannya sama, tetapi **cara menyampaikannya berbeda**, sesuai siapa yang membaca.
 
 Di atas profil usia, ada lapisan kedua yang terpisah, yaitu **preferensi akses**: teks besar, kontras tinggi, teks dibacakan, bahasa isyarat (BISINDO), tampilan sederhana, dan kurangi animasi. Lapisan ini bisa dipadukan dengan profil mana pun, karena disabilitas tidak mengenal usia.
 
-Maskot **Si Kawal** memandu pengguna yang baru pertama kali memakai website lewat tur singkat. Kawal Sehat juga menyediakan layanan nyata:
+Maskot **Piko** (*Pemandu Informasi Kesehatan Optimal*) memandu pengguna yang baru pertama kali memakai website lewat tur singkat, dan menjawab pertanyaan lewat **Tanya Piko**. Kawan Sehat juga menyediakan layanan nyata:
 - ambil antrean puskesmas dan konsultasi online, dengan pilihan juru bahasa isyarat;
 - cek gizi dan tubuh berdasarkan standar Kemenkes dan WHO;
 - pengingat obat;
@@ -43,7 +43,7 @@ Layanan kesehatan digital di Indonesia umumnya dirancang **"satu ukuran untuk se
 
 ## 3. Persona
 
-| Persona | Profil & akses | Kebutuhan | Hambatan hari ini | Bagaimana Kawal Sehat membantu |
+| Persona | Profil & akses | Kebutuhan | Hambatan hari ini | Bagaimana Kawan Sehat membantu |
 |---|---|---|---|---|
 | **Dimas, 9 th**, siswa SD | Anak | Belajar kebiasaan sehat dengan cara yang menyenangkan | Bacaan kesehatan terlalu panjang dan kaku | Mode anak: cerita komik "Nyamuk Nakal", game *Susun Isi Piringku*, kuis, dan lencana |
 | **Sinta, 15 th**, siswi SMP | Remaja | Tahu apakah jajanannya sehat, dan mana info yang benar | Info dari media sosial bercampur mitos | Kartu *Mitos vs Fakta*, cek gula/garam/lemak, IMT sesuai umur (bukan rumus dewasa) |
@@ -77,13 +77,14 @@ Profil lansia hanya berupa **pengaturan bawaan** (teks besar, suara, tampilan se
 |---|---|---|---|
 | 1 | **Mode Sesuai Usia** | Ilustrasi, warna, bahasa, tata letak, dan fitur menyesuaikan profil | Inovasi, relevansi tema |
 | 2 | **Atur Akses** | Enam preferensi akses dengan pratinjau langsung | Aksesibilitas |
-| 3 | **Tur & Tips Si Kawal** | Panduan untuk setiap halaman, sesuai profil, plus tips di setiap langkah antrean | UX, pengguna awam teknologi |
+| 3 | **Tur & Tips Piko** | Panduan untuk setiap halaman, sesuai profil, plus tips di setiap langkah antrean | UX, pengguna awam teknologi |
 | 4 | **Info Sehat Adaptif** | Satu topik (DBD) dalam 4 cara bicara, dengan sumber Kemenkes, tombol Dengarkan, dan BISINDO | Inovasi, melawan hoaks |
 | 5 | **Antrean & Konsultasi Inklusif** | Juru bahasa isyarat, kursi roda, pendamping, antrean prioritas, subtitle, dokumen dibacakan | Manfaat nyata, implementasi |
 | 6 | **Cek Gizi & Tubuh** | IMT dewasa, IMT menurut umur (5–18 th), AKG, nilai gizi makanan lokal, batas gula/garam/lemak | Manfaat jangka panjang, isu gizi nasional |
 | 7 | **Pengingat Obat** | Jadwal bergambar (bentuk & warna obat) dan pengingat bersuara | Manfaat sehari-hari |
 | 8 | **Darurat 119** | Selalu terlihat, panduan menelepon, dan **kartu bantuan** untuk orang yang sulit bicara atau Tuli | Keselamatan, inklusif |
 | 9 | **Kuis & Lencana** | Gamifikasi edukasi untuk anak | Keterlibatan anak |
+| 10 | **Tanya Piko** | Obrolan dengan Piko: menjawab soal kesehatan dan cara memakai website, mengarahkan ke halaman yang bersumber resmi, dan langsung menampilkan tombol 119 bila ada tanda gawat darurat. Piko tidak mendiagnosis atau memberi dosis obat. Anak cukup memilih pertanyaan siap pakai. Prototipe ini memakai jawaban contoh; AI menyusul | UX, aksesibilitas, keamanan informasi |
 
 ### 4.3 Contoh: satu informasi, empat cara bicara
 
@@ -100,7 +101,7 @@ Isi medis mengikuti Leaflet DBD 3M Plus Kementerian Kesehatan [9].
 
 1. **Komunikasi kesehatan adaptif.** Bukan sekadar "mode gelap" atau "ukuran huruf". Konten, bahasa, dan tata letak ikut berubah, dan semuanya digerakkan oleh **satu design system** (token warna, tipografi, bentuk), sehingga produk tetap konsisten dan mudah dirawat.
 2. **Aksesibilitas yang berdiri sendiri, bukan diikat ke usia.** Lapisan akses terpisah dari profil, sehingga kombinasi seperti "remaja + bahasa isyarat" atau "anak + teks besar" tetap terlayani.
-3. **Maskot sebagai pemandu yang aksesibel.** Tur Si Kawal menawarkan, bukan memaksa. Setiap langkahnya bisa dijalankan dengan keyboard dan pembaca layar, dan tidak maju otomatis. Tombol mengambang di pojok kanan bawah (Si Kawal dengan balon chat **"Lihat Panduan"**) membuka panduan untuk halaman yang sedang dibuka, tanpa memindahkan pengguna ke halaman lain.
+3. **Maskot sebagai pemandu yang aksesibel.** Tur Piko menawarkan, bukan memaksa. Setiap langkahnya bisa dijalankan dengan keyboard dan pembaca layar, dan tidak maju otomatis. Piko berdiri di tengah menu bawah (di desktop mengambang di kanan bawah). Mengetuknya memunculkan dua balon: **"Lihat Panduan"** membuka panduan untuk halaman yang sedang dibuka tanpa memindahkan pengguna ke halaman lain, dan **"Tanya Piko"** membuka obrolan.
 4. **Kebutuhan khusus diminta sejak awal.** Juru bahasa isyarat, kursi roda, dan pendamping dipesan saat mengambil antrean, sehingga puskesmas bisa bersiap sebelum pasien datang.
 5. **Kartu bantuan darurat.** Layar penuh bertuliskan besar "Saya butuh bantuan medis. Tolong teleponkan 119." untuk ditunjukkan ke orang terdekat.
 6. **Cek gizi yang jujur secara ilmiah dan etis.** Usia 5–18 tahun memakai IMT menurut umur (WHO 2007, Permenkes 2/2020), bukan rumus dewasa. Mode anak dan remaja tidak menampilkan target kalori, dan bahasanya tidak menghakimi.
@@ -125,7 +126,7 @@ Isi medis mengikuti Leaflet DBD 3M Plus Kementerian Kesehatan [9].
   - *claymorphism*: butuh render 3D yang berat.
 
 ### 6.2 Yang sengaja dibuat sama di semua mode
-Logo, posisi tombol **Ganti tampilan**, **119**, dan tombol mengambang **Lihat Panduan**, serta urutan langkah antrean. Tujuannya supaya orang yang salah memilih mode, atau cucu yang membantu neneknya, tetap tahu harus menekan apa.
+Logo, posisi tombol **Ganti tampilan**, **119**, dan **Piko** di tengah menu bawah, serta urutan langkah antrean. Tujuannya supaya orang yang salah memilih mode, atau cucu yang membantu neneknya, tetap tahu harus menekan apa.
 
 ## 7. Aksesibilitas (standar WCAG 2.2 AA)
 
@@ -149,7 +150,7 @@ Logo, posisi tombol **Ganti tampilan**, **119**, dan tombol mengambang **Lihat P
 
 ## 8. Relevansi dengan Indonesia Emas 2045
 
-- **SDM sehat dan unggul** adalah fondasi Indonesia Emas. Kawal Sehat menyasar kebiasaan sehat sejak anak-anak (gizi seimbang, pencegahan DBD) sampai lansia (minum obat teratur, periksa rutin).
+- **SDM sehat dan unggul** adalah fondasi Indonesia Emas. Kawan Sehat menyasar kebiasaan sehat sejak anak-anak (gizi seimbang, pencegahan DBD) sampai lansia (minum obat teratur, periksa rutin).
 - **Bonus demografi dan penuaan penduduk** terjadi bersamaan, jadi layanan digital harus bisa dipakai sekaligus oleh Gen Z dan kakek-neneknya.
 - **Inklusi.** Ruang digital yang bermanfaat harus bisa dipakai penyandang disabilitas tanpa bantuan orang lain.
 - **Literasi kesehatan melawan hoaks.** Setiap informasi mencantumkan sumber resmi dan tanggal ditinjau.

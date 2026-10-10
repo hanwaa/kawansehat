@@ -1,10 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router'
 import { BookOpen, ClipboardList, House, Phone, Salad, Star } from 'lucide-react'
 import { usePrefs } from '../prefs/PrefsProvider.jsx'
 import { TourProvider } from '../tour/TourProvider.jsx'
+import { PikoProvider } from '../piko/PikoProvider.jsx'
+import TombolPiko from '../piko/TombolPiko.jsx'
 import ModeSwitcher from './ModeSwitcher.jsx'
-import TombolPanduan from './TombolPanduan.jsx'
 import './layout.css'
 
 const MENU = {
@@ -65,7 +66,7 @@ function usePengumumanHalaman() {
       judul.setAttribute('tabindex', '-1')
       judul.focus({ preventScroll: true })
     }
-    setPengumuman(document.title.replace(' · Kawal Sehat', ''))
+    setPengumuman(document.title.replace(' · Kawan Sehat', ''))
   }, [pathname])
   return pengumuman
 }
@@ -99,8 +100,8 @@ function useHeaderRapat(ref, ...pemicu) {
   }, [ref, ...pemicu])
 }
 
-// Tinggi menu bawah (HP) disimpan di --tinggi-nav supaya tombol Panduan dan ruang bawah halaman
-// selalu berada tepat di atasnya, berapa pun ukuran teksnya.
+// Tinggi menu bawah (HP) disimpan di --tinggi-nav supaya ruang bawah halaman selalu cukup untuk menu dan Piko
+// yang menonjol di atasnya, berapa pun ukuran teksnya.
 function useTinggiNavBawah(ref, aktif) {
   useLayoutEffect(() => {
     const akar = document.documentElement
@@ -157,6 +158,16 @@ function useTepiGulir(ref) {
   }, [ref])
 }
 
+// Lebar yang sama dengan titik pecah menu bawah di layout.css. Di bawahnya Piko berdiri di tengah menu bawah;
+// di atasnya menu pindah ke header dan Piko mengambang di kanan bawah.
+const HP = '(max-width: 899px)'
+const pantauLayar = (ubah) => {
+  const mq = window.matchMedia(HP)
+  mq.addEventListener('change', ubah)
+  return () => mq.removeEventListener('change', ubah)
+}
+const useLayarSempit = () => useSyncExternalStore(pantauLayar, () => window.matchMedia(HP).matches)
+
 export default function Layout() {
   const { prefs, profil } = usePrefs()
   const { pathname } = useLocation()
@@ -170,61 +181,71 @@ export default function Layout() {
   const kepala = useRef(null)
   useTinggiKepala(kepala)
   useTepiGulir(kepala)
+  const layarSempit = useLayarSempit()
 
   return (
     <TourProvider>
-      <a className="lewati-ke-konten" href="#konten">
-        Langsung ke konten utama
-      </a>
-      <header className="kepala-situs" ref={kepala}>
-        <div className="wadah kepala-situs__isi" ref={isiKepala}>
-          <Link to={prefs.profil ? '/beranda' : '/'} className="logo">
-            <Logo />
-            <span>Kawal Sehat</span>
-          </Link>
-          {!diPembuka && (
-            <nav aria-label="Menu utama" className="navigasi-utama" data-tour="menu" ref={navUtama}>
-              <ul>
-                {menu.map(({ ke, label, Ikon }) => (
-                  <li key={ke}>
-                    <NavLink to={ke} end={ke === '/beranda'}>
-                      <Ikon aria-hidden="true" />
-                      <span>{label}</span>
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          )}
-          <div className="kepala-situs__aksi">
-            {!diPembuka && <ModeSwitcher />}
-            <Link to="/darurat" className="tombol tombol--bahaya tombol--kepala" data-tour="darurat">
-              <Phone aria-hidden="true" />
-              <span>
-                <span className="visual-tersembunyi">Darurat </span>119
-              </span>
+      <PikoProvider>
+        <a className="lewati-ke-konten" href="#konten">
+          Langsung ke konten utama
+        </a>
+        <header className="kepala-situs" ref={kepala}>
+          <div className="wadah kepala-situs__isi" ref={isiKepala}>
+            <Link to={prefs.profil ? '/beranda' : '/'} className="logo">
+              <Logo />
+              <span>Kawan Sehat</span>
             </Link>
+            {!diPembuka && (
+              <nav aria-label="Menu utama" className="navigasi-utama" data-tour="menu" ref={navUtama}>
+                <ul>
+                  {menu.map(({ ke, label, Ikon }, i) => (
+                    <Fragment key={ke}>
+                      {layarSempit && i === 2 && (
+                        <li className="navigasi-utama__piko">
+                          <TombolPiko />
+                        </li>
+                      )}
+                      <li>
+                        <NavLink to={ke} end={ke === '/beranda'}>
+                          <Ikon aria-hidden="true" />
+                          <span>{label}</span>
+                        </NavLink>
+                      </li>
+                    </Fragment>
+                  ))}
+                </ul>
+              </nav>
+            )}
+            <div className="kepala-situs__aksi">
+              {!diPembuka && <ModeSwitcher />}
+              <Link to="/darurat" className="tombol tombol--bahaya tombol--kepala" data-tour="darurat">
+                <Phone aria-hidden="true" />
+                <span>
+                  <span className="visual-tersembunyi">Darurat </span>119
+                </span>
+              </Link>
+            </div>
           </div>
+        </header>
+        <main id="konten" className={diPembuka ? '' : 'ada-navigasi'}>
+          <Outlet />
+        </main>
+        {!diPembuka && !layarSempit && <TombolPiko mengambang />}
+        <footer className="kaki-situs">
+          <div className="wadah">
+            <p>
+              <strong>Kawan Sehat</strong> adalah prototipe untuk UI/UX Competition IT CAS 2026. Informasi di sini tidak
+              menggantikan pemeriksaan oleh tenaga kesehatan.
+            </p>
+            <p>
+              Dokumen desain: <a href="/docs/user-flow.html">User flow</a> · <a href="/docs/wireframe.html">Wireframe</a>
+            </p>
+          </div>
+        </footer>
+        <div className="visual-tersembunyi" aria-live="polite" aria-atomic="true">
+          {pengumuman}
         </div>
-      </header>
-      <main id="konten" className={diPembuka ? '' : 'ada-navigasi'}>
-        <Outlet />
-      </main>
-      {!diPembuka && <TombolPanduan />}
-      <footer className="kaki-situs">
-        <div className="wadah">
-          <p>
-            <strong>Kawal Sehat</strong> adalah prototipe untuk UI/UX Competition IT CAS 2026. Informasi di sini tidak
-            menggantikan pemeriksaan oleh tenaga kesehatan.
-          </p>
-          <p>
-            Dokumen desain: <a href="/docs/user-flow.html">User flow</a> · <a href="/docs/wireframe.html">Wireframe</a>
-          </p>
-        </div>
-      </footer>
-      <div className="visual-tersembunyi" aria-live="polite" aria-atomic="true">
-        {pengumuman}
-      </div>
+      </PikoProvider>
     </TourProvider>
   )
 }

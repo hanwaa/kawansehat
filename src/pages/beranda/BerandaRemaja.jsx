@@ -17,7 +17,7 @@ export default function BerandaRemaja() {
     <div className="wadah beranda beranda--remaja" ref={isi}>
       <header className="beranda-remaja__kepala">
         <div>
-          <p className="label-kecil">Kawal Sehat · Remaja</p>
+          <p className="label-kecil">Kawan Sehat · Remaja</p>
           <h1>Hai! Mau cek apa hari ini?</h1>
           <p>Info kesehatan singkat, jelas, tanpa ribet.</p>
           <div data-tour="dengarkan">

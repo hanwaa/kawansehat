@@ -1,5 +1,5 @@
 /*
-  Design tokens Kawal Sehat.
+  Design tokens Kawan Sehat.
   Alur: preferensi pengguna → atribut data-* di <html> → token di file ini → semua komponen.
   - data-profil: anak | remaja | dewasa | lansia (karakter visual)
   - data-teks: normal | besar | sangat-besar

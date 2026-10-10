@@ -1,0 +1,307 @@
+/* Piko di tengah menu bawah (HP) atau mengambang di kanan bawah (desktop). Piring bulat menonjol di atas garis
+   menu; cincin selebar 4px berwarna permukaan menu membuat garis itu tampak berlekuk mengelilingi Piko. */
+:root {
+  /* Batas atas seberapa jauh Piko (dengan cincinnya) menonjol di atas menu bawah; layout.css menambahkannya ke
+     ruang bawah halaman. */
+  --tonjolan-piko: 30px;
+}
+
+.piko {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 2px var(--r1);
+  border: 0;
+  border-radius: var(--radius-kecil);
+  background: none;
+  color: var(--teks);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.piko__piring {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: 50%;
+  background: var(--utama-lembut);
+  box-shadow: 0 0 0 4px var(--permukaan), 0 6px 16px rgb(0 0 0 / 0.14);
+  transition: transform var(--durasi) var(--kurva), box-shadow var(--durasi) var(--kurva);
+}
+
+[data-profil='anak'] .piko__piring,
+[data-profil='remaja'] .piko__piring {
+  box-shadow: 0 0 0 4px var(--permukaan), var(--bayangan-tombol);
+}
+
+[data-profil='lansia'] .piko__piring,
+[data-kontras='ya'] .piko__piring {
+  box-shadow: 0 0 0 4px var(--permukaan);
+}
+
+.piko .maskot {
+  width: 44px;
+  height: 44px;
+  margin-top: 4px;
+  transition: transform var(--durasi) var(--kurva);
+}
+
+/* Animasi maskot yang terus bergerak dimatikan di sini (WCAG 2.2.2); gerak hanya saat disentuh. */
+.piko .maskot__tubuh,
+.piko .maskot__lambai {
+  animation: none;
+}
+
+.piko__label {
+  line-height: 1.2;
+}
+
+/* Umpan balik langsung saat jari menekan, bukan saat dilepas. */
+.piko[data-pressed] .piko__piring {
+  transform: scale(0.94);
+  transition-duration: 90ms;
+}
+
+@media (hover: hover) {
+  .piko[data-hovered] .maskot {
+    transform: translateY(-2px) rotate(-4deg);
+  }
+}
+
+/* Balon sedang terbuka: cincin warna utama menandai asal balon. */
+.piko[aria-expanded='true'] .piko__piring {
+  box-shadow: 0 0 0 4px var(--permukaan), 0 0 0 7px var(--utama);
+}
+
+/* Piring menonjol keluar dari kotak tombol, jadi cincin fokus diletakkan di piring. */
+.piko[data-focus-visible] {
+  outline: none;
+}
+
+.piko[data-focus-visible] .piko__piring {
+  outline: 3px solid var(--fokus);
+  outline-offset: 5px;
+}
+
+/* ---------- Di menu bawah (HP) ---------- */
+.navigasi-utama li.navigasi-utama__piko {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  /* Sedikit lebih sempit dari piring + cincinnya, supaya empat menu lain tetap lega. */
+  min-width: 60px;
+}
+
+/* Ukuran huruf sama dengan label menu lain (layout.css), jadi 1.3em = tinggi ikon menu. Tombol dinaikkan tepat
+   sejauh piring melebihi ikon, sehingga label Piko sebaris dengan label menu lain berapa pun ukuran teksnya.
+   Seluruh tombol (bukan hanya piring) yang naik, supaya area sentuh, cincin fokus, dan sorotan panduan mencakup
+   piring yang menonjol. */
+.navigasi-utama__piko .piko {
+  font-size: min(var(--fs-kecil), 17px, 4.3vw);
+  margin-top: calc(var(--r1) + 1.3em - 52px);
+}
+
+/* HP landscape: menu bawah satu baris; piring lebih kecil, tidak menonjol, label di samping. */
+@media (max-width: 899px) and (max-height: 480px) {
+  .navigasi-utama__piko .piko {
+    flex-direction: row;
+    gap: var(--r2);
+    margin-top: 0;
+    padding: var(--r1) var(--r2);
+  }
+  .navigasi-utama__piko .piko__piring {
+    width: 40px;
+    height: 40px;
+  }
+  .navigasi-utama__piko .maskot {
+    width: 34px;
+    height: 34px;
+    margin-top: 3px;
+  }
+}
+
+/* ---------- Mengambang di kanan bawah (desktop) ---------- */
+.piko--mengambang {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 45;
+  gap: 0;
+  padding: 0;
+}
+
+.piko--mengambang .piko__piring {
+  width: 72px;
+  height: 72px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+
+.piko--mengambang[aria-expanded='true'] .piko__piring {
+  box-shadow: 0 0 0 3px var(--utama), 0 8px 24px rgb(0 0 0 / 0.18);
+}
+
+[data-profil='anak'] .piko--mengambang .piko__piring,
+[data-profil='remaja'] .piko--mengambang .piko__piring {
+  box-shadow: var(--bayangan-tombol);
+}
+
+.piko--mengambang .maskot {
+  width: 62px;
+  height: 62px;
+}
+
+/* Label menjadi papan nama kecil yang menempel di bawah piring. */
+.piko--mengambang .piko__label {
+  position: relative;
+  margin-top: -10px;
+  padding: 2px 10px;
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: var(--radius-pil);
+  background: var(--permukaan);
+  font-size: min(var(--fs-kecil), 18px);
+}
+
+/* ---------- Dua balon pilihan ---------- */
+/* Balon tumbuh dari Piko dan kembali ke Piko. Masuk: keyframe per balon, yang terdekat dengan Piko lebih dulu.
+   Keluar: transisi pada wadahnya (React Aria menunggu transisi ini sebelum melepas balon); karena transisi, ketukan
+   ulang di tengah jalan membalik arah dari posisi saat itu, tanpa lompatan. */
+.piko-pilihan {
+  outline: none;
+  transform-origin: 50% calc(100% + 12px);
+  transition: opacity 140ms var(--kurva), transform 140ms var(--kurva);
+}
+
+.piko-pilihan--mengambang {
+  transform-origin: calc(100% - var(--trigger-width, 72px) / 2) calc(100% + 12px);
+}
+
+.piko-pilihan[data-exiting] {
+  opacity: 0;
+  transform: translateY(6px) scale(0.9);
+}
+
+.piko-pilihan__menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--r2);
+  /* Ruang untuk bayangan balon dan cincin fokus. */
+  padding: 6px;
+  outline: none;
+}
+
+.piko-pilihan--mengambang .piko-pilihan__menu {
+  align-items: flex-end;
+}
+
+.piko-pilihan__balon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  min-height: var(--target);
+  max-width: calc(100vw - 32px);
+  padding: var(--r2) var(--r4);
+  border: var(--garis) solid var(--garis-warna);
+  border-radius: 18px;
+  background: var(--permukaan);
+  color: var(--teks);
+  /* Dibatasi supaya kedua balon tidak menutupi terlalu banyak halaman saat teks diperbesar. */
+  font-size: min(var(--fs-dasar), 20px);
+  font-weight: 800;
+  line-height: 1.25;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.16);
+  cursor: pointer;
+  outline: none;
+  transform-origin: 50% calc(100% + 12px);
+  animation: piko-balon-masuk 260ms var(--kurva) both;
+  transition: background-color var(--durasi) var(--kurva), scale 90ms var(--kurva);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Balon atas tumbuh dari titik yang sama (Piko), sedikit setelah balon bawah. */
+.piko-pilihan__balon:first-child {
+  transform-origin: 50% calc(100% + var(--target) + var(--r2) + 12px);
+  animation-delay: 40ms;
+}
+
+.piko-pilihan--mengambang .piko-pilihan__balon {
+  transform-origin: calc(100% - var(--trigger-width, 72px) / 2 + 6px) calc(100% + 12px);
+}
+
+.piko-pilihan--mengambang .piko-pilihan__balon:first-child {
+  transform-origin: calc(100% - var(--trigger-width, 72px) / 2 + 6px) calc(100% + var(--target) + var(--r2) + 12px);
+}
+
+[data-profil='dewasa'] .piko-pilihan__balon {
+  border-color: color-mix(in srgb, var(--garis-warna) 55%, transparent);
+}
+
+[data-profil='anak'] .piko-pilihan__balon,
+[data-profil='remaja'] .piko-pilihan__balon {
+  box-shadow: var(--bayangan-tombol);
+}
+
+[data-profil='lansia'] .piko-pilihan__balon,
+[data-kontras='ya'] .piko-pilihan__balon {
+  box-shadow: none;
+}
+
+.piko-pilihan__balon svg {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--utama);
+}
+
+.piko-pilihan__balon[data-hovered],
+.piko-pilihan__balon[data-focused] {
+  background: var(--permukaan-2);
+}
+
+.piko-pilihan__balon[data-pressed] {
+  scale: 0.97;
+}
+
+.piko-pilihan__balon[data-focus-visible] {
+  outline: 3px solid var(--fokus);
+  outline-offset: 2px;
+}
+
+/* Ekor balon bawah menunjuk ke Piko. */
+.piko-pilihan__balon:last-child::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 7px);
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  border-right: inherit;
+  border-bottom: inherit;
+  transform: rotate(45deg);
+}
+
+.piko-pilihan--mengambang .piko-pilihan__balon:last-child::after {
+  left: auto;
+  right: calc(var(--trigger-width, 72px) / 2 - 6px - 7px);
+}
+
+@keyframes piko-balon-masuk {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.85);
+  }
+}
+
+@media print {
+  .piko--mengambang,
+  .navigasi-utama__piko {
+    display: none;
+  }
+}

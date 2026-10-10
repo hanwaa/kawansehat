@@ -223,7 +223,7 @@ export default function CekIMT() {
             )}
           </div>
           {profil === 'anak' && (
-            <Gelembung pose="jempol" kecil className="hasil-gizi__kawal">
+            <Gelembung pose="jempol" kecil className="hasil-gizi__piko">
               <p>Tumbuh sehat itu soal kebiasaan: makan lengkap, main aktif, dan tidur cukup!</p>
             </Gelembung>
           )}

@@ -111,7 +111,7 @@ export default function Tiket() {
         </p>
       </section>
 
-      <Gelembung pose="jempol" kecil className="tiket__kawal">
+      <Gelembung pose="jempol" kecil className="tiket__piko">
         <p>{profil === 'lansia' ? 'Sudah beres, Bapak/Ibu. Semoga lekas sehat!' : 'Beres! Simpan nomor ini, ya.'}</p>
       </Gelembung>
 

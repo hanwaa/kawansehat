@@ -38,12 +38,12 @@ export default function Pembuka() {
     <div className="wadah pembuka">
       <Gelembung pose="lambai" ukuran={120} className="pembuka__sapa">
         <p>
-          <strong>Halo! Aku Si Kawal.</strong> Kawal Sehat akan menyesuaikan tampilan, bahasa, dan gambar dengan
+          <strong>Halo! Aku Piko.</strong> Kawan Sehat akan menyesuaikan tampilan, bahasa, dan gambar dengan
           siapa yang memakainya.
         </p>
       </Gelembung>
 
-      <h1>Siapa yang memakai Kawal Sehat hari ini?</h1>
+      <h1>Siapa yang memakai Kawan Sehat hari ini?</h1>
       <p className="pembuka__ket">Pilih salah satu. Tampilan langsung berubah, dan bisa diganti kapan saja.</p>
 
       <ProfilPilihan />

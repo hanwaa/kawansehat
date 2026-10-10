@@ -1,8 +1,8 @@
 {
-  "name": "kawal-sehat",
+  "name": "kawan-sehat",
   "private": true,
   "version": "0.1.0",
-  "description": "Kawal Sehat — website kesehatan adaptif & inklusif (UI/UX Competition IT CAS 2026)",
+  "description": "Kawan Sehat — website kesehatan adaptif & inklusif (UI/UX Competition IT CAS 2026)",
   "type": "module",
   "scripts": {
     "dev": "vite",

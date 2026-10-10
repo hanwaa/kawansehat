@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Kawal Sehat** is a student team's entry for the UI/UX Competition IT CAS 2026 (theme: accessible, inclusive digital spaces).
+**Kawan Sehat** is a student team's entry for the UI/UX Competition IT CAS 2026 (theme: accessible, inclusive digital spaces).
 
 It is a responsive health website with two independent layers of adaptation:
 - an **age profile** (`anak` / `remaja` / `dewasa` / `lansia`), which changes illustrations, palette, copy tone and page layouts;
@@ -53,7 +53,7 @@ Selecting a profile applies `PRESET[profil]` from `src/prefs/presets.js`. For ex
 - `<ForProfile only={[...]}>` for conditional blocks;
 - separate layout components when the structure differs, such as `pages/beranda/Beranda{Anak,Remaja,Dewasa,Lansia}.jsx` and `VARIAN_DBD` in `src/content/topik/dbd.jsx`.
 
-Only a few things must stay identical across profiles: the logo, the "Tampilan" and "119" header buttons, and the order of the queue-booking steps.
+Only a few things must stay identical across profiles: the logo, the "Tampilan" and "119" header buttons, Piko's position, and the order of the queue-booking steps.
 
 **Routing & focus.** `src/router.jsx` lazy-loads every page under `components/Layout.jsx`. On each route change, Layout scrolls to top, focuses `main h1`, and announces `document.title` in a live region. Every page must:
 - call `useJudulHalaman(judul)`;
@@ -62,11 +62,19 @@ Only a few things must stay identical across profiles: the logo, the "Tampilan" 
 **CSS loading order matters.** `main.jsx` imports `tokens.css` and `base.css` first. Page CSS ships inside lazily loaded route chunks, so a page's CSS only exists after that page has been visited. Styles shared across pages belong in `base.css` or in a component's own CSS file (e.g. `listen-button.css`), never in a page's CSS.
 
 **Mascot tour.** `src/tour/TourProvider.jsx` and `MascotTour.jsx` run the tour. It is a **per-page guide**: it explains the page that is currently open and never navigates away.
-- Steps live in `src/tour/steps.js` in `PANDUAN`, keyed by page (`halamanPanduan(pathname)` maps routes to keys; Beranda has one list per profile). Every page ends with the shared steps `menu`, `ganti-tampilan` and `darurat`.
+- Steps live in `src/tour/steps.js` in `PANDUAN`, keyed by page (`halamanPanduan(pathname)` maps routes to keys; Beranda has one list per profile). Every page ends with the shared steps `menu`, `piko`, `ganti-tampilan` and `darurat`.
 - Each step points at a `[data-tour="..."]` element on that page. When the tour opens, steps whose target is missing or hidden are skipped, so one list can cover profile variants and states (no result yet, no ticket). A new page feature that deserves a step needs both a `data-tour` attribute and an entry in its page list.
 - `judul`/`teks` are plain strings or per-profile variants resolved with `pilih()`; `profil: [...]` limits a step to some profiles.
 - Each step is a React Aria modal dialog with a spotlight cut-out and a tail pointing at the target, placed by `hitungPosisi()`: as a bottom sheet on mobile, otherwise beside or above/below the target.
-- The Beranda tour is offered once, after onboarding (`navigate('/beranda', { state: { tawarTur: true } })`). Any page except onboarding can open its own guide via the floating Si Kawal button with a "Lihat Panduan" chat bubble (`components/TombolPanduan.jsx`, bottom-right). On mobile it sits above the bottom nav, using `--tinggi-nav`, which Layout measures.
+- The Beranda tour is offered once, after onboarding (`navigate('/beranda', { state: { tawarTur: true } })`).
+- **Piko** (Pemandu Informasi Kesehatan Optimal) is the mascot and the help entry point on every page except onboarding (`src/piko/TombolPiko.jsx`). Below 900 px it sits raised in the middle of the bottom nav (Layout inserts it as the 3rd `<li>`, using `useLayarSempit()`); from 900 px it floats bottom-right, outside the header (the header's `backdrop-filter` would trap a fixed child). Its label is "Piko" ("Bantuan" for `lansia`).
+- Pressing Piko opens a React Aria `Menu` in a `Popover` with two chat bubbles: **Lihat Panduan** runs `useTur().mulai()`; **Tanya Piko** opens the chat. The chosen action runs only after the popover has closed and focus has returned to Piko, so closing the tour or chat restores focus there.
+
+**Tanya Piko (chat).** `src/piko/PikoProvider.jsx` holds the chat state (wrapped inside `TourProvider` in Layout) and renders `TanyaPiko.jsx`: a bottom sheet below 900 px, a bottom-right panel above.
+- Answers come from `tanyaPiko({ teks, profil })` in `src/piko/jawab.js`, the single seam for the AI that comes later (`/api/tanya-piko`). For now it matches keywords and routes to existing pages that cite sources, covered by `jawab.test.js`. The UI says it is a sample version.
+- Same rule as nutrition: answers never contain health numbers. Emergency keywords are checked first and return `darurat: true` (the UI then shows a `tel:119` button). Diagnosis, prescription and dose questions are declined.
+- `anak` can only tap the preset questions in `SARAN` (no free text); `anak`/`remaja` are never sent to calorie targets.
+- History lives in memory only: it survives route changes, not reloads, and is never written to storage. Replies are read aloud when `suara` is on.
 
 **Nutrition (`/cek-gizi/*`).** The rule here: **never invent health numbers.**
 - `src/lib/gizi.js` holds pure functions, covered by `gizi.test.js`.

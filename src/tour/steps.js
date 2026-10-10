@@ -1,4 +1,4 @@
-// Panduan Si Kawal per halaman. Tombol "Lihat Panduan" menjelaskan halaman yang sedang dibuka, tanpa berpindah
+// Panduan Piko per halaman. Tombol "Lihat Panduan" menjelaskan halaman yang sedang dibuka, tanpa berpindah
 // halaman. Setiap langkah menunjuk elemen [data-tour="..."] di halaman itu; langkah yang elemennya tidak ada di
 // layar (varian profil lain, hasil yang belum dihitung, tiket yang belum diambil) otomatis dilewati.
 // `judul` dan `teks` boleh berupa teks biasa atau varian per profil: { anak, remaja, dewasa, lansia, semua }.
@@ -6,15 +6,15 @@
 
 // Sapaan saat tur ditawarkan setelah pembuka (hanya di beranda). `n` = jumlah langkah yang tersedia.
 export const SAPAAN_TUR = {
-  anak: { judul: 'Halo! Aku Si Kawal.', teks: () => 'Mau aku ajak jalan-jalan keliling Kawal Sehat? Cuma sebentar, kok!' },
-  remaja: { judul: 'Hai, aku Si Kawal!', teks: (n) => `Mau tur kilat ${n} langkah biar langsung paham cara pakainya?` },
+  anak: { judul: 'Halo! Aku Piko.', teks: () => 'Mau aku ajak jalan-jalan keliling Kawan Sehat? Cuma sebentar, kok!' },
+  remaja: { judul: 'Hai, aku Piko!', teks: (n) => `Mau tur kilat ${n} langkah biar langsung paham cara pakainya?` },
   dewasa: {
-    judul: 'Selamat datang di Kawal Sehat',
-    teks: (n) => `Saya Si Kawal. Mau saya tunjukkan cara memakai website ini dalam ${n} langkah singkat?`,
+    judul: 'Selamat datang di Kawan Sehat',
+    teks: (n) => `Saya Piko. Mau saya tunjukkan cara memakai website ini dalam ${n} langkah singkat?`,
   },
   lansia: {
     judul: 'Selamat datang, Bapak/Ibu',
-    teks: (n) => `Saya Si Kawal. Mau saya tunjukkan cara memakainya? Hanya ${n} langkah, pelan-pelan saja.`,
+    teks: (n) => `Saya Piko. Mau saya tunjukkan cara memakainya? Hanya ${n} langkah, pelan-pelan saja.`,
   },
 }
 
@@ -29,6 +29,18 @@ const MENU = {
     remaja: 'Beranda, Info, Cek Gizi, dan Layanan. Selalu ada di sini, di halaman mana pun.',
     dewasa: 'Beranda, Info kesehatan, Cek Gizi, dan Layanan. Posisinya selalu sama di setiap halaman.',
     lansia: 'Menu ini selalu ada di setiap halaman. Tekan Beranda untuk kembali ke halaman awal.',
+  },
+}
+
+const PIKO = {
+  target: 'piko',
+  pose: 'lambai',
+  judul: { anak: 'Ini aku, Piko!', remaja: 'Butuh bantuan? Ada Piko', lansia: 'Tombol Bantuan', semua: 'Piko, pemandu Anda' },
+  teks: {
+    anak: 'Ketuk aku kapan saja. Aku bisa menemanimu lagi keliling halaman, atau kamu bisa memilih pertanyaan untukku.',
+    remaja: 'Ketuk Piko untuk melihat panduan halaman ini lagi, atau tanya soal kesehatan lewat Tanya Piko.',
+    dewasa: 'Ketuk Piko untuk membuka panduan halaman ini kapan saja, atau ajukan pertanyaan lewat Tanya Piko.',
+    lansia: 'Tekan tombol Bantuan untuk melihat panduan ini lagi, atau bertanya kepada Piko.',
   },
 }
 
@@ -56,7 +68,7 @@ const DARURAT = {
   },
 }
 
-const UMUM = [MENU, TAMPILAN, DARURAT]
+const UMUM = [MENU, PIKO, TAMPILAN, DARURAT]
 
 // Tautan kembali di halaman turunan (topik, alat cek gizi). `tujuan` = nama halaman induknya.
 const kembali = (tujuan) => ({
@@ -109,6 +121,7 @@ const TIKET_AKTIF = {
 const BERANDA = {
   anak: [
     MENU,
+    PIKO,
     DENGARKAN_BERANDA,
     {
       target: 'lencana',
@@ -128,6 +141,7 @@ const BERANDA = {
   remaja: [
     TAMPILAN,
     MENU,
+    PIKO,
     {
       target: 'aksi-utama',
       pose: 'jempol',
@@ -139,6 +153,7 @@ const BERANDA = {
   ],
   dewasa: [
     MENU,
+    PIKO,
     TAMPILAN,
     TIKET_AKTIF,
     {
@@ -161,6 +176,7 @@ const BERANDA = {
     DENGARKAN_BERANDA,
     TAMPILAN,
     MENU,
+    PIKO,
     DARURAT,
   ],
 }
@@ -421,9 +437,9 @@ const PANDUAN = {
     {
       target: 'tips',
       pose: 'lambai',
-      judul: 'Tips dari Si Kawal',
+      judul: 'Tips dari Piko',
       teks: {
-        anak: 'Di setiap langkah, Si Kawal memberi tips di sini.',
+        anak: 'Di setiap langkah, Piko memberi tips di sini.',
         remaja: 'Di setiap langkah aku kasih tips singkat di sini.',
         dewasa: 'Di setiap langkah, saya memberi tips singkat di sini.',
         lansia: 'Di setiap langkah, saya memberi petunjuk di sini.',
@@ -574,6 +590,7 @@ const PANDUAN = {
     },
     // Tombol 119 di header tidak dijelaskan lagi: halaman ini sudah halaman daruratnya.
     MENU,
+    PIKO,
     TAMPILAN,
   ],
 

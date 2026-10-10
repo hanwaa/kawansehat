@@ -7,7 +7,7 @@ import { usePrefs } from '../prefs/PrefsProvider.jsx'
 import './profil-pilihan.css'
 
 // Empat kartu profil bergambar. Memilih kartu langsung mengubah tampilan (pratinjau hidup).
-export default function ProfilPilihan({ label = 'Siapa yang memakai Kawal Sehat?', ringkas = false }) {
+export default function ProfilPilihan({ label = 'Siapa yang memakai Kawan Sehat?', ringkas = false }) {
   const { prefs, pilihProfil } = usePrefs()
   const grup = useRef(null)
   // Kartu yang diketuk dijadikan jangkar: tetap di bawah jari walau tampilan (dan ukuran teks) berubah.

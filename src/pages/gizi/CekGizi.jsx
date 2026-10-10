@@ -93,8 +93,8 @@ export default function CekGizi() {
               <span className="ikon-bulat">
                 <Calculator aria-hidden="true" />
               </span>
-              <h2>Kebutuhan gizi harian</h2>
-              <p className="teks-redup">Angka Kecukupan Gizi sesuai umur dan jenis kelamin.</p>
+              <h2>Kebutuhan gizi</h2>
+              <p className="teks-redup">Angka Kecukupan Gizi harian sesuai umur dan jenis kelamin.</p>
             </Link>
           </li>
           <li>

@@ -1,0 +1,414 @@
+/* ---------- Panel obrolan Tanya Piko ---------- */
+/* Lapisan obrolan setinggi area layar yang terlihat (React Aria mengisi --visual-viewport-height), sehingga saat
+   keyboard HP terbuka, kolom tulis tetap duduk tepat di atas keyboard. */
+.lapisan-dialog.lapisan-obrolan {
+  inset: 0 0 auto;
+  height: var(--visual-viewport-height, 100dvh);
+}
+
+.modal.obrolan {
+  display: flex;
+  flex-direction: column;
+  height: min(720px, 100%);
+  max-height: none;
+  overflow: hidden;
+}
+
+/* HP & tablet: Piko ada di tengah menu bawah, jadi obrolan naik sebagai lembar dari bawah dan turun lagi ke sana.
+   Sama dengan dialog lain di HP (base.css), tetapi berlaku sampai 899px, selebar menu bawah. */
+@media (max-width: 899px) {
+  .lapisan-dialog.lapisan-obrolan {
+    place-items: end center;
+    padding: var(--r6) 0 0;
+  }
+
+  .lapisan-dialog.lapisan-obrolan[data-entering] {
+    animation: redup var(--durasi) var(--kurva);
+  }
+
+  .lapisan-dialog.lapisan-obrolan[data-exiting] {
+    animation: redup-keluar 240ms var(--kurva-laci) forwards;
+  }
+
+  .lapisan-obrolan .modal.obrolan {
+    width: min(100%, 640px);
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .lapisan-obrolan .modal.obrolan[data-entering] {
+    animation: lembar-naik 400ms var(--kurva-laci);
+  }
+
+  .lapisan-obrolan .modal.obrolan[data-exiting] {
+    animation: lembar-turun 240ms var(--kurva-laci) forwards;
+  }
+}
+
+/* Desktop: panel di kanan bawah, tumbuh dari sudut tempat Piko mengambang dan kembali ke sana saat ditutup. */
+@media (min-width: 900px) {
+  .lapisan-dialog.lapisan-obrolan {
+    place-items: end end;
+  }
+
+  .lapisan-obrolan .modal.obrolan {
+    width: min(26rem, 100%);
+    height: min(44rem, 100%);
+    transform-origin: calc(100% - 36px) 100%;
+  }
+
+  .lapisan-obrolan .modal.obrolan[data-entering] {
+    animation: obrolan-masuk 280ms var(--kurva);
+  }
+
+  .lapisan-obrolan .modal.obrolan[data-exiting] {
+    animation: obrolan-keluar 160ms var(--kurva) forwards;
+  }
+}
+
+@keyframes obrolan-masuk {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+}
+
+@keyframes obrolan-keluar {
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+.obrolan__dialog {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  outline: none;
+  /* Lebar panel (dalam em) menentukan kepala dan kolom tulis yang ringkas di bawah. */
+  container-type: inline-size;
+}
+
+/* Kepala dan kolom tulis tetap; hanya isi percakapan yang bergulir. */
+.obrolan__kepala {
+  display: flex;
+  align-items: center;
+  gap: var(--r3);
+  padding: var(--r3) var(--r2) var(--r3) var(--r4);
+  border-bottom: 1px solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+}
+
+.obrolan__nama {
+  flex: 1;
+  min-width: 0;
+}
+
+.obrolan__nama h2 {
+  margin: 0;
+  font-size: var(--fs-besar);
+  line-height: 1.2;
+}
+
+.obrolan__nama p {
+  margin: 0;
+  font-size: var(--fs-kecil);
+  line-height: 1.3;
+  color: var(--teks-redup);
+}
+
+/* Panel sempit dibanding ukuran teksnya (HP dengan teks besar, lansia): subjudul disembunyikan supaya kepala tidak
+   setinggi seperempat lembar, dan Kirim menjadi tombol ikon supaya kolom tulis tetap lebar. Nama "Kirim" tetap
+   dibacakan pembaca layar. */
+@container (max-width: 20em) {
+  .obrolan__nama p {
+    display: none;
+  }
+
+  .obrolan__tulis .tombol {
+    width: var(--target);
+    padding-inline: 0;
+  }
+
+  .obrolan__kirim-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* HP landscape: tinggi layar hanya ±360px. */
+@media (max-height: 480px) {
+  .obrolan__nama p {
+    display: none;
+  }
+}
+
+.obrolan__gulir {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--r4);
+}
+
+.obrolan__catatan {
+  margin-bottom: var(--r4);
+  padding: var(--r3);
+  border-radius: var(--radius-kecil);
+  background: var(--permukaan-2);
+  font-size: var(--fs-kecil);
+  line-height: 1.45;
+}
+
+[data-kontras='ya'] .obrolan__catatan {
+  border: var(--garis) solid var(--garis-warna);
+}
+
+.obrolan__catatan p {
+  margin: 0;
+}
+
+.obrolan__catatan p + p {
+  margin-top: var(--r1);
+  color: var(--teks-redup);
+}
+
+.obrolan__hapus {
+  margin-top: var(--r1);
+  padding-inline: 0;
+}
+
+/* ---------- Pesan ---------- */
+.obrolan__log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--r3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.obrolan__log > li + li {
+  margin-top: 0;
+}
+
+/* Pesan baru naik sedikit dari bawah, arah datangnya percakapan. */
+.pesan {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--r2);
+  animation: pesan-naik 220ms var(--kurva) both;
+}
+
+.pesan--kamu {
+  justify-content: flex-end;
+}
+
+.pesan .maskot {
+  flex: none;
+}
+
+.pesan .maskot__tubuh,
+.pesan .maskot__lambai {
+  animation: none;
+}
+
+.pesan__balon {
+  min-width: 0;
+  max-width: min(85%, 34rem);
+  margin: 0;
+  padding: var(--r2) var(--r3);
+  border-radius: 18px;
+  overflow-wrap: anywhere;
+}
+
+.pesan__balon p {
+  margin: 0;
+}
+
+.pesan--piko .pesan__balon {
+  background: var(--permukaan-2);
+  border-bottom-left-radius: 6px;
+}
+
+.pesan--kamu .pesan__balon {
+  background: var(--utama);
+  color: var(--pada-utama);
+  border-bottom-right-radius: 6px;
+}
+
+[data-profil='lansia'] .pesan__balon,
+[data-kontras='ya'] .pesan__balon {
+  border: var(--garis) solid var(--garis-warna);
+}
+
+.pesan__balon.pesan__balon--darurat {
+  background: var(--bahaya-lembut);
+  border: var(--garis) solid var(--bahaya);
+}
+
+.pesan__telepon {
+  margin-top: var(--r2);
+}
+
+.pesan__tautan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r2);
+  margin: var(--r2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pesan__tautan li + li {
+  margin-top: 0;
+}
+
+.pesan__tautan .tombol {
+  padding-inline: var(--r4);
+}
+
+.pesan__isyarat {
+  display: flex;
+  align-items: center;
+  gap: var(--r2);
+  margin-top: var(--r2);
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+}
+
+.pesan__isyarat svg {
+  width: 72px;
+  flex: none;
+}
+
+/* Tiga titik "sedang mengetik". Bila gerak dikurangi, titiknya diam (base.css). */
+.titik-mengetik {
+  display: inline-flex;
+  gap: 5px;
+  padding: 8px 2px;
+}
+
+.titik-mengetik span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teks-redup);
+  animation: titik-mengetik 1s ease-in-out infinite;
+}
+
+.titik-mengetik span:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.titik-mengetik span:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes titik-mengetik {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pesan-naik {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* ---------- Saran pertanyaan & kolom tulis ---------- */
+/* Di dalam percakapan, saran berdiri di sisi pengguna (kanan): mengetuknya sama dengan mengirim pesan itu. */
+.obrolan__saran {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--r2);
+  margin: var(--r4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.obrolan__saran li + li {
+  margin-top: 0;
+}
+
+.obrolan__saran-tombol {
+  min-height: var(--target);
+  padding: var(--r2) var(--r3);
+  border: var(--garis) solid var(--utama);
+  border-radius: var(--radius-pil);
+  background: var(--permukaan);
+  color: var(--utama);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--durasi) var(--kurva), scale 90ms var(--kurva);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.obrolan__saran-tombol[data-hovered] {
+  background: var(--utama-lembut);
+}
+
+.obrolan__saran-tombol[data-pressed] {
+  scale: 0.97;
+}
+
+.obrolan__saran-tombol[data-focus-visible] {
+  outline: 3px solid var(--fokus);
+  outline-offset: 2px;
+}
+
+.obrolan__bawah {
+  padding: var(--r3) var(--r4) calc(var(--r3) + env(safe-area-inset-bottom));
+  border-top: 1px solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+}
+
+.obrolan__tulis {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--r2);
+}
+
+.obrolan__kolom {
+  flex: 1;
+  min-width: 0;
+}
+
+.obrolan__kolom .input {
+  border-radius: var(--radius-pil);
+  padding-inline: var(--r4);
+}
+
+.obrolan__kolom .input::placeholder {
+  color: var(--teks-redup);
+  opacity: 1;
+}
+
+.obrolan__tulis .tombol {
+  flex: none;
+  padding-inline: var(--r4);
+}
+
+.obrolan__ajak {
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+  color: var(--teks-redup);
+}

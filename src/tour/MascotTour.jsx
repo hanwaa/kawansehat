@@ -128,7 +128,7 @@ export default function MascotTour({ status, setStatus, onTutup }) {
     window.scrollBy({ top: r.top - sasaran, behavior: 'instant' })
   }, [kunci, sekarang, tinggiBalon])
 
-  // Bila "Bacakan teks" aktif, Si Kawal membacakan setiap langkah.
+  // Bila "Bacakan teks" aktif, Piko membacakan setiap langkah.
   useEffect(() => {
     if (!status.terbuka || !prefs.suara || !isi) return
     bacakan([isi.judul, isi.teks], { kecepatan: profil === 'lansia' ? 0.9 : 1 })
@@ -195,10 +195,10 @@ export default function MascotTour({ status, setStatus, onTutup }) {
             {(diTawar || terakhir) && (
               <p className="tur-dialog__petunjuk">
                 {pilih({
-                  anak: 'Mau jalan-jalan lagi? Ketuk aku di pojok kanan bawah, ya!',
-                  remaja: 'Butuh panduan lagi? Tekan tombol Si Kawal di pojok kanan bawah.',
-                  dewasa: 'Panduan bisa dibuka lagi kapan saja lewat tombol Si Kawal di pojok kanan bawah.',
-                  lansia: 'Bapak/Ibu bisa membuka panduan ini lagi lewat tombol Si Kawal di pojok kanan bawah.',
+                  anak: 'Mau jalan-jalan lagi? Ketuk aku kapan saja, ya!',
+                  remaja: 'Butuh panduan lagi atau mau tanya sesuatu? Ketuk Piko kapan saja.',
+                  dewasa: 'Panduan bisa dibuka lagi, atau pertanyaan diajukan, kapan saja lewat Piko.',
+                  lansia: 'Bapak/Ibu bisa membuka panduan ini lagi kapan saja lewat tombol Bantuan.',
                 })}
               </p>
             )}

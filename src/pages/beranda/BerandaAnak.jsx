@@ -61,7 +61,7 @@ export default function BerandaAnak() {
           <Award aria-hidden="true" /> Lencanaku
         </h2>
         {lencana.length === 0 ? (
-          <p>Belum ada lencana. Yuk, ikut tur Si Kawal atau main kuis!</p>
+          <p>Belum ada lencana. Yuk, ikut tur Piko atau main kuis!</p>
         ) : (
           <ul className="lencana-anak__daftar">
             {lencana.map((id) => (

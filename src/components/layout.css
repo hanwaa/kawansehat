@@ -185,25 +185,26 @@
     flex-direction: column;
     gap: 2px;
     border-radius: var(--radius-kecil);
-    /* Label menu bawah dibatasi supaya empat menu tetap muat saat teks diperbesar: paling besar 18px, dan di
-       bawah 360px ikut mengecil bersama lebar layar (16px di 320px) supaya "Beranda" tidak terpotong. */
-    font-size: min(var(--fs-kecil), 18px, 5vw);
+    /* Label menu bawah dibatasi supaya empat menu + Piko tetap muat saat teks diperbesar: paling besar 17px, dan
+       di bawah ±400px ikut mengecil bersama lebar layar supaya "Beranda" tidak terpotong. Label Piko memakai
+       batas yang sama (tombol-piko.css). */
+    font-size: min(var(--fs-kecil), 17px, 4.3vw);
     padding: var(--r1) 2px;
     text-align: center;
     line-height: 1.2;
   }
-  /* Menu bawah + tombol Panduan mengambang. */
+  /* Ruang untuk menu bawah dan Piko yang menonjol di tengahnya. */
   main.ada-navigasi {
-    padding-bottom: calc(var(--tinggi-nav, 72px) + 136px);
+    padding-bottom: calc(var(--tinggi-nav, 72px) + var(--tonjolan-piko) + var(--r5));
   }
   .kaki-situs {
-    padding-bottom: calc(var(--tinggi-nav, 72px) + 144px) !important;
+    padding-bottom: calc(var(--tinggi-nav, 72px) + var(--tonjolan-piko) + var(--r5)) !important;
   }
 }
 
 /* HP diputar (landscape): tinggi layar hanya ±360px, sementara header sticky + menu bawah memakan 35–45%-nya.
    Header ikut tergulir (Layout.jsx lalu mengisi --tinggi-kepala dengan 0) dan label menu pindah ke samping ikon,
-   sehingga menu bawah lebih pendek. Ruang bawah halaman cukup untuk tombol Panduan yang di sini satu baris. */
+   sehingga menu bawah lebih pendek. Piko di sini tidak menonjol (tombol-piko.css), jadi ruang bawahnya lebih kecil. */
 @media (max-width: 899px) and (max-height: 480px) {
   html {
     scroll-padding-top: var(--r4);
@@ -217,10 +218,10 @@
     padding-inline: var(--r2);
   }
   main.ada-navigasi {
-    padding-bottom: calc(var(--tinggi-nav, 56px) + 88px);
+    padding-bottom: calc(var(--tinggi-nav, 56px) + var(--r5));
   }
   .kaki-situs {
-    padding-bottom: calc(var(--tinggi-nav, 56px) + 96px) !important;
+    padding-bottom: calc(var(--tinggi-nav, 56px) + var(--r5)) !important;
   }
 }
 

@@ -1,7 +1,7 @@
 import Maskot from '../illustrations/Maskot.jsx'
 import './gelembung.css'
 
-// Si Kawal berbicara lewat balon kata. Dipakai untuk sapaan, tips inline, dan layar sukses.
+// Piko berbicara lewat balon kata. Dipakai untuk sapaan, tips inline, dan layar sukses.
 export default function Gelembung({ pose = 'lambai', ukuran = 104, kecil = false, children, className = '', ...rest }) {
   return (
     <div className={`gelembung ${kecil ? 'gelembung--kecil' : ''} ${className}`} {...rest}>

@@ -145,7 +145,7 @@ export default function PengingatObat() {
     ])
   }
 
-  // Panduan Si Kawal menunjuk tombol-tombol pada obat pertama di jadwal.
+  // Panduan Piko menunjuk tombol-tombol pada obat pertama di jadwal.
   const kunciPertama = WAKTU.flatMap((w) => obat.filter((o) => o.waktu.includes(w.id)).map((o) => `${o.id}-${w.id}`))[0]
 
   return (

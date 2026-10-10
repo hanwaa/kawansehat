@@ -15,6 +15,11 @@
   color: var(--utama);
 }
 
+/* Kartu mengisi tinggi <li> agar sebaris tetap sama tinggi walau judulnya turun baris. */
+.gizi-alat .kartu {
+  height: 100%;
+}
+
 .gizi-alat h2 {
   font-size: var(--fs-besar);
 }
@@ -108,7 +113,7 @@
   font-size: var(--fs-2xl);
 }
 
-.hasil-gizi__kawal {
+.hasil-gizi__piko {
   margin-top: var(--r4);
 }
 

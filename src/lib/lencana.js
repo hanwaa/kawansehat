@@ -2,7 +2,7 @@
 const KUNCI = 'ks-lencana'
 
 export const LENCANA = {
-  penjelajah: { nama: 'Penjelajah Kawal Sehat', ket: 'Selesai jalan-jalan bersama Si Kawal' },
+  penjelajah: { nama: 'Penjelajah Kawan Sehat', ket: 'Selesai jalan-jalan bersama Piko' },
   'pemburu-jentik': { nama: 'Pemburu Jentik', ket: 'Lulus kuis demam berdarah' },
   'piring-sehat': { nama: 'Jagoan Piring Sehat', ket: 'Berhasil menyusun Isi Piringku' },
 }

@@ -283,12 +283,12 @@
   color: var(--teks-redup);
 }
 
-.tiket__kawal {
+.tiket__piko {
   margin: var(--r5) 0;
 }
 
 @media print {
-  .tiket__kawal {
+  .tiket__piko {
     display: none;
   }
 }

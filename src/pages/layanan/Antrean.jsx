@@ -12,7 +12,7 @@ import './layanan.css'
 
 const LANGKAH = ['Jenis layanan', 'Tempat & poli', 'Jadwal', 'Kebutuhan khusus', 'Data diri', 'Periksa ulang']
 
-// Tips Si Kawal per langkah, disesuaikan dengan cara bicara tiap profil.
+// Tips Piko per langkah, disesuaikan dengan cara bicara tiap profil.
 const TIPS = [
   { semua: 'Datang langsung atau konsultasi lewat video call. Keduanya bisa memakai juru bahasa isyarat.', lansia: 'Kalau ragu, pilih “Datang ke puskesmas”.' },
   { semua: 'Pilih puskesmas yang paling dekat dulu, ya. Fasilitas aksesibelnya tertulis di setiap pilihan.', lansia: 'Pilih puskesmas yang paling dekat, Bapak/Ibu.' },

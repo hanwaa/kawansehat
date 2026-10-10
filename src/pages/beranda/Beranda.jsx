@@ -18,7 +18,7 @@ export default function Beranda() {
   const navigate = useNavigate()
   useJudulHalaman('Beranda')
 
-  // Setelah pembuka, Si Kawal menawarkan tur (tidak pernah memaksa, dan hanya sekali).
+  // Setelah pembuka, Piko menawarkan tur (tidak pernah memaksa, dan hanya sekali).
   useEffect(() => {
     if (state?.tawarTur && !prefs.turSelesai) {
       tur.tawarkan()

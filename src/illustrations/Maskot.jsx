@@ -1,6 +1,6 @@
 import './maskot.css'
 
-// Si Kawal: tunas kecil yang menjaga kesehatan. Pose: lambai | tunjuk | jempol | pikir.
+// Piko: tunas kecil yang menjaga kesehatan. Pose: lambai | tunjuk | jempol | pikir.
 const WARNA = {
   badan: '#2f8f5b',
   tangan: '#287d4f',
