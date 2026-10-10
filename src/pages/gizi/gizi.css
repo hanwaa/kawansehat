@@ -240,6 +240,7 @@
   border: var(--garis) solid var(--utama);
   border-radius: var(--radius-kecil);
   background: var(--utama-lembut);
+  animation: pesan-masuk 150ms var(--kurva);
 }
 
 .kabar-tambah__teks {
@@ -477,10 +478,15 @@
   overflow: hidden;
 }
 
+/* Bilah tumbuh saat makanan ditambah: geraknya menunjukkan sumbangan makanan itu. Lewat scaleX (seperti bilah
+   langkah antrean), bukan width, supaya tidak memicu tata letak ulang. */
 .bar-gizi__jalur span {
   display: block;
+  width: 100%;
   height: 100%;
   background: var(--utama);
+  transform-origin: left;
+  transition: transform 200ms var(--kurva), background-color var(--durasi) var(--kurva);
 }
 
 .bar-gizi--lewat .bar-gizi__jalur span {

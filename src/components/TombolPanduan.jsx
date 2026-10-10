@@ -5,16 +5,26 @@ import { useTur } from '../tour/TourProvider.jsx'
 import './tombol-panduan.css'
 
 // Saat halaman digulir ke bawah, balon menyusut sehingga tinggal Si Kawal yang tidak banyak menutupi konten;
-// balon muncul lagi saat menggulir ke atas atau kembali ke puncak halaman.
+// balon muncul lagi setelah menggulir ke atas sedikitnya 48px atau kembali ke puncak halaman. Ambang yang tidak
+// sama ini mencegah balon berkedip saat jari sedikit goyang di tengah membaca.
 function useRingkasSaatGulir() {
   const [ringkas, setRingkas] = useState(false)
   useEffect(() => {
-    let terakhir = window.scrollY
+    let sekarang = false
+    // Titik terjauh yang dicapai searah keadaan sekarang: terendah saat balon tampil, terdalam saat ringkas.
+    let acuan = window.scrollY
     const cek = () => {
       const y = window.scrollY
-      if (Math.abs(y - terakhir) < 8) return
-      setRingkas(y > terakhir && y > 120)
-      terakhir = y
+      if (sekarang) {
+        acuan = Math.max(acuan, y)
+        if (y > 120 && acuan - y < 48) return
+      } else {
+        acuan = Math.min(acuan, y)
+        if (y <= 120 || y - acuan < 8) return
+      }
+      sekarang = !sekarang
+      acuan = y
+      setRingkas(sekarang)
     }
     window.addEventListener('scroll', cek, { passive: true })
     return () => window.removeEventListener('scroll', cek)

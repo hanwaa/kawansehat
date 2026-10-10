@@ -41,6 +41,8 @@
   --target: 44px;
   --durasi: 220ms;
   --kurva: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Lembar dari bawah (bottom sheet): melesat lalu mengendap panjang, seperti laci iOS. */
+  --kurva-laci: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Warna: Hangat & Ramah (dewasa) */
   --latar: #fbf7ef;

@@ -37,7 +37,7 @@ function BarGizi({ label, nilai, target, satuan, batas = false }) {
         </span>
       </div>
       <div className="bar-gizi__jalur" aria-hidden="true">
-        <span style={{ width: `${Math.min(p, 100)}%` }} />
+        <span style={{ transform: `scaleX(${Math.min(p, 100) / 100})` }} />
       </div>
     </div>
   )

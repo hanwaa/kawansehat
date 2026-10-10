@@ -125,16 +125,23 @@ function useTinggiNavBawah(ref, aktif) {
 }
 
 // Tinggi header (sticky) disimpan di --tinggi-kepala supaya elemen sticky di halaman menempel tepat di bawahnya,
-// berapa pun ukuran teks dan jumlah baris header.
+// berapa pun ukuran teks dan jumlah baris header. Di HP landscape header tidak sticky (layout.css), jadi nilainya 0.
 function useTinggiKepala(ref) {
   useLayoutEffect(() => {
     const kepala = ref.current
     if (!kepala) return
-    const ukur = () => document.documentElement.style.setProperty('--tinggi-kepala', `${kepala.offsetHeight}px`)
+    const ukur = () => {
+      const menempel = getComputedStyle(kepala).position === 'sticky'
+      document.documentElement.style.setProperty('--tinggi-kepala', menempel ? `${kepala.offsetHeight}px` : '0px')
+    }
     ukur()
     const pengamat = new ResizeObserver(ukur)
     pengamat.observe(kepala)
-    return () => pengamat.disconnect()
+    window.addEventListener('resize', ukur)
+    return () => {
+      pengamat.disconnect()
+      window.removeEventListener('resize', ukur)
+    }
   }, [ref])
 }
 

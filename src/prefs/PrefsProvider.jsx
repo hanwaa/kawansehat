@@ -42,10 +42,15 @@ function terapkan(prefs) {
 }
 
 // Crossfade ganti profil hanya mengubah opasitas (tidak memicu pusing), jadi tetap dipakai saat sistem meminta
-// "kurangi gerakan" (durasinya dipersingkat di base.css). Hanya pilihan "Kurangi animasi" di aplikasi yang mematikannya.
-function bolehAnimasi(prefs) {
-  return !prefs.gerak && typeof document.startViewTransition === 'function'
+// "kurangi gerakan" (durasinya dipersingkat di base.css). Hanya pilihan "Kurangi animasi" di aplikasi yang mematikannya;
+// dibaca dari atribut <html> supaya selalu sesuai preferensi yang sedang berlaku.
+function bolehAnimasi() {
+  return !document.documentElement.dataset.gerak && typeof document.startViewTransition === 'function'
 }
+
+// Preferensi yang mengubah wujud seluruh halaman. Perubahannya ikut crossfade seperti ganti profil, supaya latar,
+// kartu, dan teks berganti bersama, bukan sebagian memudar dan sebagian melompat.
+const UBAH_WUJUD = ['teks', 'kontras', 'sederhana', 'isyarat']
 
 // Mencatat posisi layar elemen jangkar; fungsi yang dikembalikan menggulir wadahnya supaya elemen itu tetap
 // di tempat setelah tampilan berubah (misalnya teks membesar saat memilih Lansia), tidak lari dari bawah jari.
@@ -75,43 +80,60 @@ export function PrefsProvider({ children }) {
     }
   }, [prefs])
 
-  const ubah = useCallback((perubahan) => setPrefs((p) => ({ ...p, ...perubahan })), [])
-
   // Transisi yang sedang berjalan & perubahan yang menunggu untuk diterapkan di dalamnya.
   const transisi = useRef({ aktif: false, menunggu: null })
 
-  // Mengganti profil dengan transisi "berubah wujud" bila animasi diizinkan. Pilihan baru di tengah transisi
-  // tidak membatalkannya (itu membuat tampilan melompat): perubahan langsung diterapkan dan ikut tampil di
-  // gambar "baru" transisi yang masih hidup. `jangkar` = elemen yang harus tetap di posisinya, biasanya kartu
-  // profil yang baru diketuk.
+  // Menerapkan perubahan tampilan di dalam transisi "berubah wujud" bila animasi diizinkan. Perubahan baru di
+  // tengah transisi tidak membatalkannya (itu membuat tampilan melompat): perubahan langsung diterapkan dan ikut
+  // tampil di gambar "baru" transisi yang masih hidup. `perbarui` harus memakai flushSync supaya DOM sudah
+  // berubah saat transisi mengambil gambar barunya.
+  const denganTransisi = useCallback((perbarui) => {
+    const t = transisi.current
+    if (t.menunggu) {
+      // Transisi belum sempat menerapkan perubahan sebelumnya: keduanya diterapkan berurutan di dalamnya.
+      const sebelumnya = t.menunggu
+      t.menunggu = () => {
+        sebelumnya()
+        perbarui()
+      }
+    } else if (t.aktif || !bolehAnimasi()) {
+      perbarui()
+    } else {
+      t.aktif = true
+      t.menunggu = perbarui
+      const vt = document.startViewTransition(() => {
+        const terapkan = t.menunggu
+        t.menunggu = null
+        terapkan()
+      })
+      vt.finished.finally(() => {
+        t.aktif = false
+        t.menunggu = null
+      })
+    }
+  }, [])
+
+  const ubah = useCallback(
+    (perubahan) => {
+      if (Object.keys(perubahan).some((k) => UBAH_WUJUD.includes(k))) {
+        denganTransisi(() => flushSync(() => setPrefs((p) => ({ ...p, ...perubahan }))))
+      } else {
+        setPrefs((p) => ({ ...p, ...perubahan }))
+      }
+    },
+    [denganTransisi],
+  )
+
+  // Mengganti profil. `jangkar` = elemen yang harus tetap di posisinya, biasanya kartu profil yang baru diketuk.
   const pilihProfil = useCallback(
     (profil, { pakaiPreset = true, jangkar } = {}) => {
       const tahan = tahanPosisi(jangkar)
-      const perbarui = () => {
+      denganTransisi(() => {
         flushSync(() => setPrefs((p) => ({ ...p, ...(pakaiPreset ? PRESET[profil] : {}), profil })))
         tahan()
-      }
-      const t = transisi.current
-      if (t.menunggu) {
-        // Transisi belum sempat menerapkan perubahan sebelumnya: cukup ganti dengan pilihan terbaru.
-        t.menunggu = perbarui
-      } else if (t.aktif || !bolehAnimasi(prefs)) {
-        perbarui()
-      } else {
-        t.aktif = true
-        t.menunggu = perbarui
-        const vt = document.startViewTransition(() => {
-          const terapkan = t.menunggu
-          t.menunggu = null
-          terapkan()
-        })
-        vt.finished.finally(() => {
-          t.aktif = false
-          t.menunggu = null
-        })
-      }
+      })
     },
-    [prefs],
+    [denganTransisi],
   )
 
   const nilai = useMemo(() => {

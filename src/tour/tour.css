@@ -16,7 +16,7 @@
 }
 
 .tur-lapisan[data-exiting] {
-  animation: muncul 160ms var(--kurva) reverse forwards;
+  animation: hilang 160ms var(--kurva) forwards;
 }
 
 /* Sorotan: lubang terang di sekitar elemen yang dijelaskan + garis emas tebal.
@@ -91,26 +91,34 @@
   animation: tur-masuk var(--durasi) var(--kurva);
 }
 
+/* Keluar searah dengan saat masuk, tetap ease-out (lihat .modal[data-exiting] di base.css). */
 .tur-balon[data-exiting] {
-  animation: tur-masuk 160ms var(--kurva) reverse forwards;
+  animation: tur-keluar 160ms var(--kurva) forwards;
 }
 
 /* Balon yang menempel di atas layar (HP) masuk dan keluar dari atas, bukan dari bawah. */
-.tur-balon--atas[data-entering],
-.tur-balon--atas[data-exiting] {
+.tur-balon--atas[data-entering] {
   animation-name: tur-masuk-atas;
 }
 
-/* Balon melayang ikut meluncur bersama sorotan ke target berikutnya. */
+.tur-balon--atas[data-exiting] {
+  animation-name: tur-keluar-atas;
+}
+
+/* Balon melayang ikut meluncur bersama sorotan ke target berikutnya. Posisinya hanya lewat transform (diisi
+   MascotTour.jsx) dengan daftar fungsi yang sama dengan balon tengah, sehingga perpindahan dari sapaan di tengah
+   ke langkah pertama pun bisa dianimasikan. */
 .tur-balon--melayang {
-  transition: top var(--durasi) var(--kurva), left var(--durasi) var(--kurva), transform var(--durasi) var(--kurva);
+  top: 0;
+  left: 0;
+  transition: transform var(--durasi) var(--kurva);
 }
 
 .tur-balon--tengah {
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: min(480px, calc(100vw - 32px));
-  transform: translate(-50%, -50%);
+  transform: translate(calc(50vw - 50%), 50dvh) translateY(-50%);
 }
 
 .tur-balon--bawah,
@@ -269,6 +277,20 @@
   from {
     opacity: 0;
     translate: 0 -12px;
+  }
+}
+
+@keyframes tur-keluar {
+  to {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes tur-keluar-atas {
+  to {
+    opacity: 0;
+    translate: 0 -8px;
   }
 }
 

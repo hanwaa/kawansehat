@@ -60,6 +60,9 @@
   text-decoration: none;
   white-space: nowrap;
   flex: none;
+  /* Saat nama situs disembunyikan (HP), tautan tinggal ikon 32px; area sentuhnya tetap sebesar target. */
+  min-height: var(--target);
+  min-width: var(--target);
 }
 
 .logo svg {
@@ -117,9 +120,11 @@
   transition: transform var(--durasi) var(--kurva);
 }
 
-.navigasi-utama a:hover {
-  background: var(--permukaan-2);
-  color: var(--teks);
+@media (hover: hover) {
+  .navigasi-utama a:hover {
+    background: var(--permukaan-2);
+    color: var(--teks);
+  }
 }
 
 .navigasi-utama a:active {
@@ -180,8 +185,9 @@
     flex-direction: column;
     gap: 2px;
     border-radius: var(--radius-kecil);
-    /* Label menu bawah dibatasi supaya empat menu tetap muat di layar 360px saat teks diperbesar. */
-    font-size: min(var(--fs-kecil), 18px);
+    /* Label menu bawah dibatasi supaya empat menu tetap muat saat teks diperbesar: paling besar 18px, dan di
+       bawah 360px ikut mengecil bersama lebar layar (16px di 320px) supaya "Beranda" tidak terpotong. */
+    font-size: min(var(--fs-kecil), 18px, 5vw);
     padding: var(--r1) 2px;
     text-align: center;
     line-height: 1.2;
@@ -192,6 +198,29 @@
   }
   .kaki-situs {
     padding-bottom: calc(var(--tinggi-nav, 72px) + 144px) !important;
+  }
+}
+
+/* HP diputar (landscape): tinggi layar hanya ±360px, sementara header sticky + menu bawah memakan 35–45%-nya.
+   Header ikut tergulir (Layout.jsx lalu mengisi --tinggi-kepala dengan 0) dan label menu pindah ke samping ikon,
+   sehingga menu bawah lebih pendek. Ruang bawah halaman cukup untuk tombol Panduan yang di sini satu baris. */
+@media (max-width: 899px) and (max-height: 480px) {
+  html {
+    scroll-padding-top: var(--r4);
+  }
+  .kepala-situs {
+    position: static;
+  }
+  .navigasi-utama a {
+    flex-direction: row;
+    gap: var(--r2);
+    padding-inline: var(--r2);
+  }
+  main.ada-navigasi {
+    padding-bottom: calc(var(--tinggi-nav, 56px) + 88px);
+  }
+  .kaki-situs {
+    padding-bottom: calc(var(--tinggi-nav, 56px) + 96px) !important;
   }
 }
 

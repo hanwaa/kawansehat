@@ -23,7 +23,6 @@ body {
   font-size: var(--fs-dasar);
   line-height: var(--lh);
   overflow-wrap: break-word;
-  transition: background-color var(--durasi) var(--kurva), color var(--durasi) var(--kurva);
 }
 
 img,
@@ -41,6 +40,8 @@ h4 {
   line-height: 1.2;
   margin: 0 0 var(--r3);
   text-wrap: balance;
+  /* Pengaman reflow: kata yang lebih lebar dari layar (teks sangat besar di 320px) dipatahkan, bukan meluber. */
+  overflow-wrap: anywhere;
 }
 
 h1 {
@@ -98,9 +99,14 @@ a {
   text-decoration-thickness: 0.08em;
 }
 
-a:hover {
-  color: var(--utama-kuat);
-  text-decoration-thickness: 0.14em;
+/* Semua :hover di file ini hanya untuk perangkat yang benar-benar bisa hover. Di layar sentuh :hover "lengket"
+   setelah diketuk (misalnya tombol 119 tetap gelap di halaman Darurat). Komponen React Aria memakai
+   [data-hovered], yang sudah mengabaikan sentuhan. */
+@media (hover: hover) {
+  a:hover {
+    color: var(--utama-kuat);
+    text-decoration-thickness: 0.14em;
+  }
 }
 
 strong {
@@ -260,10 +266,16 @@ h1[tabindex='-1']:focus {
   height: 1.25em;
 }
 
-.tombol:hover,
 .tombol[data-hovered] {
   --tombol-latar: var(--permukaan-2);
   color: var(--tombol-teks);
+}
+
+@media (hover: hover) {
+  .tombol:hover {
+    --tombol-latar: var(--permukaan-2);
+    color: var(--tombol-teks);
+  }
 }
 
 /* Saat ditekan, umpan balik masuk cepat (90ms); saat dilepas kembali dengan durasi normal. */
@@ -297,9 +309,14 @@ h1[tabindex='-1']:focus {
   --tombol-garis: var(--garis-warna);
 }
 
-.tombol--utama:hover,
 .tombol--utama[data-hovered] {
   --tombol-latar: var(--utama-kuat);
+}
+
+@media (hover: hover) {
+  .tombol--utama:hover {
+    --tombol-latar: var(--utama-kuat);
+  }
 }
 
 .tombol--bahaya {
@@ -308,10 +325,16 @@ h1[tabindex='-1']:focus {
   --tombol-garis: var(--bahaya);
 }
 
-.tombol--bahaya:hover,
 .tombol--bahaya[data-hovered] {
   --tombol-latar: var(--bahaya-kuat);
   color: var(--pada-bahaya);
+}
+
+@media (hover: hover) {
+  .tombol--bahaya:hover {
+    --tombol-latar: var(--bahaya-kuat);
+    color: var(--pada-bahaya);
+  }
 }
 
 .tombol--teks {
@@ -323,9 +346,14 @@ h1[tabindex='-1']:focus {
   text-underline-offset: 0.2em;
 }
 
-.tombol--teks:hover,
 .tombol--teks[data-hovered] {
   --tombol-latar: var(--permukaan-2);
+}
+
+@media (hover: hover) {
+  .tombol--teks:hover {
+    --tombol-latar: var(--permukaan-2);
+  }
 }
 
 .tombol--besar {
@@ -595,6 +623,7 @@ legend {
   border: 2px solid var(--garis-warna);
   border-radius: 50%;
   background: var(--permukaan);
+  transition: background-color 150ms var(--kurva), border-color 150ms var(--kurva);
 }
 
 .pilihan--kotak .pilihan__tanda {
@@ -607,14 +636,18 @@ legend {
   color: var(--pada-utama);
 }
 
+/* Centang tumbuh sedikit saat dipilih (dari 0.8, bukan dari nol): konfirmasi yang terasa tanpa memperlambat. */
 .pilihan__tanda svg {
   width: 1rem;
   height: 1rem;
   opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 150ms var(--kurva), transform 150ms var(--kurva);
 }
 
 .pilihan[data-selected] .pilihan__tanda svg {
   opacity: 1;
+  transform: none;
 }
 
 .pilihan__isi {
@@ -755,14 +788,47 @@ legend {
   animation: naik var(--durasi) var(--kurva);
 }
 
-/* Keluar lewat jalur yang sama dengan saat masuk, sedikit lebih cepat. `reverse` sekaligus mencerminkan
-   kurvanya (melambat saat masuk → dipercepat saat keluar). React Aria menunggu animasi ini selesai. */
+/* Keluar searah dengan saat masuk, lebih cepat dan lebih pendek jaraknya. Kurvanya tetap ease-out: langsung
+   bergerak begitu Tutup ditekan. (`reverse` tidak dipakai karena ikut membalik kurva menjadi ease-in, yang diam
+   dulu di awal.) React Aria menunggu animasi overlay dan modal selesai sebelum melepasnya. */
 .lapisan-dialog[data-exiting] {
-  animation: muncul 160ms var(--kurva) reverse forwards;
+  animation: hilang 160ms var(--kurva) forwards;
 }
 
 .modal[data-exiting] {
-  animation: naik 160ms var(--kurva) reverse forwards;
+  animation: turun 160ms var(--kurva) forwards;
+}
+
+/* HP: dialog menjadi lembar dari bawah, dekat jempol. Overlay meredup lewat warna latar, bukan opacity, supaya
+   lembar tidak ikut memudar selagi meluncur. Kartu bantuan darurat tetap layar penuh. */
+@media (max-width: 640px) {
+  .lapisan-dialog:not(.kartu-bantuan-lapisan) {
+    place-items: end stretch;
+    padding: var(--r6) 0 0;
+  }
+
+  .lapisan-dialog:not(.kartu-bantuan-lapisan)[data-entering] {
+    animation: redup var(--durasi) var(--kurva);
+  }
+
+  .lapisan-dialog:not(.kartu-bantuan-lapisan)[data-exiting] {
+    animation: redup-keluar 240ms var(--kurva-laci) forwards;
+  }
+
+  .lapisan-dialog .modal {
+    width: 100%;
+    max-height: calc(100dvh - var(--r6));
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .lapisan-dialog .modal[data-entering] {
+    animation: lembar-naik 400ms var(--kurva-laci);
+  }
+
+  .lapisan-dialog .modal[data-exiting] {
+    animation: lembar-turun 240ms var(--kurva-laci) forwards;
+  }
 }
 
 .dialog {
@@ -782,8 +848,34 @@ legend {
   margin: 0;
 }
 
+/* Tombol penutup dialog yang isinya panjang tetap terlihat selagi isi digulir. */
+.dialog__kaki {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--r3);
+  margin: var(--r5) calc(-1 * var(--r5)) calc(-1 * var(--r5));
+  padding: var(--r3) var(--r5);
+  border-top: 1px solid color-mix(in srgb, var(--garis-warna) 30%, transparent);
+  background: var(--permukaan);
+}
+
+@media (max-width: 640px) {
+  .dialog__kaki > .tombol {
+    flex: 1;
+  }
+}
+
 @keyframes muncul {
   from {
+    opacity: 0;
+  }
+}
+
+@keyframes hilang {
+  to {
     opacity: 0;
   }
 }
@@ -792,6 +884,47 @@ legend {
   from {
     opacity: 0;
     transform: translateY(16px);
+  }
+}
+
+@keyframes turun {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Pesan singkat setelah aksi (ditambahkan, dihapus): muncul lembut, tidak mendadak mendorong isi di bawahnya.
+   Dipakai PesanUrungkan dan kabar Cek Makanan; elemennya tetap terpasang dan hanya berganti kelas, jadi
+   dipakai animasi, bukan @starting-style. */
+@keyframes pesan-masuk {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+@keyframes redup {
+  from {
+    background-color: transparent;
+  }
+}
+
+@keyframes redup-keluar {
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes lembar-naik {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes lembar-turun {
+  to {
+    transform: translateY(100%);
   }
 }
 
@@ -894,15 +1027,33 @@ legend {
   }
 
   :root:not([data-gerak='kurang']) :is(.lapisan-dialog, .tur-lapisan)[data-exiting] {
-    animation: muncul 120ms ease-in reverse forwards !important;
+    animation: hilang 120ms ease-out forwards !important;
   }
 }
 
-/* Transisi "berubah wujud" saat profil diganti (View Transitions API): crossfade singkat. */
-::view-transition-old(root),
+/* Transisi "berubah wujud" saat profil atau tampilan diganti (View Transitions API): crossfade singkat dengan
+   sedikit blur. Tata letak antarprofil sangat berbeda, jadi crossfade polos memperlihatkan dua halaman bertumpuk;
+   blur 2px menyatukannya menjadi satu perubahan. Jarang terjadi, jadi biaya blur layar penuh masih wajar. */
+::view-transition-old(root) {
+  animation: 280ms var(--kurva) both wujud-keluar;
+}
+
 ::view-transition-new(root) {
-  animation-duration: 280ms;
-  animation-timing-function: var(--kurva);
+  animation: 280ms var(--kurva) both wujud-masuk;
+}
+
+@keyframes wujud-keluar {
+  to {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@keyframes wujud-masuk {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

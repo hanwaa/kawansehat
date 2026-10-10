@@ -27,7 +27,7 @@ export default function ModeSwitcher() {
                   <ProfilPilihan ringkas label="Siapa yang memakai?" />
                   <AksesKontrol />
                 </div>
-                <div className="baris" style={{ marginTop: 'var(--r5)', justifyContent: 'flex-end' }}>
+                <div className="dialog__kaki">
                   <Button className="tombol tombol--utama" onPress={close}>
                     Selesai
                   </Button>

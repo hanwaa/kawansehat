@@ -17,6 +17,10 @@ const batasi = (n, min, max) => Math.max(min, Math.min(n, max))
 // Di bawah lebar ini balon berupa lembar selebar layar (lihat hitungPosisi).
 const LEBAR_LEMBAR = 640
 
+// Balon melayang diletakkan lewat transform (bukan top/left), supaya perpindahannya ke target berikutnya ditangani
+// compositor tanpa tata letak ulang. `atas` = balon di atas titik itu (digeser setinggi dirinya sendiri).
+const letak = (x, y, atas = false) => ({ transform: `translate(${x}px, ${y}px) translateY(${atas ? '-100%' : '0px'})` })
+
 // `ekor` = sisi balon tempat ekor penunjuk berada dan jaraknya dari sudut, supaya balon jelas menunjuk targetnya.
 function hitungPosisi(rect, tinggiTerukur) {
   const lebarLayar = window.innerWidth
@@ -36,14 +40,14 @@ function hitungPosisi(rect, tinggiTerukur) {
   const ekorX = batasi(rect.left + rect.width / 2 - left, 28, lebar - 28)
   if (rect.bottom + JARAK + tinggiBalon < tinggiLayar) {
     return {
-      gaya: { top: rect.bottom + JARAK, left, width: lebar },
+      gaya: { ...letak(left, rect.bottom + JARAK), width: lebar },
       kelas: 'tur-balon--melayang',
       ekor: { sisi: 'atas', posisi: ekorX },
     }
   }
   if (rect.top - JARAK - tinggiBalon > 0) {
     return {
-      gaya: { top: rect.top - JARAK, left, width: lebar, transform: 'translateY(-100%)' },
+      gaya: { ...letak(left, rect.top - JARAK, true), width: lebar },
       kelas: 'tur-balon--melayang',
       ekor: { sisi: 'bawah', posisi: ekorX },
     }
@@ -52,12 +56,12 @@ function hitungPosisi(rect, tinggiTerukur) {
   const top = batasi(rect.top, 16, tinggiLayar - tinggiBalon - 16)
   const ekorY = batasi(rect.top + rect.height / 2 - top, 28, tinggiBalon - 28)
   if (lebarLayar - rect.right - JARAK > lebar + 16) {
-    return { gaya: { top, left: rect.right + JARAK, width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kiri', posisi: ekorY } }
+    return { gaya: { ...letak(rect.right + JARAK, top), width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kiri', posisi: ekorY } }
   }
   if (rect.left - JARAK > lebar + 16) {
-    return { gaya: { top, left: rect.left - JARAK - lebar, width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kanan', posisi: ekorY } }
+    return { gaya: { ...letak(rect.left - JARAK - lebar, top), width: lebar }, kelas: 'tur-balon--melayang', ekor: { sisi: 'kanan', posisi: ekorY } }
   }
-  return { gaya: { bottom: 16, left: (lebarLayar - lebar) / 2, width: lebar }, kelas: 'tur-balon--melayang' }
+  return { gaya: { ...letak((lebarLayar - lebar) / 2, tinggiLayar - 16, true), width: lebar }, kelas: 'tur-balon--melayang' }
 }
 
 export default function MascotTour({ status, setStatus, onTutup }) {
@@ -108,11 +112,14 @@ export default function MascotTour({ status, setStatus, onTutup }) {
 
   // HP: lembar panduan menutup bagian bawah layar, jadi target digulir ke ruang kosong antara header dan lembar
   // (di tengahnya bila muat, kalau tidak bagian atasnya). Diulang saat tinggi lembar berubah, misalnya karena
-  // isi langkah atau ukuran teks. Target di header dan menu bawah tidak ikut bergulir, jadi dilewati.
+  // isi langkah atau ukuran teks. Menu bawah dan header sticky tidak ikut bergulir, jadi dilewati; di HP landscape
+  // header ikut tergulir, jadi targetnya tetap perlu digulir ke layar.
   useLayoutEffect(() => {
     if (!kunci || window.innerWidth >= LEBAR_LEMBAR) return
     const el = cariTarget(sekarang.target)
-    if (!el || el.closest('.kepala-situs')) return
+    if (!el || el.closest('.navigasi-utama')) return
+    const kepala = el.closest('.kepala-situs')
+    if (kepala && getComputedStyle(kepala).position === 'sticky') return
     const akar = getComputedStyle(document.documentElement)
     const atas = (parseFloat(akar.getPropertyValue('--tinggi-kepala')) || 0) + 12
     const bawah = window.innerHeight - (tinggiBalon || window.innerHeight / 2) - 20

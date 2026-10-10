@@ -86,6 +86,7 @@
   border: 2px solid var(--garis-warna);
   background: var(--permukaan);
   color: transparent;
+  transition: background-color 150ms var(--kurva), border-color 150ms var(--kurva), color 150ms var(--kurva);
 }
 
 .profil-kartu[data-selected] .profil-kartu__centang {

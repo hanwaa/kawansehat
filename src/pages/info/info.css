@@ -33,6 +33,16 @@
   color: var(--utama);
 }
 
+/* Layar sempit + teks sangat besar: ikon pindah ke atas judul, supaya kata terpanjang ("Pencegahan:") mendapat
+   lebar penuh dan tidak meluber. */
+@media (max-width: 400px) {
+  [data-teks='sangat-besar'] .topik__isi h2 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--r1);
+  }
+}
+
 .topik__kaki {
   margin-top: var(--r7);
   padding-top: var(--r4);
@@ -207,6 +217,16 @@
 
 .poin-besar__item--bahaya svg {
   color: var(--bahaya);
+}
+
+/* Layar sempit + teks sangat besar: di samping ikon, teks hanya muat satu kata per baris dan "puskesmas." meluber
+   dari layar 320px. Ikon ditaruh di atas supaya teks mendapat lebar penuh, tanpa memotong kata. */
+@media (max-width: 400px) {
+  [data-teks='sangat-besar'] .poin-besar__item {
+    flex-direction: column;
+    gap: var(--r2);
+    padding: var(--r4);
+  }
 }
 
 /* Daftar topik */
