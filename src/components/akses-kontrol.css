@@ -3,9 +3,11 @@
   gap: var(--r5);
 }
 
+/* Tiga kolom sejajar, atau satu kolom bila ruangnya di bawah 18rem (HP kecil, teks sangat besar), tidak pernah
+   2 + 1 yang menyisakan satu kartu sendirian. Ambangnya dalam rem, jadi ikut membesar bersama ukuran teks. */
 .akses-kontrol__ukuran {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(clamp((100% - 2 * var(--r2)) / 3, (18rem - 100%) * 999, 100%), 1fr));
   gap: var(--r2);
   margin-top: var(--r2);
 }

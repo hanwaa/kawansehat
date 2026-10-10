@@ -122,12 +122,16 @@
   flex: none;
 }
 
+/* Kolom mengikuti ruang di dalam dialog, bukan lebar layar: dua kolom hanya bila setiap kartu dapat ≥ 15rem.
+   Di HP (termasuk layar lebar seperti iPhone Pro Max) dan saat teks diperbesar, kartu menjadi daftar satu kolom
+   sehingga nama dan rentang usia tidak terpotong per kata. */
 .profil-grup--ringkas .profil-grup__daftar {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--r3);
   margin-top: var(--r2);
 }
 
-@media (max-width: 420px) {
-  .profil-grup--ringkas .profil-grup__daftar {
-    grid-template-columns: 1fr;
-  }
+/* Teks boleh menyusut supaya centang tidak terdorong keluar kartu. */
+.profil-grup--ringkas .profil-kartu__teks {
+  min-width: 0;
 }
