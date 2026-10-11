@@ -178,7 +178,7 @@ Logo, posisi tombol **Ganti tampilan**, **119**, dan **Piko** di tengah menu baw
 
 - Nama puskesmas, nomor antrean, dan pesan SMS adalah **data contoh**. Prototipe tidak terhubung ke layanan sungguhan.
 - Video BISINDO masih berupa **placeholder berlabel "Contoh"** + transkrip. Video asli perlu direkam bersama juru bahasa isyarat atau komunitas Tuli.
-- Fitur suara memakai Web Speech API bawaan browser. Kualitas suara bahasa Indonesia bergantung pada perangkat.
+- Fitur suara memakai Web Speech API bawaan browser. Kualitas suara bahasa Indonesia bergantung pada perangkat. Browser tidak menyediakan suara anak atau remaja berbahasa Indonesia, jadi karakter suara per profil (anak, remaja, dewasa) dibentuk dari nada dan kecepatan; sebagian mesin suara bisa mengabaikan pengaturan nada.
 - Nilai gizi makanan adalah nilai per satuan penukar dari Pedoman Gizi Seimbang. Makanan gorengan dihitung sebagai bahan + 1 sendok teh minyak (perkiraan).
 - Hasil cek gizi bersifat edukasi dan **tidak menggantikan pemeriksaan tenaga kesehatan**.
 

@@ -34,7 +34,7 @@ export default function Tiket() {
     if (!tiket || !state?.baru) return
     const kalimat = `Nomor antrean ${tiket.nomor.replace('-', '').split('').join(' ')}. ${tiket.tanggalLabel}, sesi ${tiket.sesi.label}.`
     const t = setTimeout(() => setPengumuman(kalimat), 600)
-    if (prefs.suara) bacakan(kalimat, { kecepatan: profil === 'lansia' ? 0.9 : 1 })
+    if (prefs.suara) bacakan(kalimat, { profil })
     return () => clearTimeout(t)
   }, [tiket, state, prefs.suara, profil])
 

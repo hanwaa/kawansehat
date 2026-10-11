@@ -54,7 +54,7 @@ export default function ListenButton({ target, label = 'Dengarkan', className = 
     bacakan(
       elemen.map((el) => el.innerText),
       {
-        kecepatan: profil === 'lansia' ? 0.9 : 1,
+        profil,
         onMulai: (i) => {
           bersihkanSorot()
           sorot.current = elemen[i]

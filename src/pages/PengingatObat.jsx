@@ -134,7 +134,7 @@ export default function PengingatObat() {
   const cobaPengingat = (o, w) => {
     setNotifikasi({ obat: o, waktu: w })
     setNotifTerbuka(true)
-    if (prefs.suara) bacakan(kalimatPengingat(o), { kecepatan: profil === 'lansia' ? 0.9 : 1 })
+    if (prefs.suara) bacakan(kalimatPengingat(o), { profil })
   }
 
   const contoh = () => {

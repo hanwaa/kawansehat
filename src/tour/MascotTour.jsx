@@ -131,7 +131,7 @@ export default function MascotTour({ status, setStatus, onTutup }) {
   // Bila "Bacakan teks" aktif, Piko membacakan setiap langkah.
   useEffect(() => {
     if (!status.terbuka || !prefs.suara || !isi) return
-    bacakan([isi.judul, isi.teks], { kecepatan: profil === 'lansia' ? 0.9 : 1 })
+    bacakan([isi.judul, isi.teks], { profil })
     return () => hentikan()
   }, [status.terbuka, status.tahap, status.indeks, prefs.suara, isi, profil])
 

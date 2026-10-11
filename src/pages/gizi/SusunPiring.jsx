@@ -37,7 +37,7 @@ const NAMA_PENDEK = { pokok: 'Pokok', lauk: 'Lauk', sayur: 'Sayur', buah: 'Buah'
 const WARNA_SEKTOR = Object.fromEntries(SEKTOR_PIRING.map((s) => [s.id, s.warna]))
 
 export default function SusunPiring() {
-  const { prefs } = usePrefs()
+  const { profil, prefs } = usePrefs()
   const [piring, setPiring] = useState({ pokok: null, lauk: null, sayur: null, buah: null })
   const [pesan, setPesan] = useState('Ketuk makanan di bawah untuk mengisi piringmu!')
   const lengkap = Object.values(piring).every(Boolean)
@@ -51,7 +51,7 @@ export default function SusunPiring() {
       : `${m.nama} masuk ke bagian ${PENJELASAN[m.kelompok]}.`
     setPesan(kalimat)
     if (selesai) beriLencana('piring-sehat')
-    if (prefs.suara) bacakan(kalimat)
+    if (prefs.suara) bacakan(kalimat, { profil })
   }
 
   const ulang = () => {

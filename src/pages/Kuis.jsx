@@ -44,7 +44,7 @@ const SOAL = [
 ]
 
 export default function Kuis() {
-  const { prefs, pilih } = usePrefs()
+  const { profil, prefs, pilih } = usePrefs()
   useJudulHalaman('Kuis Nyamuk')
   const [nomor, setNomor] = useState(0)
   const [jawab, setJawab] = useState('')
@@ -77,7 +77,7 @@ export default function Kuis() {
     const benar = jawab === soal.benar
     if (benar) setSkor((s) => s + 1)
     setDiperiksa(true)
-    if (prefs.suara) bacakan(`${benar ? 'Betul!' : 'Hampir!'} ${soal.jelas}`)
+    if (prefs.suara) bacakan(`${benar ? 'Betul!' : 'Hampir!'} ${soal.jelas}`, { profil })
   }
 
   const berikutnya = () => {

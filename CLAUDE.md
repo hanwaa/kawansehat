@@ -97,7 +97,7 @@ Only a few things must stay identical across profiles: the logo, the "Tampilan" 
 | `ks-obat`, `ks-obat-minum` | Medication reminders |
 | `ks-lencana` | Kids' badges |
 
-**Speech & sign language.** `src/lib/suara.js` wraps the Web Speech API (`id-ID`). `ListenButton` reads `h1, h2, h3, p, li, [data-baca]` inside a target and highlights each element as it is read. Mark UI chrome with `data-tidak-dibaca` so it is skipped. `SignVideo` is a clearly labelled placeholder plus transcript, shown only when `isyarat` is on.
+**Speech & sign language.** `src/lib/suara.js` wraps the Web Speech API (`id-ID`). Always pass `bacakan(teks, { profil })`: `KARAKTER_SUARA` gives each profile its own voice (child, teen, adult; `lansia` is the adult voice, slower). Browsers ship no child/teen Indonesian voices, so it is done with pitch and rate, preferring a female voice for `anak`/`remaja` (`pilihSuara`, covered by `suara.test.js`). `ListenButton` reads `h1, h2, h3, p, li, [data-baca]` inside a target and highlights each element as it is read. Mark UI chrome with `data-tidak-dibaca` so it is skipped. `SignVideo` is a clearly labelled placeholder plus transcript, shown only when `isyarat` is on.
 
 ## Accessibility conventions (scored by the competition)
 

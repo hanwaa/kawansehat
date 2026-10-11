@@ -123,7 +123,7 @@ export default function CekIMT() {
     const k = kalimatHasil(h, profil)
     setHasil({ ...h, ...k, tinggiCm: nilai.tinggiCm })
     requestAnimationFrame(() => judulHasil.current?.focus())
-    if (prefs.suara) bacakan([k.judul, k.teks], { kecepatan: profil === 'lansia' ? 0.9 : 1 })
+    if (prefs.suara) bacakan([k.judul, k.teks], { profil })
   }
 
   return (

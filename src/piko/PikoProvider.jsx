@@ -61,7 +61,7 @@ export function PikoProvider({ children }) {
     const akhir = pesan.at(-1)
     if (!terbuka || !prefs.suara || akhir?.dari !== 'piko' || akhir.id === terakhirDibaca.current) return
     terakhirDibaca.current = akhir.id
-    bacakan([akhir.teks], { kecepatan: profil === 'lansia' ? 0.9 : 1 })
+    bacakan([akhir.teks], { profil })
   }, [pesan, terbuka, prefs.suara, profil])
 
   const nilai = useMemo(() => ({ buka }), [buka])
