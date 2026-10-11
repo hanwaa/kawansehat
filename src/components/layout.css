@@ -8,8 +8,7 @@
 }
 
 /* Material di layar lebar: konten yang tergulir tampak buram di balik header, bukan teks yang membayang.
-   Di HP header solid, karena menu bawah (position: fixed) ada di dalam header dan backdrop-filter akan
-   menjadikan header containing block-nya. Lansia, kontras tinggi, dan tampilan sederhana selalu solid. */
+   Di HP header solid. Lansia, kontras tinggi, dan tampilan sederhana selalu solid. */
 @media (min-width: 900px) {
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     :root:not([data-profil='lansia'], [data-kontras], [data-sederhana]) .kepala-situs {
@@ -166,6 +165,9 @@
     right: 0;
     bottom: 0;
     z-index: 40;
+    /* Layer compositing sendiri: iOS Safari tidak lagi menggambar kartu yang bertransformasi di atas menu
+       selama momentum scroll. */
+    transform: translateZ(0);
     background: var(--permukaan);
     border-top: var(--garis) solid var(--garis-warna);
     padding: var(--r1) var(--r2) calc(var(--r1) + env(safe-area-inset-bottom));

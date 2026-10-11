@@ -176,12 +176,34 @@ export default function Layout() {
   const menu = MENU[profil]
   const isiKepala = useRef(null)
   useHeaderRapat(isiKepala, profil, prefs.teks, diPembuka)
+  const layarSempit = useLayarSempit()
   const navUtama = useRef(null)
-  useTinggiNavBawah(navUtama, !diPembuka)
+  useTinggiNavBawah(navUtama, !diPembuka && layarSempit)
   const kepala = useRef(null)
   useTinggiKepala(kepala)
   useTepiGulir(kepala)
-  const layarSempit = useLayarSempit()
+
+  const menuUtama = !diPembuka && (
+    <nav aria-label="Menu utama" className="navigasi-utama" data-tour="menu" ref={navUtama}>
+      <ul>
+        {menu.map(({ ke, label, Ikon }, i) => (
+          <Fragment key={ke}>
+            {layarSempit && i === 2 && (
+              <li className="navigasi-utama__piko">
+                <TombolPiko />
+              </li>
+            )}
+            <li>
+              <NavLink to={ke} end={ke === '/beranda'}>
+                <Ikon aria-hidden="true" />
+                <span>{label}</span>
+              </NavLink>
+            </li>
+          </Fragment>
+        ))}
+      </ul>
+    </nav>
+  )
 
   return (
     <TourProvider>
@@ -195,27 +217,7 @@ export default function Layout() {
               <Logo />
               <span>Kawan Sehat</span>
             </Link>
-            {!diPembuka && (
-              <nav aria-label="Menu utama" className="navigasi-utama" data-tour="menu" ref={navUtama}>
-                <ul>
-                  {menu.map(({ ke, label, Ikon }, i) => (
-                    <Fragment key={ke}>
-                      {layarSempit && i === 2 && (
-                        <li className="navigasi-utama__piko">
-                          <TombolPiko />
-                        </li>
-                      )}
-                      <li>
-                        <NavLink to={ke} end={ke === '/beranda'}>
-                          <Ikon aria-hidden="true" />
-                          <span>{label}</span>
-                        </NavLink>
-                      </li>
-                    </Fragment>
-                  ))}
-                </ul>
-              </nav>
-            )}
+            {!layarSempit && menuUtama}
             <div className="kepala-situs__aksi">
               {!diPembuka && <ModeSwitcher />}
               <Link to="/darurat" className="tombol tombol--bahaya tombol--kepala" data-tour="darurat">
@@ -227,6 +229,9 @@ export default function Layout() {
             </div>
           </div>
         </header>
+        {/* Di HP menu bawah (position: fixed) berada di luar header sticky. Bila bersarang di dalamnya, iOS Safari
+            kadang menggambar konten di atas menu saat momentum scroll. */}
+        {layarSempit && menuUtama}
         <main id="konten" className={diPembuka ? '' : 'ada-navigasi'}>
           <Outlet />
         </main>
