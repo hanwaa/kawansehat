@@ -1,9 +1,10 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { Button, Dialog, Form, Heading, Input, Label, Modal, ModalOverlay, TextField } from 'react-aria-components'
-import { ArrowRight, Phone, SendHorizontal, X } from 'lucide-react'
+import { ChevronRight, Phone, SendHorizontal, X } from 'lucide-react'
 import Maskot from '../illustrations/Maskot.jsx'
 import { IsyaratContoh } from '../illustrations/Adegan.jsx'
+import { useLembar } from '../components/useLembar.js'
 import { usePrefs } from '../prefs/PrefsProvider.jsx'
 import { SARAN } from './jawab.js'
 import './tanya-piko.css'
@@ -25,30 +26,28 @@ const CATATAN = {
 const gerakDikurangi = () =>
   !!document.documentElement.dataset.gerak || window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+// Jawaban Piko: teks, poin, tombol 119 bila darurat, lalu tautan sebagai baris di kaki bubble. Avatar memakai satu
+// pose tetap per jenis pesan supaya percakapan tidak ramai.
 function PesanPiko({ isi, pose, onTutup, isyarat }) {
   return (
     <li className="pesan pesan--piko">
-      <Maskot pose={pose ?? (isi.darurat ? 'pikir' : isi.tautan?.length ? 'tunjuk' : 'jempol')} ukuran={36} />
+      <Maskot pose={pose ?? (isi.darurat ? 'pikir' : 'jempol')} ukuran={32} />
       <div className={`pesan__balon ${isi.darurat ? 'pesan__balon--darurat' : ''}`}>
         <p>
           <span className="visual-tersembunyi">Piko: </span>
           {isi.teks}
         </p>
+        {isi.poin?.length > 0 && (
+          <ul className="pesan__poin">
+            {isi.poin.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        )}
         {isi.darurat && (
           <a href="tel:119" className="tombol tombol--bahaya pesan__telepon">
             <Phone aria-hidden="true" /> Telepon 119
           </a>
-        )}
-        {isi.tautan?.length > 0 && (
-          <ul role="list" className="pesan__tautan">
-            {isi.tautan.map((t) => (
-              <li key={t.ke}>
-                <Link to={t.ke} className="tombol" onClick={onTutup}>
-                  {t.label} <ArrowRight aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
-          </ul>
         )}
         {isyarat && (
           <div className="pesan__isyarat">
@@ -56,22 +55,44 @@ function PesanPiko({ isi, pose, onTutup, isyarat }) {
             <span>Video BISINDO (contoh)</span>
           </div>
         )}
+        {isi.tautan?.length > 0 && (
+          <ul role="list" className="pesan__tautan">
+            {isi.tautan.map((t) => (
+              <li key={t.ke}>
+                {/* Langsung ditutup, tanpa pegas: halaman tujuan memindahkan fokus ke judulnya, dan itu hanya bisa
+                    terjadi bila dialog sudah tidak menahan fokus. */}
+                <Link to={t.ke} className="pesan__tautan-baris" onClick={onTutup}>
+                  <span>{t.label}</span>
+                  <ChevronRight aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </li>
   )
 }
 
-function Saran({ profil, onPilih }) {
+// Pertanyaan siap ketuk: saran awal maupun pertanyaan lanjutan dari jawaban terakhir. Letaknya di luar role="log"
+// supaya tidak ikut diumumkan sebagai isi jawaban. Mengetuknya sama dengan mengirim pertanyaan itu.
+function Pilihan({ label, daftar, onPilih }) {
+  const id = useId()
   return (
-    <ul role="list" className="obrolan__saran" aria-label="Pertanyaan yang bisa dipilih">
-      {SARAN[profil].map((s) => (
-        <li key={s}>
-          <Button className="obrolan__saran-tombol" onPress={() => onPilih(s)}>
-            {s}
-          </Button>
-        </li>
-      ))}
-    </ul>
+    <div className="obrolan__pilihan">
+      <p id={id} className="obrolan__pilihan-label">
+        {label}
+      </p>
+      <ul role="list" className="obrolan__saran" aria-labelledby={id}>
+        {daftar.map((s) => (
+          <li key={s}>
+            <Button className="obrolan__saran-tombol" onPress={() => onPilih(s)}>
+              {s}
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -84,12 +105,30 @@ export default function TanyaPiko({ terbuka, onTutup, pesan, menunggu, onKirim, 
   const gulir = useRef(null)
   const bisaMengetik = profil !== 'anak'
   const saya = pilih({ anak: 'Kamu', remaja: 'Kamu', semua: 'Anda' })
+  // HP & tablet: lembar yang bisa ditarik turun. Tombol X, Esc, dan ketuk di luar juga menutup lewat pegas.
+  const {
+    pasang: pasangLembar,
+    onOpenChange: gantiBuka,
+    tutup: tutupLembar,
+  } = useLembar({ onOpenChange: (buka) => !buka && onTutup(), media: '(max-width: 899px)' })
+
+  // Pilihan di bawah percakapan: saran awal saat obrolan kosong, lalu pertanyaan lanjutan dari jawaban terakhir.
+  // Disembunyikan selama Piko mengetik. Anak tidak bisa mengetik, jadi saran awal muncul lagi bila jawaban terakhir
+  // tidak punya lanjutan (misalnya jawaban darurat).
+  const terakhir = pesan.at(-1)
+  const akhirDariPiko = terakhir?.dari === 'piko'
+  const lanjutan = akhirDariPiko ? (terakhir.lanjutan ?? []) : []
+  const pakaiLanjutan = lanjutan.length > 0
+  const pakaiSaran = !pakaiLanjutan && (pesan.length === 0 || !bisaMengetik)
+  const daftarPilihan = menunggu ? [] : pakaiLanjutan ? lanjutan : pakaiSaran ? SARAN[profil] : []
+  const labelPilihan = pakaiLanjutan
+    ? pilih({ anak: 'Tanya lagi', semua: 'Tanya lanjut' })
+    : pilih({ anak: 'Pilih pertanyaanmu', semua: 'Pilih pertanyaan' })
 
   // Pesan terbaru (dan indikator mengetik) selalu terlihat; jawaban Piko yang lebih tinggi dari area gulir
   // ditampilkan dari awal kalimatnya. Obrolan kosong dimulai dari atas supaya sapaan dan catatan terbaca dulu.
   // Saat panel baru dibuka, langsung di posisinya tanpa animasi.
   const sudahTampil = useRef(false)
-  const akhirDariPiko = pesan.at(-1)?.dari === 'piko'
   useLayoutEffect(() => {
     const el = gulir.current
     if (!terbuka || !el) {
@@ -107,10 +146,11 @@ export default function TanyaPiko({ terbuka, onTutup, pesan, menunggu, onKirim, 
     sudahTampil.current = true
   }, [terbuka, pesan.length, menunggu, akhirDariPiko])
 
-  // Tombol saran hilang setelah pesan pertama (kecuali anak); fokus dipindah ke kolom supaya tidak jatuh ke <body>.
+  // Tombol pilihan hilang begitu diketuk. Fokus dipindah ke area percakapan supaya tidak jatuh ke <body>, dan
+  // bukan ke kolom tulis, yang di HP akan memunculkan keyboard dan menutupi jawaban.
   const pilihSaran = (s) => {
     onKirim(s)
-    kolom.current?.focus()
+    gulir.current?.focus({ preventScroll: true })
   }
 
   const kirimTeks = () => {
@@ -124,24 +164,24 @@ export default function TanyaPiko({ terbuka, onTutup, pesan, menunggu, onKirim, 
   return (
     <ModalOverlay
       isOpen={terbuka}
-      onOpenChange={(buka) => !buka && onTutup()}
+      onOpenChange={gantiBuka}
       isDismissable
       className="lapisan-dialog lapisan-obrolan"
     >
-      <Modal className="modal obrolan">
+      <Modal ref={pasangLembar} className="modal obrolan">
         <Dialog className="obrolan__dialog">
-          <div className="obrolan__kepala">
+          <div className="obrolan__kepala" data-pegangan>
             <Maskot pose="lambai" ukuran={44} />
             <div className="obrolan__nama">
               <Heading slot="title">Tanya Piko</Heading>
               <p>Pemandu Informasi Kesehatan Optimal</p>
             </div>
-            <Button className="tombol tombol--teks" onPress={onTutup} aria-label="Tutup">
+            <Button className="tombol tombol--teks" onPress={tutupLembar} aria-label="Tutup">
               <X aria-hidden="true" />
             </Button>
           </div>
 
-          <div className="obrolan__gulir" ref={gulir}>
+          <div className="obrolan__gulir" ref={gulir} tabIndex={-1}>
             <div className="obrolan__catatan">
               <p>{pilih(CATATAN)}</p>
               <p>Versi contoh: jawaban Piko belum memakai AI.</p>
@@ -169,7 +209,7 @@ export default function TanyaPiko({ terbuka, onTutup, pesan, menunggu, onKirim, 
                 )}
                 {menunggu && (
                   <li className="pesan pesan--piko pesan--mengetik" aria-hidden="true">
-                    <Maskot pose="pikir" ukuran={36} />
+                    <Maskot pose="pikir" ukuran={32} />
                     <div className="pesan__balon">
                       <span className="titik-mengetik">
                         <span />
@@ -185,9 +225,11 @@ export default function TanyaPiko({ terbuka, onTutup, pesan, menunggu, onKirim, 
               {menunggu ? 'Piko sedang mengetik…' : ''}
             </p>
 
-            {/* Anak hanya bisa memilih saran, jadi saran selalu ada di bawah jawaban terakhir. Saran tidak diletakkan
-                di bagian bawah yang tetap, karena saat teks diperbesar empat tombolnya menutupi hampir seluruh obrolan. */}
-            {(!bisaMengetik || pesan.length === 0) && <Saran profil={profil} onPilih={pilihSaran} />}
+            {/* Pilihan ikut bergulir di bawah jawaban terakhir, tidak diletakkan di bagian bawah yang tetap, karena saat
+                teks diperbesar tombol-tombolnya akan menutupi hampir seluruh obrolan. */}
+            {daftarPilihan.length > 0 && (
+              <Pilihan key={terakhir?.id ?? 'awal'} label={labelPilihan} daftar={daftarPilihan} onPilih={pilihSaran} />
+            )}
           </div>
 
           <div className="obrolan__bawah">

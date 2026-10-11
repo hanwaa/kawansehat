@@ -21,6 +21,8 @@ export function PikoProvider({ children }) {
   // Naik setiap obrolan dihapus, supaya jawaban yang masih ditunggu tidak muncul di obrolan yang baru.
   const sesi = useRef(0)
   const nomor = useRef(0)
+  // Topik jawaban terakhir, supaya pertanyaan susulan ("cara mencegahnya?") tetap tersambung.
+  const topikTerakhir = useRef(undefined)
 
   const kirim = useCallback(
     async (teks) => {
@@ -31,11 +33,12 @@ export function PikoProvider({ children }) {
       setMenunggu(true)
       let jawaban
       try {
-        jawaban = await tanyaPiko({ teks: isi, profil })
+        jawaban = await tanyaPiko({ teks: isi, profil, topik: topikTerakhir.current })
       } catch {
         jawaban = { ...GAGAL, galat: true }
       }
       if (sesiIni !== sesi.current) return
+      topikTerakhir.current = jawaban.topik
       setPesan((p) => [...p, { id: ++nomor.current, dari: 'piko', ...jawaban }])
       setMenunggu(false)
     },
@@ -44,6 +47,7 @@ export function PikoProvider({ children }) {
 
   const hapus = useCallback(() => {
     sesi.current += 1
+    topikTerakhir.current = undefined
     hentikan()
     setPesan([])
     setMenunggu(false)
@@ -55,13 +59,14 @@ export function PikoProvider({ children }) {
     setTerbuka(false)
   }, [])
 
-  // Bila "Bacakan teks" aktif, setiap jawaban baru dibacakan sekali (tidak diulang saat panel dibuka lagi).
+  // Bila "Bacakan teks" aktif, setiap jawaban baru (beserta poinnya) dibacakan sekali, tidak diulang saat panel
+  // dibuka lagi.
   const terakhirDibaca = useRef(0)
   useEffect(() => {
     const akhir = pesan.at(-1)
     if (!terbuka || !prefs.suara || akhir?.dari !== 'piko' || akhir.id === terakhirDibaca.current) return
     terakhirDibaca.current = akhir.id
-    bacakan([akhir.teks], { profil })
+    bacakan([akhir.teks, ...(akhir.poin ?? [])], { profil })
   }, [pesan, terbuka, prefs.suara, profil])
 
   const nilai = useMemo(() => ({ buka }), [buka])

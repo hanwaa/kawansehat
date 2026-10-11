@@ -30,10 +30,46 @@
     animation: redup-keluar 240ms var(--kurva-laci) forwards;
   }
 
+  /* Bayangan padat 80px di bawah lembar menutup celah saat lembar ditarik ke atas melewati posisinya (karet,
+     maksimum 80px di useLembar.js). Bayangan tidak ikut terpotong overflow lembar. */
   .lapisan-obrolan .modal.obrolan {
     width: min(100%, 640px);
     border-bottom: 0;
     border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 80px 0 var(--permukaan), 0 20px 60px rgb(0 0 0 / 0.25);
+  }
+
+  /* Kepala obrolan = area tarik lembar, dengan pegangan kecil di atasnya. Sama dengan pegangan dialog lain
+     (base.css), tetapi berlaku sampai 899px. */
+  .lapisan-obrolan [data-pegangan] {
+    position: relative;
+    padding-top: var(--r5);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+  }
+
+  .lapisan-obrolan [data-pegangan]::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 36px;
+    height: 5px;
+    border-radius: var(--radius-pil);
+    background: var(--garis-warna);
+    translate: -50% 0;
+    transition: width 150ms var(--kurva), background-color 150ms var(--kurva);
+  }
+
+  .lapisan-obrolan .modal[data-ditarik] [data-pegangan] {
+    cursor: grabbing;
+  }
+
+  .lapisan-obrolan .modal[data-ditarik] [data-pegangan]::before {
+    width: 44px;
+    background: var(--teks-redup);
   }
 
   .lapisan-obrolan .modal.obrolan[data-entering] {
@@ -118,25 +154,10 @@
 }
 
 /* Panel sempit dibanding ukuran teksnya (HP dengan teks besar, lansia): subjudul disembunyikan supaya kepala tidak
-   setinggi seperempat lembar, dan Kirim menjadi tombol ikon supaya kolom tulis tetap lebar. Nama "Kirim" tetap
-   dibacakan pembaca layar. */
+   setinggi seperempat lembar. Kirim juga menjadi tombol ikon (lihat bagian kolom tulis). */
 @container (max-width: 20em) {
   .obrolan__nama p {
     display: none;
-  }
-
-  .obrolan__tulis .tombol {
-    width: var(--target);
-    padding-inline: 0;
-  }
-
-  .obrolan__kirim-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 }
 
@@ -153,6 +174,17 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--r4);
+}
+
+/* Fokus dipindah ke sini setelah pilihan diketuk. Cincin fokus hanya untuk papan ketik, di sisi dalam karena
+   tepinya terpotong. */
+.obrolan__gulir:focus {
+  outline: none;
+}
+
+.obrolan__gulir:focus-visible {
+  outline: 3px solid var(--fokus);
+  outline-offset: -3px;
 }
 
 .obrolan__catatan {
@@ -186,7 +218,7 @@
 .obrolan__log {
   display: flex;
   flex-direction: column;
-  gap: var(--r3);
+  gap: var(--r4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -196,10 +228,11 @@
   margin-top: 0;
 }
 
-/* Pesan baru naik sedikit dari bawah, arah datangnya percakapan. */
+/* Pesan baru naik sedikit dari bawah, arah datangnya percakapan. Avatar Piko rata atas, menempel ke sudut bubble
+   yang lancip. */
 .pesan {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: var(--r2);
   animation: pesan-naik 220ms var(--kurva) both;
 }
@@ -219,10 +252,9 @@
 
 .pesan__balon {
   min-width: 0;
-  max-width: min(85%, 34rem);
   margin: 0;
-  padding: var(--r2) var(--r3);
-  border-radius: 18px;
+  padding: var(--r3) var(--r4);
+  border-radius: 20px;
   overflow-wrap: anywhere;
 }
 
@@ -230,15 +262,19 @@
   margin: 0;
 }
 
+/* Bubble Piko memakai lebar kolom di samping avatar; overflow dipotong supaya baris tautan mengikuti sudutnya. */
 .pesan--piko .pesan__balon {
+  max-width: 34rem;
+  overflow: hidden;
   background: var(--permukaan-2);
-  border-bottom-left-radius: 6px;
+  border-top-left-radius: 6px;
 }
 
 .pesan--kamu .pesan__balon {
+  max-width: min(85%, 34rem);
   background: var(--utama);
   color: var(--pada-utama);
-  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 [data-profil='lansia'] .pesan__balon,
@@ -251,32 +287,32 @@
   border: var(--garis) solid var(--bahaya);
 }
 
-.pesan__telepon {
-  margin-top: var(--r2);
-}
-
-.pesan__tautan {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--r2);
+/* Poin jawaban: daftar biasa dengan penanda berwarna utama. Penandanya ditetapkan supaya tidak menjadi lingkaran
+   kosong (gaya bawaan untuk daftar di dalam daftar percakapan). */
+.pesan__poin {
   margin: var(--r2) 0 0;
-  padding: 0;
-  list-style: none;
+  padding-left: 1.25em;
+  list-style: disc;
 }
 
-.pesan__tautan li + li {
-  margin-top: 0;
+.pesan__poin li + li {
+  margin-top: var(--r1);
 }
 
-.pesan__tautan .tombol {
-  padding-inline: var(--r4);
+.pesan__poin li::marker {
+  color: var(--utama);
+}
+
+.pesan__telepon {
+  width: 100%;
+  margin-top: var(--r3);
 }
 
 .pesan__isyarat {
   display: flex;
   align-items: center;
   gap: var(--r2);
-  margin-top: var(--r2);
+  margin-top: var(--r3);
   font-size: var(--fs-kecil);
   font-weight: 700;
 }
@@ -284,6 +320,67 @@
 .pesan__isyarat svg {
   width: 72px;
   flex: none;
+}
+
+/* Tautan sebagai baris di kaki bubble, dipisah garis rambut, selebar bubble. (Dua kelas supaya menang atas
+   ul[role='list'] di base.css.) */
+.pesan__balon .pesan__tautan {
+  margin: var(--r3) calc(-1 * var(--r4)) calc(-1 * var(--r3));
+  padding: 0;
+  list-style: none;
+}
+
+.pesan__tautan li {
+  border-top: 1px solid color-mix(in srgb, var(--garis-warna) 35%, transparent);
+}
+
+.pesan__tautan li + li {
+  margin-top: 0;
+}
+
+.pesan__tautan-baris {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--r2);
+  min-height: var(--target);
+  padding: var(--r2) var(--r4);
+  color: var(--teks);
+  font-weight: 700;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background-color var(--durasi) var(--kurva);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pesan__tautan-baris svg {
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--utama);
+  transition: translate var(--durasi) var(--kurva);
+}
+
+@media (hover: hover) {
+  .pesan__tautan-baris:hover {
+    color: var(--teks);
+    background: color-mix(in srgb, var(--utama) 8%, transparent);
+  }
+
+  .pesan__tautan-baris:hover svg {
+    translate: 2px 0;
+  }
+}
+
+/* Umpan balik tekan langsung saat jari menyentuh, tidak menunggu dilepas. */
+.pesan__tautan-baris:active {
+  background: var(--utama-lembut);
+  transition-duration: 0ms;
+}
+
+.pesan__tautan-baris:focus-visible {
+  outline-offset: -3px;
+  border-radius: 0;
 }
 
 /* Tiga titik "sedang mengetik". Bila gerak dikurangi, titiknya diam (base.css). */
@@ -329,20 +426,39 @@
   }
 }
 
-/* ---------- Saran pertanyaan & kolom tulis ---------- */
-/* Di dalam percakapan, saran berdiri di sisi pengguna (kanan): mengetuknya sama dengan mengirim pesan itu. */
-.obrolan__saran {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--r2);
-  margin: var(--r4) 0 0;
-  padding: 0;
-  list-style: none;
+/* ---------- Pilihan pertanyaan & kolom tulis ---------- */
+/* Saran awal dan pertanyaan lanjutan menjorok sejajar bubble Piko (avatar 32px + jarak), seolah ditawarkan oleh
+   jawaban di atasnya. Ditumpuk satu per baris supaya rapi walau teks diperbesar di layar 360px. Muncul sesaat
+   setelah bubble, mengarahkan mata ke langkah berikutnya. */
+.obrolan__pilihan {
+  margin-top: var(--r3);
+  padding-left: calc(32px + var(--r2));
+  animation: pilihan-muncul 200ms var(--kurva) 120ms both;
 }
 
-.obrolan__saran li + li {
-  margin-top: 0;
+.obrolan__pilihan-label {
+  margin: 0 0 var(--r2);
+  font-size: var(--fs-kecil);
+  font-weight: 700;
+  color: var(--teks-redup);
+}
+
+.obrolan__saran {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--r2);
+}
+
+.obrolan__saran li {
+  max-width: 100%;
+}
+
+@keyframes pilihan-muncul {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
 }
 
 .obrolan__saran-tombol {
@@ -356,6 +472,7 @@
   font-weight: 700;
   line-height: 1.25;
   text-align: left;
+  max-width: 100%;
   cursor: pointer;
   transition: background-color var(--durasi) var(--kurva), scale 90ms var(--kurva);
   -webkit-tap-highlight-color: transparent;
@@ -403,6 +520,25 @@
 .obrolan__tulis .tombol {
   flex: none;
   padding-inline: var(--r4);
+}
+
+/* Panel sempit dibanding ukuran teksnya: Kirim menjadi tombol ikon supaya kolom tulis tetap lebar, dan nama
+   "Kirim" tetap dibacakan pembaca layar. Harus sesudah aturan di atas; bila sebelumnya, padding-nya menang dan
+   ikon terjepit menjadi beberapa piksel. */
+@container (max-width: 20em) {
+  .obrolan__tulis .tombol {
+    width: var(--target);
+    padding-inline: 0;
+  }
+
+  .obrolan__kirim-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 .obrolan__ajak {

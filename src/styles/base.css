@@ -759,6 +759,7 @@ legend {
 }
 
 /* ---------- Dialog (React Aria Modal) ---------- */
+/* --lembar-terlihat (0–1) diisi useLembar selama lembar ditarik, jadi peredupan ikut berkurang saat lembar turun. */
 .lapisan-dialog {
   position: fixed;
   inset: 0;
@@ -766,7 +767,7 @@ legend {
   display: grid;
   place-items: center;
   padding: var(--r4);
-  background: rgb(15 20 18 / 0.55);
+  background: rgb(15 20 18 / calc(0.55 * var(--lembar-terlihat, 1)));
 }
 
 .lapisan-dialog[data-entering] {
@@ -815,11 +816,56 @@ legend {
     animation: redup-keluar 240ms var(--kurva-laci) forwards;
   }
 
+  /* Bayangan padat 80px di bawah lembar menutup celah saat lembar ditarik ke atas melewati posisinya (karet,
+     maksimum 80px di useLembar.js). Bayangan tidak ikut terpotong overflow lembar. */
   .lapisan-dialog .modal {
     width: 100%;
     max-height: calc(100dvh - var(--r6));
     border-bottom: 0;
     border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: 0 80px 0 var(--permukaan), 0 20px 60px rgb(0 0 0 / 0.25);
+  }
+
+  /* Lembar yang bisa ditarik (useLembar): kepala dialog menjadi area tarik dengan pegangan kecil di atasnya.
+     Kepala menempel di atas saat isi digulir, jadi pegangannya selalu bisa diraih. */
+  .lapisan-dialog [data-pegangan] {
+    position: relative;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+  }
+
+  .lapisan-dialog [data-pegangan]::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 36px;
+    height: 5px;
+    border-radius: var(--radius-pil);
+    background: var(--garis-warna);
+    translate: -50% 0;
+    transition: width 150ms var(--kurva), background-color 150ms var(--kurva);
+  }
+
+  .lapisan-dialog .modal[data-ditarik] [data-pegangan] {
+    cursor: grabbing;
+  }
+
+  /* Umpan balik saat jari menyentuh: pegangan menebal dan melebar. */
+  .lapisan-dialog .modal[data-ditarik] [data-pegangan]::before {
+    width: 44px;
+    background: var(--teks-redup);
+  }
+
+  .lapisan-dialog .dialog__kepala[data-pegangan] {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    margin: calc(-1 * var(--r5)) calc(-1 * var(--r5)) var(--r4);
+    padding: var(--r5) var(--r5) var(--r3);
+    background: var(--permukaan);
   }
 
   .lapisan-dialog .modal[data-entering] {

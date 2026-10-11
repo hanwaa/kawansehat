@@ -70,10 +70,11 @@ Only a few things must stay identical across profiles: the logo, the "Tampilan" 
 - **Piko** (Pemandu Informasi Kesehatan Optimal) is the mascot and the help entry point on every page except onboarding (`src/piko/TombolPiko.jsx`). Below 900 px it sits raised in the middle of the bottom nav (Layout inserts it as the 3rd `<li>`, using `useLayarSempit()`); from 900 px it floats bottom-right, outside the header (the header's `backdrop-filter` would trap a fixed child). Its label is "Piko" ("Bantuan" for `lansia`).
 - Pressing Piko opens a React Aria `Menu` in a `Popover` with two chat bubbles: **Lihat Panduan** runs `useTur().mulai()`; **Tanya Piko** opens the chat. The chosen action runs only after the popover has closed and focus has returned to Piko, so closing the tour or chat restores focus there.
 
-**Tanya Piko (chat).** `src/piko/PikoProvider.jsx` holds the chat state (wrapped inside `TourProvider` in Layout) and renders `TanyaPiko.jsx`: a bottom sheet below 900 px, a bottom-right panel above.
+**Tanya Piko (chat).** `src/piko/PikoProvider.jsx` holds the chat state (wrapped inside `TourProvider` in Layout) and renders `TanyaPiko.jsx`: a bottom sheet below 900 px (draggable, via `src/components/useLembar.js`, which also drives the "Tampilan" sheet), a bottom-right panel above.
 - Answers come from `tanyaPiko({ teks, profil })` in `src/piko/jawab.js`, the single seam for the AI that comes later (`/api/tanya-piko`). For now it matches keywords and routes to existing pages that cite sources, covered by `jawab.test.js`. The UI says it is a sample version.
 - Same rule as nutrition: answers never contain health numbers. Emergency keywords are checked first and return `darurat: true` (the UI then shows a `tel:119` button). Diagnosis, prescription and dose questions are declined.
-- `anak` can only tap the preset questions in `SARAN` (no free text); `anak`/`remaja` are never sent to calorie targets.
+- Every answer carries `lanjutan` (follow-up questions shown as chips under the latest answer; DBD has a sub-question tree, `SUB_DBD`) and its `topik`, which is passed back so typed follow-ups ("cara mencegahnya?") stay on topic. `jawab.test.js` walks every reachable chip per profile.
+- `anak` can only tap chips (`SARAN` and `lanjutan`, no free text); `anak`/`remaja` are never sent to calorie targets.
 - History lives in memory only: it survives route changes, not reloads, and is never written to storage. Replies are read aloud when `suara` is on.
 
 **Nutrition (`/cek-gizi/*`).** The rule here: **never invent health numbers.**
